@@ -108,7 +108,7 @@ async def _(event):
         await event.reply("Couldn't fetch that user.")
         return
     if not reason:
-        await event.reply("Need a reason for gban.")
+        await event.reply("Need a reason for ungban.")
         return
     chats = gbanned.find({})
 
