@@ -8,6 +8,7 @@ from io import BytesIO
 import julia.modules.sql.feds_sql as sql
 from telethon import *
 from telethon.tl import *
+from telethon.tl.types import User
 from julia import *
 from julia.events import register
 from pymongo import MongoClient
