@@ -604,7 +604,7 @@ async def _(event):
         return
 
     if "|" in args:
-        iid, reasonn = quew.split("|")
+        iid, reasonn = args.split("|")
     cid = iid.strip()
     reason = reasonn.strip()
     entity = await tbot.get_input_entity(cid)
