@@ -570,7 +570,6 @@ async def _(event):
             text += f" • <p><a href='tg://user?id={user.id}'>{unamee}</a></p>\n"
 
     await event.reply(text, parse_mode="html")
-
  except Exception as e :
     print (e)
    
@@ -694,7 +693,7 @@ async def _(event):
               "\n<b>Federation Admin:</b> {}" \
               "\n<b>User:</b> {}" \
               "\n<b>User ID:</b> <code>{}</code>" \
-              "\n<b>Reason:</b> {}".format(fed_name, "<p><a href='tg://user?id={user.id}'>{user.first_name}</a></p>", user_target, fban_user_id, reason), parse_mode="html")
+              "\n<b>Reason:</b> {}".format(fed_name, f"<p><a href='tg://user?id={user.id}'>{user.first_name}</a></p>", user_target, fban_user_id, reason), parse_mode="html")
         # Send message to owner if fednotif is enabled
         if getfednotif:
             await tbot.send_message(info['owner'], "<b>FedBan reason updated</b>" \
@@ -702,7 +701,7 @@ async def _(event):
                  "\n<b>Federation Admin:</b> {}" \
                  "\n<b>User:</b> {}" \
                  "\n<b>User ID:</b> <code>{}</code>" \
-                 "\n<b>Reason:</b> {}".format(fed_name, "<p><a href='tg://user?id={user.id}'>{user.first_name}</a></p>", user_target, fban_user_id, reason), parse_mode="html")
+                 "\n<b>Reason:</b> {}".format(fed_name, f"<p><a href='tg://user?id={user.id}'>{user.first_name}</a></p>", user_target, fban_user_id, reason), parse_mode="html")
         # If fedlog is set, then send message, except fedlog is current chat
         get_fedlog = sql.get_fed_log(fed_id)
         if get_fedlog:
@@ -712,7 +711,7 @@ async def _(event):
                     "\n<b>Federation Admin:</b> {}" \
                     "\n<b>User:</b> {}" \
                     "\n<b>User ID:</b> <code>{}</code>" \
-                    "\n<b>Reason:</b> {}".format(fed_name, "<p><a href='tg://user?id={user.id}'>{user.first_name}</a></p>", user_target, fban_user_id, reason), parse_mode="html")
+                    "\n<b>Reason:</b> {}".format(fed_name, f"<p><a href='tg://user?id={user.id}'>{user.first_name}</a></p>", user_target, fban_user_id, reason), parse_mode="html")
         for fedschat in fed_chats:
             try:
                 await tbot.kick_participant(fedschat, fban_user_id)
@@ -749,7 +748,7 @@ async def _(event):
           "\n<b>Federation Admin:</b> {}" \
           "\n<b>User:</b> {}" \
           "\n<b>User ID:</b> <code>{}</code>" \
-          "\n<b>Reason:</b> {}".format(fed_name, "<p><a href='tg://user?id={user.id}'>{user.first_name}</a></p>", user_target, fban_user_id, reason), parse_mode="html")
+          "\n<b>Reason:</b> {}".format(fed_name, f"<p><a href='tg://user?id={user.id}'>{user.first_name}</a></p>", user_target, fban_user_id, reason), parse_mode="html")
     # Send message to owner if fednotif is enabled
     if getfednotif:
         await tbot.send_message(info['owner'], "<b>FedBan reason updated</b>" \
@@ -757,7 +756,7 @@ async def _(event):
              "\n<b>Federation Admin:</b> {}" \
              "\n<b>User:</b> {}" \
              "\n<b>User ID:</b> <code>{}</code>" \
-             "\n<b>Reason:</b> {}".format(fed_name, "<p><a href='tg://user?id={user.id}'>{user.first_name}</a></p>", user_target, fban_user_id, reason), parse_mode="html")
+             "\n<b>Reason:</b> {}".format(fed_name, f"<p><a href='tg://user?id={user.id}'>{user.first_name}</a></p>", user_target, fban_user_id, reason), parse_mode="html")
     # If fedlog is set, then send message, except fedlog is current chat
     get_fedlog = sql.get_fed_log(fed_id)
     if get_fedlog:
@@ -767,7 +766,7 @@ async def _(event):
                 "\n<b>Federation Admin:</b> {}" \
                 "\n<b>User:</b> {}" \
                 "\n<b>User ID:</b> <code>{}</code>" \
-                "\n<b>Reason:</b> {}".format(fed_name, "<p><a href='tg://user?id={user.id}'>{user.first_name}</a></p>", user_target, fban_user_id, reason), parse_mode="html")
+                "\n<b>Reason:</b> {}".format(fed_name, f"<p><a href='tg://user?id={user.id}'>{user.first_name}</a></p>", user_target, fban_user_id, reason), parse_mode="html")
     chats_in_fed = 0
     for fedschat in fed_chats:
         chats_in_fed += 1
