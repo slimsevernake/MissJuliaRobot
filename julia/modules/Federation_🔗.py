@@ -607,6 +607,8 @@ async def _(event):
         iid, reasonn = args.split("|")
     cid = iid.strip()
     reason = reasonn.strip()
+    if cid.isnumeric():
+       cid = int(cid)
     entity = await tbot.get_input_entity(cid)
     try:
         user_id = entity.user_id
