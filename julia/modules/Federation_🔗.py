@@ -517,11 +517,11 @@ async def _(event):
  except Exception as e :
     print (e)
 
-@register(pattern="^/fedadmins ?(.*)")
+@register(pattern="^/fedadmins$")
 async def _(event):   
  try:
     chat = event.chat
-    args = event.pattern_match.group(1)
+    args = False
     user = event.sender
     if event.is_group:
         if (await is_register_admin(event.input_chat, event.sender_id)):
@@ -789,3 +789,27 @@ async def _(event):
                         print (e)
  except Exception as e:
        print (e)                          
+
+@register(pattern="^/frules$")
+async def _(event):   
+    chat = event.chat
+    if event.is_group:
+        if (await is_register_admin(event.input_chat, event.sender_id)):
+            pass
+        else:
+            return
+    if event.is_private:
+        await event.reply("This command is specific to the group, not to my pm !")
+        return
+
+    fed_id = sql.get_fed_id(chat.id)
+    if not fed_id:
+        await event.reply(
+            "This group is not in any federation!")
+        return
+
+    rules = sql.get_frules(fed_id)
+    text = "**Rules for this fed:**\n"
+    text += rules
+    await event.reply(text, parse_mode="markdown")
+
