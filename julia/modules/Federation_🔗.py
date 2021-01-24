@@ -809,7 +809,9 @@ async def _(event):
         return
 
     rules = sql.get_frules(fed_id)
+    if not rules:
+       await event.reply("This federation has no rules.")
+       return
     text = "**Rules for this fed:**\n"
     text += rules
-    await event.reply(text, parse_mode="markdown")
-
+    await event.reply(text)
