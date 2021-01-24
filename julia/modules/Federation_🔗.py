@@ -815,3 +815,52 @@ async def _(event):
     text = "**Rules for this fed:**\n"
     text += rules
     await event.reply(text)
+
+@register(pattern="^/setfrules ?(.*)")
+async def _(event):   
+    chat = event.chat
+    user = event.sender
+    if event.is_group:
+        if (await is_register_admin(event.input_chat, event.sender_id)):
+            pass
+        else:
+            return
+    if event.is_private:
+        await event.reply("This command is specific to the group, not to my pm !")
+        return
+
+    fed_id = sql.get_fed_id(chat.id)
+
+    if not fed_id:
+        await event.reply(
+            "This group is not in any federation!")
+        return
+
+    if is_user_fed_admin(fed_id, user.id) is False:
+        await event.reply("Only fed admins can do this!")
+        return
+
+    if args:
+        x = sql.set_frules(fed_id, args)
+        if not x:
+            await event.reply(
+                "There was an error while setting federation rules!\nPlease go to @MissJuliaRobotSupport to report this."
+            )
+            return
+
+        rules = sql.get_fed_info(fed_id)['frules']
+        getfed = sql.get_fed_info(fed_id)
+        get_fedlog = sql.get_fed_log(fed_id)
+        if get_fedlog:
+            if eval(get_fedlog):
+                await tbot.send_message(
+                    get_fedlog,
+                    "**{}** has updated federation rules for fed **{}**".format(
+                        user.first_name, getfed['fname']),
+                    parse_mode="markdown")
+        await event.reply(
+            f"Rules have been changed to :\n{rules}!")
+    else:
+        await event.reply(
+            "Please give some rules to set.")
+
