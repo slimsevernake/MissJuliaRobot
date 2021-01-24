@@ -58,7 +58,7 @@ async def _(event):
     if r_sender_id == OWNER_ID:
         await event.reply("Fool, how can I gban my master ?")
         return
-    if r_sender_id == SUDO_USERS:
+    if r_sender_id in SUDO_USERS:
         await event.reply("Hey that's a sudo user idiot.")
         return
 
@@ -115,7 +115,7 @@ async def _(event):
     if r_sender_id == OWNER_ID:
         await event.reply("Fool, how can I ungban my master ?")
         return
-    if r_sender_id == SUDO_USERS:
+    if r_sender_id in SUDO_USERS:
         await event.reply("Hey that's a sudo user idiot.")
         return
 
