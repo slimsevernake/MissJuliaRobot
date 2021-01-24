@@ -145,7 +145,7 @@ async def upstream(ups):
                 break
         if heroku_app is None:
             await lol.edit(
-                f"{txt}\n`Invalid Heroku credentials for updating userbot dyno.`"
+                f"{txt}\n`Invalid Heroku credentials for updating bot dyno.`"
             )
             repo.__del__()
             return
