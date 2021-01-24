@@ -111,12 +111,14 @@ async def _(event):
         await event.reply("Need a reason for gban.")
         return
     chats = gbanned.find({})
+
     if r_sender_id == OWNER_ID:
         await event.reply("Fool, how can I ungban my master ?")
         return
     if r_sender_id == SUDO_USERS:
         await event.reply("Hey that's a sudo user idiot.")
         return
+
     for c in chats:
         if r_sender_id == c["user"]:
             to_check = get_reason(id=r_sender_id)
