@@ -815,6 +815,7 @@ async def _(event):
 
 @register(pattern="^/setfrules ?(.*)")
 async def _(event):   
+ try:
     chat = event.chat
     user = event.sender
     args = event.pattern_match.group(1)
@@ -861,6 +862,8 @@ async def _(event):
     else:
         await event.reply(
             "Please give some rules to set.")
+ except Exception as e:
+    print (e)
 
 """
  - /newfed <fed_name>: Creates a Federation, one allowed per user.
