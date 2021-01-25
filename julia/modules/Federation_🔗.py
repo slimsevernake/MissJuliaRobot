@@ -991,6 +991,79 @@ async def _(event):
  except Exception as e:
     print (e)
 
+@tbot.on(events.NewMessage(pattern="^/setfedlog (.*)"))
+async def _(event):   
+ try:
+    chat = event.chat
+    args = event.pattern_match.group(1)
+    user = event.sender
+    if event.is_group:
+        if (await is_register_admin(event.input_chat, event.sender_id)):
+            pass
+        else:
+            return
+    if event.is_private:
+        await event.reply("This command is specific to the group, not to my pm !")
+        return
+
+    if args:
+        fedinfo = sql.get_fed_info(args)
+        if not fedinfo:
+            await event.reply(
+                         "This Federation does not exist!")
+            return
+        isowner = is_user_fed_owner(args, user.id)
+        if not isowner:
+            await event.reply(
+                         "Only federation creator can set federation logs.")
+            return
+        setlog = sql.set_fed_log(args, chat.id)
+        if setlog:
+           await event.reply(
+                "Federation log `{}` has been set to {}".format(
+                    fedinfo['fname'], chat.title),
+                parse_mode="markdown")
+    else:
+        await event.reply(
+                     "You have not provided your federated ID!")
+
+@tbot.on(events.NewMessage(pattern="^/unsetfedlog (.*)"))
+async def _(event):   
+ try:
+    chat = event.chat
+    args = event.pattern_match.group(1)
+    user = event.sender
+    if event.is_group:
+        if (await is_register_admin(event.input_chat, event.sender_id)):
+            pass
+        else:
+            return
+    if event.is_private:
+        await event.reply("This command is specific to the group, not to my pm !")
+        return
+
+    if args:
+        fedinfo = sql.get_fed_info(args)
+        if not fedinfo:
+            await event.reply(
+                         "This Federation does not exist!")
+            return
+        isowner = is_user_fed_owner(args, user.id)
+        if not isowner:
+            await event.reply(
+                         "Only federation creator can set federation logs.")
+            return
+        setlog = sql.set_fed_log(args, None)
+        if setlog:
+           await event.reply(
+                "Federation log `{}` has been revoked on {}".format(
+                    fedinfo['fname'], chat.title),
+                parse_mode="markdown")
+    else:
+        await event.reply(
+                     "You have not provided your federated ID!")
+
+
 
 """
  - /newfed <fed_name>: Creates a Federation, one allowed per user.
