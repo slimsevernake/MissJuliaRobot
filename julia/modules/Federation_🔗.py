@@ -998,6 +998,12 @@ async def _(event):
  - /delfed <fed_id>: Delete a Federation, and any information related to it. 
  - /fpromote <user>: Assigns the user as a federation admin. 
  - /fdemote <user>: Drops the user from the federation admin to a normal user.
+ - /subfed <fed_id>: Subscribes to a given fed ID, fedbans from that subscribed fed will also happen in your fed
+ - /unsubfed <fed_id>: Unsubscribes to a given fed ID
+ - /setfedlog <fed_id>: Sets the group as a fed log report base for the federation
+ - /unsetfedlog <fed_id>: Removed the group as a fed log report base for the federation
+ - /fbroadcast <message>: Broadcasts a messages to all groups that have joined your fed
+ - /fedsubs: Shows the feds your group is subscribed to (broken rn)
  - /fban (<user>|<reason>): Fed bans a user. Syntax: `fban 12345 | testing`, `fban @MissJuliaRobot | testing`.
  - /unfban <user> <reason>: Removes a user from a fed ban.
  - /fedinfo <fed_id>: Information about the specified Federation.
