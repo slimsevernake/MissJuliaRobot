@@ -1067,7 +1067,52 @@ async def _(event):
  except Exception as e:
     print (e)
 
+@tbot.on(events.NewMessage(pattern="^/fedsubs$"))
+async def _(event):   
+ try:
+    chat = event.chat
+    user = event.sender
+    if event.is_group:
+        if (await is_register_admin(event.input_chat, event.sender_id)):
+            pass
+        else:
+            return
+    if event.is_private:
+        await event.reply("This command is specific to the group, not to my pm !")
+        return
 
+    fed_id = sql.get_fed_id(chat.id)
+    fedinfo = sql.get_fed_info(fed_id)
+
+    if not fed_id:
+        await event.reply(
+                     "This group is not in any federation!")
+        return
+
+    if is_user_fed_owner(fed_id, user.id) is False:
+        await event.reply("Only fed owner can do this!")
+        return
+
+    try:
+        getmy = sql.get_mysubs(fed_id)
+    except:
+        getmy = []
+
+    if len(getmy) == 0:
+        await event.reply(
+            "Federation `{}` is not subscribing any federation.".format(
+                fedinfo['fname']),
+            parse_mode="markdown")
+        return
+    else:
+        listfed = "Federation `{}` is subscribing federation:\n".format(
+            fedinfo['fname'])
+        for x in getmy:
+            listfed += "- `{}`\n".format(x)
+        listfed += "\nTo get fed info `/fedinfo <fedid>`. To unsubscribe `/unsubfed <fedid>`."
+        await event.reply(listfed, parse_mode="markdown")
+ except Exception as e:
+        print (e)
 
 """
  - /newfed <fed_name>: Creates a Federation, one allowed per user.
