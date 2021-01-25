@@ -1026,6 +1026,8 @@ async def _(event):
     else:
         await event.reply(
                      "You have not provided your federated ID!")
+ except Exception as e:
+    print (e)
 
 @tbot.on(events.NewMessage(pattern="^/unsetfedlog (.*)"))
 async def _(event):   
@@ -1062,6 +1064,8 @@ async def _(event):
     else:
         await event.reply(
                      "You have not provided your federated ID!")
+ except Exception as e:
+    print (e)
 
 
 
