@@ -1114,6 +1114,28 @@ async def _(event):
  except Exception as e:
         print (e)
 
+@tbot.on(events.NewMessage(pattern="^/myfeds$"))
+async def _(event):   
+ try:
+    user = event.sender
+    if event.is_group:
+        if (await is_register_admin(event.input_chat, event.sender_id)):
+            pass
+        else:
+            return
+    fedowner = sql.get_user_owner_fed_full(user.id)
+    if fedowner:
+        text = "**You are owner of feds:\n\n**"
+        for f in fedowner:
+            text += "- `{}`: *{}*\n".format(f['fed_id'], f['fed']['fname'])
+    else:
+        text = "**You don't have any feds !**"
+    await event.reply(text, parse_mode="markdown")
+
+ except Exception as e:
+    print (e)
+
+
 """
  - /newfed <fed_name>: Creates a Federation, one allowed per user.
  - /renamefed <fed_id> <new_fed_name>: Renames the fed id to a new name.
