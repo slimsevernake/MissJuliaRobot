@@ -813,7 +813,7 @@ async def _(event):
     text += rules
     await event.reply(text)
 
-@tbot.on(events.NewMessage(pattern="^/setfrules ?(.*)"))
+@register(pattern="^/setfrules ?(.*)")
 async def _(event):   
  try:
     chat = event.chat
@@ -858,7 +858,7 @@ async def _(event):
                         user.first_name, getfed['fname']),
                     parse_mode="markdown")
         await event.reply(
-            f"Rules have been changed to :\n{rules}!")
+            f"Rules have been changed to :\n\n{rules}")
     else:
         await event.reply(
             "Please give some rules to set.")
