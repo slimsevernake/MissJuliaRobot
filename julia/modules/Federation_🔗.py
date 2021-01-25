@@ -813,7 +813,7 @@ async def _(event):
     text += rules
     await event.reply(text)
 
-@register(pattern="^/setfrules ?(.*)")
+@tbot.on(events.NewMessage(pattern="^/setfrules ?(.*)"))
 async def _(event):   
  try:
     chat = event.chat
