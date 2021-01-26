@@ -1135,7 +1135,7 @@ async def _(event):
  except Exception as e:
     print (e)
 
-@tbot.on(events.NewMessage(pattern="^/fedbanlist$"))
+@tbot.on(events.NewMessage(pattern="^/fbanlist$"))
 async def _(event):   
  try:
     chat = event.chat
@@ -1326,7 +1326,7 @@ async def _(event):
         subfed = sql.subs_fed(args, fed_id)
         if subfed:
             await event.reply(
-                "Federation `{}` has subscribe the federation `{}`. Every time there is a Fedban from that federation, this federation will also ban that user."
+                "Federation `{}` has subscribed the federation `{}`. Every time there is a Fedban from that federation, this federation will also ban that user."
                 .format(fedinfo['fname'], getfed['fname']),
                 parse_mode="markdown")
             get_fedlog = sql.get_fed_log(args)
@@ -1334,12 +1334,12 @@ async def _(event):
                 if int(get_fedlog) != int(chat.id):
                     await tbot.send_message(
                         get_fedlog,
-                        "Federation `{}` has subscribe the federation `{}`"
+                        "Federation `{}` has subscribed the federation `{}`"
                         .format(fedinfo['fname'], getfed['fname']),
                         parse_mode="markdown")
         else:
             await event.reply(
-                "Federation `{}` already subscribe the federation `{}`.".format(
+                "Federation `{}` already subscribed the federation `{}`.".format(
                     fedinfo['fname'], getfed['fname']),
                 parse_mode="markdown")
     else:
@@ -1392,12 +1392,12 @@ async def _(event):
                 if int(get_fedlog) != int(chat.id):
                     await tbot.send_message(
                         get_fedlog,
-                        "Federation `{}` has unsubscribe fed `{}`.".format(
+                        "Federation `{}` has unsubscribed fed `{}`.".format(
                             fedinfo['fname'], getfed['fname']),
                         parse_mode="markdown")
         else:
             await event.reply(
-                "Federation `{}` is not subscribing `{}`.".format(
+                "Federation `{}` is not subscribed to `{}`.".format(
                     fedinfo['fname'], getfed['fname']),
                 parse_mode="markdown")
     else:
@@ -1433,7 +1433,7 @@ async def _(event):
             broadcaster = user.first_name
         except:
             broadcaster = user.first_name + " " + user.last_name
-        text += f"\n\n- [broadcaster](tg://user?id={user.id})"
+        text += f"\n\n- [{broadcaster}](tg://user?id={user.id})"
         chat_list = sql.all_fed_chats(fed_id)
         failed = 0
         for chat in chat_list:
