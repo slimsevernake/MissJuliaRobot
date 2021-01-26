@@ -1406,6 +1406,51 @@ async def _(event):
  except Exception as e:
         print (e)
 
+@tbot.on(events.NewMessage(pattern="^/unsubfed ?(.*)"))
+async def _(event):   
+ try:
+    chat = event.chat
+    user = event.sender
+    args = event.pattern_match.group(1)
+    if event.is_group:
+        if (await is_register_admin(event.input_chat, event.sender_id)):
+            pass
+        else:
+            return
+    if event.is_private:
+        await event.reply("This command is specific to the group, not to my pm !")
+        return
+
+    if args:        
+        fed_id = sql.get_fed_id(chat.id)
+        fedinfo = sql.get_fed_info(fed_id)
+        if is_user_fed_owner(fed_id, user.id) is False:
+            await event.reply(
+                "Only federation owners can do this!")
+            return
+        text = args
+        try:
+            broadcaster = user.first_name
+        except:
+            broadcaster = user.first_name + " " + user.last_name
+        text += "\n\n- [broadcaster](tg://user?id={user.id})"
+        chat_list = sql.all_fed_chats(fed_id)
+        failed = 0
+        for chat in chat_list:
+            title = "**New broadcast from Fed {}**\n\n".format(fedinfo['fname'])
+            try:
+                await tbot.send_message(event.chat_id, title + text, parse_mode="markdown")
+            except Exception as e:
+                failed += 1
+                print (e)
+
+        send_text = "The federation broadcast is complete\n"
+        if failed >= 1:
+            send_text += "{} groups failed to receive the message.".format(
+                failed)
+        await event.reply(send_text)
+ except Exception as e:
+    print (e)
 
 # Temporary data
 def put_chat(chat_id, value, chat_data):
