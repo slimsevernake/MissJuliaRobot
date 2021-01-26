@@ -1135,6 +1135,165 @@ async def _(event):
  except Exception as e:
     print (e)
 
+@tbot.on(events.NewMessage(pattern="^/fedbanlist$"))
+async def _(event):   
+ try:
+    chat = event.chat
+    user = event.sender
+    args = event.pattern_match.group(1)
+    if event.is_group:
+        if (await is_register_admin(event.input_chat, event.sender_id)):
+            pass
+        else:
+            return
+    if event.is_private:
+        await event.reply("This command is specific to the group, not to my pm !")
+        return
+
+    fed_id = sql.get_fed_id(chat.id)
+    info = sql.get_fed_info(fed_id)
+
+    if not fed_id:
+        await event.reply(
+            "This group is not a part of any federation!")
+        return
+
+    if is_user_fed_owner(fed_id, user.id) is False:
+        await event.reply(
+            "Only Federation owners can do this!")
+        return
+
+    getfban = sql.get_all_fban_users(fed_id)
+    if len(getfban) == 0:
+        await event.reply(
+            "The federation ban list of {} is empty".format(info['fname']),
+            parse_mode="html")
+        return
+
+    if args:
+        if args == 'json':
+            jam = time.time()
+            new_jam = jam + 1800
+            cek = get_chat(chat.id, chat_data)
+            if cek.get('status'):
+                if jam <= int(cek.get('value')):
+                    waktu = time.strftime("%H:%M:%S %d/%m/%Y",
+                                          time.localtime(cek.get('value')))
+                    await event.reply(
+                        "You can backup your data once every 30 minutes!\nYou can back up data again at `{}`"
+                        .format(waktu),
+                        parse_mode="markdown")
+                    return
+                else:
+                    if user.id != OWNER_ID:
+                        put_chat(chat.id, new_jam, chat_data)
+            else:
+                if user.id != OWNER_ID:
+                    put_chat(chat.id, new_jam, chat_data)
+            backups = ""
+            for users in getfban:
+                getuserinfo = sql.get_all_fban_users_target(fed_id, users)
+                json_parser = {
+                    "user_id": users,
+                    "first_name": getuserinfo['first_name'],
+                    "last_name": getuserinfo['last_name'],
+                    "user_name": getuserinfo['user_name'],
+                    "reason": getuserinfo['reason']
+                }
+                backups += json.dumps(json_parser)
+                backups += "\n"
+            with BytesIO(str.encode(backups)) as output:
+                output.name = "julia_fbanned_users.json"
+                await tbot.send_file(event.chat_id, 
+                    document=output,
+                    filename="julia_fbanned_users.json",
+                    caption="Total {} users are blocked by the Federation {}."
+                    .format(len(getfban), info['fname']))
+            return
+        elif args == 'csv':
+            jam = time.time()
+            new_jam = jam + 1800
+            cek = get_chat(chat.id, chat_data)
+            if cek.get('status'):
+                if jam <= int(cek.get('value')):
+                    waktu = time.strftime("%H:%M:%S %d/%m/%Y",
+                                          time.localtime(cek.get('value')))
+                    await event.reply(
+                        "You can back up data once every 30 minutes!\nYou can back up data again at `{}`"
+                        .format(waktu),
+                        parse_mode="markdown")
+                    return
+                else:
+                    if user.id != OWNER_ID:
+                        put_chat(chat.id, new_jam, chat_data)
+            else:
+                if user.id != OWNER_ID:
+                    put_chat(chat.id, new_jam, chat_data)
+            backups = "id,firstname,lastname,username,reason\n"
+            for users in getfban:
+                getuserinfo = sql.get_all_fban_users_target(fed_id, users)
+                backups += "{user_id},{first_name},{last_name},{user_name},{reason}".format(
+                    user_id=users,
+                    first_name=getuserinfo['first_name'],
+                    last_name=getuserinfo['last_name'],
+                    user_name=getuserinfo['user_name'],
+                    reason=getuserinfo['reason'])
+                backups += "\n"
+            with BytesIO(str.encode(backups)) as output:
+                output.name = "julia_fbanned_users.csv"
+                await tbot.send_file(event.chat_id, 
+                    document=output,
+                    filename="julia_fbanned_users.csv",
+                    caption="Total {} User are blocked by Federation {}."
+                    .format(len(getfban), info['fname']))
+            return
+
+    text = "<b>{} users have been banned from the federation {}:</b>\n".format(
+        len(getfban), info['fname'])
+    for users in getfban:
+        getuserinfo = sql.get_all_fban_users_target(fed_id, users)
+        if getuserinfo is False:
+            text = "There are no users banned from the federation {}".format(
+                info['fname'])
+            break
+        user_name = getuserinfo['first_name']
+        if getuserinfo['last_name']:
+            user_name += " " + getuserinfo['last_name']
+        text += " • {} (<code>{}</code>)\n".format(
+            mention_html(users, user_name), users)
+    try:
+        await event.reply(text, parse_mode="html")
+    except:
+        jam = time.time()
+        new_jam = jam + 1800
+        cek = get_chat(chat.id, chat_data)
+        if cek.get('status'):
+            if jam <= int(cek.get('value')):
+                waktu = time.strftime("%H:%M:%S %d/%m/%Y",
+                                      time.localtime(cek.get('value')))
+                await event.reply(
+                    "You can back up data once every 30 minutes!\nYou can back up data again at `{}`"
+                    .format(waktu),
+                    parse_mode="markdown")
+                return
+            else:
+                if user.id != OWNER_ID:
+                    put_chat(chat.id, new_jam, chat_data)
+        else:
+            if user.id != OWNER_ID:
+                put_chat(chat.id, new_jam, chat_data)
+        cleanr = re.compile('<.*?>')
+        cleantext = re.sub(cleanr, '', text)
+        with BytesIO(str.encode(cleantext)) as output:
+            output.name = "fbanlist.txt"
+            await tbot.send_file(event.chat_id, 
+                document=output,
+                filename="fbanlist.txt",
+                caption="The following is a list of users who are currently fbanned in the Federation {}."
+                .format(info['fname']))
+ except Exception as e:
+        print (e)
+
 
 """
  - /newfed <fed_name>: Creates a Federation, one allowed per user.
