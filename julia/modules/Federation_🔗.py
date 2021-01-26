@@ -1348,6 +1348,63 @@ async def _(event):
  except Exception as e:
         print (e)
 
+@tbot.on(events.NewMessage(pattern="^/unsubfed ?(.*)"))
+async def _(event):   
+ try:
+    chat = event.chat
+    user = event.sender
+    args = event.pattern_match.group(1)
+    if event.is_group:
+        if (await is_register_admin(event.input_chat, event.sender_id)):
+            pass
+        else:
+            return
+    if event.is_private:
+        await event.reply("This command is specific to the group, not to my pm !")
+        return
+
+    fed_id = sql.get_fed_id(chat.id)
+    fedinfo = sql.get_fed_info(fed_id)
+
+    if not fed_id:
+        await event.reply(
+                     "This group is not in any federation!")
+        return
+
+    if is_user_fed_owner(fed_id, user.id) is False:
+        await event.reply("Only fed owner can do this!")
+        return
+
+    if args:
+        getfed = sql.search_fed_by_id(args)
+        if getfed is False:
+            await event.reply(
+                         "Please enter a valid federation id.")
+            return
+        subfed = sql.unsubs_fed(args, fed_id)
+        if subfed:
+            await event.reply(
+                "Federation `{}` now unsubscribe fed `{}`.".format(
+                    fedinfo['fname'], getfed['fname']),
+                parse_mode="markdown")
+            get_fedlog = sql.get_fed_log(args)
+            if get_fedlog:
+                if int(get_fedlog) != int(chat.id):
+                    await tbot.send_message(
+                        get_fedlog,
+                        "Federation `{}` has unsubscribe fed `{}`.".format(
+                            fedinfo['fname'], getfed['fname']),
+                        parse_mode="markdown")
+        else:
+            await event.reply(
+                "Federation `{}` is not subscribing `{}`.".format(
+                    fedinfo['fname'], getfed['fname']),
+                parse_mode="markdown")
+    else:
+        await event.reply(
+                     "You have not provided your federated ID!")
+ except Exception as e:
+        print (e)
 
 
 # Temporary data
