@@ -1206,7 +1206,7 @@ async def _(event):
             with BytesIO(str.encode(backups)) as output:
                 output.name = "julia_fbanned_users.json"
                 await tbot.send_file(event.chat_id, 
-                    document=output,
+                    file=output,
                     filename="julia_fbanned_users.json",
                     caption="Total {} users are blocked by the Federation {}."
                     .format(len(getfban), info['fname']))
@@ -1243,7 +1243,7 @@ async def _(event):
             with BytesIO(str.encode(backups)) as output:
                 output.name = "julia_fbanned_users.csv"
                 await tbot.send_file(event.chat_id, 
-                    document=output,
+                    file=output,
                     filename="julia_fbanned_users.csv",
                     caption="Total {} User are blocked by Federation {}."
                     .format(len(getfban), info['fname']))
@@ -1288,7 +1288,7 @@ async def _(event):
         with BytesIO(str.encode(cleantext)) as output:
             output.name = "fbanlist.txt"
             await tbot.send_file(event.chat_id, 
-                document=output,
+                file=output,
                 filename="fbanlist.txt",
                 caption="The following is a list of users who are currently fbanned in the Federation {}."
                 .format(info['fname']))
