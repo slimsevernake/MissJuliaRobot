@@ -1345,7 +1345,8 @@ async def _(event):
     else:
         await event.reply(
                      "You have not provided your federated ID!")
-
+ except Exception as e:
+        print (e)
 
 
 
