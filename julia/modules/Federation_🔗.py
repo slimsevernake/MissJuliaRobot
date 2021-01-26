@@ -1141,6 +1141,7 @@ async def _(event):
     chat = event.chat
     user = event.sender
     args = event.pattern_match.group(1)
+    chat_data = {}
     if event.is_group:
         if (await is_register_admin(event.input_chat, event.sender_id)):
             pass
