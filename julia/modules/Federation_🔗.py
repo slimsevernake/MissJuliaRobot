@@ -1439,7 +1439,7 @@ async def _(event):
         for chat in chat_list:
             title = "**New broadcast from Fed {}**\n\n".format(fedinfo['fname'])
             try:
-                await tbot.send_message(chat, title + text, parse_mode="markdown")
+                await tbot.send_message(int(chat), title + text, parse_mode="markdown")
             except Exception as e:
                 failed += 1
                 print (e)
