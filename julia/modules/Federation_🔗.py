@@ -1294,6 +1294,24 @@ async def _(event):
  except Exception as e:
         print (e)
 
+# Temporary data
+def put_chat(chat_id, value, chat_data):
+    # print(chat_data)
+    if value is False:
+        status = False
+    else:
+        status = True
+    chat_data[chat_id] = {'federation': {"status": status, "value": value}}
+
+def get_chat(chat_id, chat_data):
+    # print(chat_data)
+    try:
+        value = chat_data[chat_id]['federation']
+        return value
+    except KeyError:
+        return {"status": False, "value": False}
+
+
 
 """
  - /newfed <fed_name>: Creates a Federation, one allowed per user.
