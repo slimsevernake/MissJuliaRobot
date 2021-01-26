@@ -279,7 +279,7 @@ async def _(event):
             await event.reply("Please enter a valid federation ID")
             return
 
-        x = sql.chat_join_fed(args, chat.title, chat)
+        x = sql.chat_join_fed(args, event.chat.title, chat)
         if not x:
             await event.reply(
                 "Failed to join federation! Please contact @MissJuliaRobotSupport should this problem persist!"
@@ -290,8 +290,8 @@ async def _(event):
         if get_fedlog:
                 await tbot.send_message(
                     get_fedlog,
-                    "Chat *{}* has joined the federation *{}*".format(
-                        chat.title, getfed['fname']),
+                    "Chat **{}** has joined the federation **{}**".format(
+                        event.chat.title, getfed['fname']),
                     parse_mode="markdown")       
         await event.reply("This group has joined the federation: **{}**".format(getfed['fname']))
 
@@ -333,8 +333,8 @@ async def _(event):
             if get_fedlog:
                     await tbot.send_message(
                         get_fedlog,
-                        "Chat *{}* has left the federation *{}*".format(
-                            chat.title, fed_info['fname']),
+                        "Chat **{}** has left the federation **{}**".format(
+                            event.chat.title, fed_info['fname']),
                         parse_mode="markdown")
             await event.reply(
                 "This group has left the federation **{}**".format(
@@ -1021,7 +1021,7 @@ async def _(event):
         if setlog:
            await event.reply(
                 "Federation log `{}` has been set to {}".format(
-                    fedinfo['fname'], chat.title),
+                    fedinfo['fname'], event.chat.title),
                 parse_mode="markdown")
     else:
         await event.reply(
@@ -1059,7 +1059,7 @@ async def _(event):
         if setlog:
            await event.reply(
                 "Federation log `{}` has been revoked on {}".format(
-                    fedinfo['fname'], chat.title),
+                    fedinfo['fname'], event.chat.title),
                 parse_mode="markdown")
     else:
         await event.reply(
