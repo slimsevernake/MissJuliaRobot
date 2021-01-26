@@ -1504,3 +1504,10 @@ __help__ = """
 
 **NOTE**: Federation ban doesn't ban the user from the fed chats instead kicks everytime they join the chat.
 """
+
+CMD_HELP.update({
+    file_helpo: [
+        file_helpo,
+        __help__
+    ]
+})
