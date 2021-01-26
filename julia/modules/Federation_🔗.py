@@ -1260,7 +1260,7 @@ async def _(event):
         if getuserinfo['last_name']:
             user_name += " " + getuserinfo['last_name']
         text += " • {} (<code>{}</code>)\n".format(
-            mention_html(users, user_name), users)
+            f"<p><a href='tg://user?id={users}'>{user_name}</a></p>", users)
     try:
         await event.reply(text, parse_mode="html")
     except:
