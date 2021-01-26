@@ -1310,8 +1310,11 @@ def get_chat(chat_id, chat_data):
         return {"status": False, "value": False}
 
 
+file_help = os.path.basename(__file__)
+file_help = file_help.replace(".py", "")
+file_helpo = file_help.replace("_", " ")
 
-"""
+__help__ = """
  - /newfed <fed_name>: Creates a Federation, one allowed per user.
  - /renamefed <fed_id> <new_fed_name>: Renames the fed id to a new name.
  - /delfed <fed_id>: Delete a Federation, and any information related to it. 
