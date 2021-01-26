@@ -1127,7 +1127,7 @@ async def _(event):
     if fedowner:
         text = "**You are owner of feds:\n\n**"
         for f in fedowner:
-            text += "- `{}`: *{}*\n".format(f['fed_id'], f['fed']['fname'])
+            text += "- **{}**: `{}`\n".format(f['fed']['fname'], f['fed_id'])
     else:
         text = "**You don't have any feds !**"
     await event.reply(text, parse_mode="markdown")
