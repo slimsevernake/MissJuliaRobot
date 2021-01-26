@@ -1135,7 +1135,7 @@ async def _(event):
  except Exception as e:
     print (e)
 
-@tbot.on(events.NewMessage(pattern="^/fedbanlist$"))
+@tbot.on(events.NewMessage(pattern="^/fedbanlist ?(.*)"))
 async def _(event):   
  try:
     chat = event.chat
