@@ -1406,7 +1406,7 @@ async def _(event):
  except Exception as e:
         print (e)
 
-@tbot.on(events.NewMessage(pattern="^/unsubfed ?(.*)"))
+@tbot.on(events.NewMessage(pattern="^/fedbroadcast ?(.*)"))
 async def _(event):   
  try:
     chat = event.chat
