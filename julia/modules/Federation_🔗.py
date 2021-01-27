@@ -238,7 +238,6 @@ async def _(event):
 
 @tbot.on(events.NewMessage(pattern="^/joinfed ?(.*)"))
 async def _(event):   
- try:
     chat = event.chat_id
     user = event.sender
     args = event.pattern_match.group(1)
@@ -294,9 +293,6 @@ async def _(event):
                         event.chat.title, getfed['fname']),
                     parse_mode="markdown")       
         await event.reply("This group has joined the federation: **{}**".format(getfed['fname']))
-
- except Exception as e:
-    print(e)
 
 
 @register(pattern="^/leavefed$")
