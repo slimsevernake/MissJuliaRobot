@@ -6,7 +6,6 @@ from julia import HEROKU_APP_NAME
 class MissJuliaRobot:
     def on_get(self, req, resp):
         if not req.params:
-            resp.content_type = "application/javascript"
             resp.status = falcon.HTTP_200
             with io.open("index.html", "rb") as f:
                 resp.body = f.read()
