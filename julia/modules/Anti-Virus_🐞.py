@@ -4,7 +4,7 @@ from julia import CMD_HELP, VIRUS_API_KEY
 from telethon import events
 from telethon.tl import functions
 from telethon.tl import types
-from telethon.tl.types import MessageMediaDocument
+from telethon.tl.types import MessageMediaDocument, DocumentAttributeFilename
 from pymongo import MongoClient
 from julia import MONGO_DB_URI
 from julia.events import register
