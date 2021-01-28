@@ -1583,20 +1583,13 @@ async def _(event):
     getlist = sql.all_fed_chats(fed_id)
     if len(getlist) == 0:
         await event.reply(
-            "No users are fbanned from the federation {}".format(info['fname']),
+            "No chats are joined to the federation **{}**".format(info['fname']),
             parse_mode="html")
         return
 
-    text = "<b>New chat joined the federation {}:</b>\n".format(info['fname'])
-    for chats in getlist:
-        try:
-            chat_name = await tbot.get_entity(chats).title
-        except Exception as e:
-            sql.chat_leave_fed(chats)
-            print (e)
-            continue
-        text += " • {} (<code>{}</code>)\n".format(chat_name, chats)
-
+    text = "<b>Here is the list of chats connected to {}:</b>\n\n".format(info['fname'])
+    for chats in getlist:       
+        text += " • <code>{}</code>\n".format(chats)
     try:
         await event.reply(text, parse_mode="html")
     except:
@@ -1607,7 +1600,7 @@ async def _(event):
             await tbot.send_file(
                 file=output,
                 filename="fedchats.txt",
-                caption="Here is a list of all the chats that joined the federation {}."
+                caption="Here is a list of all the chats that joined the federation **{}**"
                 .format(info['fname']))
  except Exception as e:
         print (e)
