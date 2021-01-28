@@ -70,33 +70,9 @@ async def virusscan(event):
        await event.reply("Thats not a file.")
        return
     h = c.media
-    if isinstance(h, MessageMediaDocument):
+    if not isinstance(h, MessageMediaDocument):
        await event.reply("Thats not a file.")
        return
-    if c.sticker:
-       await event.reply("Thats not a file.")
-       return
-    if c.audio:
-       await event.reply("Thats not a file.")
-       return
-    if event.gif:
-       await event.reply("Thats not a file.")
-       return
-    if c.photo:
-       await event.reply("Thats not a file.")
-       return
-    if c.video:
-       await event.reply("Thats not a file.")
-       return   
-    if c.poll:
-       await event.reply("Thats not a file.")
-       return
-    if c.geo:
-       await event.reply("Thats not a file.")
-       return
-    if c.game:
-       await event.reply("Thats not a file.")
-       return   
     try:
       virus = c.file.name
       await event.client.download_file(c, virus)
