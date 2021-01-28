@@ -790,7 +790,7 @@ async def _(event):
                 "\n<b>User:</b> {}" \
                 "\n<b>User ID:</b> <code>{}</code>" \
                 "\n<b>Reason:</b> {}".format(fed_name, f"<p><a href='tg://user?id={user.id}'>{user.first_name}</a></p>", user_target, fban_user_id, reason), parse_mode="html")
-     except Exception as e:
+         except Exception as e:
                   print (e)
                   pass
     chats_in_fed = 0
