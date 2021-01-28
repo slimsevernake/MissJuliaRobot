@@ -726,13 +726,14 @@ async def _(event):
                     "\n<b>User:</b> {}" \
                     "\n<b>User ID:</b> <code>{}</code>" \
                     "\n<b>Reason:</b> {}".format(fed_name, f"<p><a href='tg://user?id={user.id}'>{user.first_name}</a></p>", user_target, fban_user_id, reason), parse_mode="html")
-             except Exception as e:
+             except Exception as e:                         
                          print (e)
                          pass
         for fedschat in fed_chats:
             try:
                 await tbot.kick_participant(fedschat, fban_user_id)
             except Exception as e:
+                 sql.chat_leave_fed(fedschat)
                  print (e)         
                  pass                         
 
@@ -1498,6 +1499,7 @@ async def _(event):
             try:
                 await tbot.send_message(int(chat), title + text, parse_mode="markdown")
             except Exception as e:
+                sql.chat_leave_fed(chat)
                 failed += 1
                 print (e)
                 pass
