@@ -1385,7 +1385,7 @@ async def _(event):
                         "Federation `{}` has subscribed the federation `{}`"
                         .format(fedinfo['fname'], getfed['fname']),
                         parse_mode="markdown")
-                except Exception as e:
+                 except Exception as e:
                          print (e)
                          pass
         else:
