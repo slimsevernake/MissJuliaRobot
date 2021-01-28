@@ -1511,6 +1511,47 @@ async def _(event):
     print (e)
     pass
 
+@register(pattern="^/fednotif ?(.*)")
+async def _(event):   
+ try:
+    chat = event.chat_id
+    args = event.pattern_match.group(1)
+    user = event.sender
+    if event.is_group:
+        if (await is_register_admin(event.input_chat, event.sender_id)):
+            pass
+        else:
+            return
+    fed_id = sql.get_fed_id(chat)
+
+    if not fed_id:
+        await event.reply(
+            "This group is not a part of any federation!")
+        return
+
+    if args:
+        if args == "yes":
+            sql.set_feds_setting(user.id, True)
+            await event.reply(
+                "Reporting Federation back up! Every user who is fban / unfban you will be notified via PM."
+            )
+        elif args == "no":
+            sql.set_feds_setting(user.id, False)
+            await event.reply(
+                "Reporting Federation has stopped! Every user who is fban / unfban you will not be notified via PM."
+            )
+        else:
+            await event.reply("Please enter `on`/`off`", parse_mode="markdown")
+    else:
+        getreport = sql.user_feds_report(user.id)
+        await event.reply(
+            "Your current Federation report preferences: `{}`".format(
+                getreport),
+            parse_mode="markdown")
+ except Exception as e:
+        print (e)
+
+
 # Temporary data
 def put_chat(chat_id, value, chat_data):
     # print(chat_data)
