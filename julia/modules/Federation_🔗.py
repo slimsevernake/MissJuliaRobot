@@ -1551,6 +1551,66 @@ async def _(event):
  except Exception as e:
         print (e)
 
+@tbot.on(events.NewMessage(pattern="^/fedchats$"))
+async def _(event):   
+ try:
+    chat = event.chat_id
+    user = event.sender
+    if event.is_group:
+        if (await is_register_admin(event.input_chat, event.sender_id)):
+            pass
+        else:
+            return
+    if event.is_private:
+        await event.reply("This command is specific to the group, not to my pm !")
+        return
+
+    fed_id = sql.get_fed_id(chat)
+    info = sql.get_fed_info(fed_id)
+
+    if not fed_id:
+        await event.reply(
+            "This group is not a part of any federation!")
+        return
+
+    if is_user_fed_admin(fed_id, user.id) is False:
+        await event.reply(
+            "Only federation admins can do this!")
+        return
+
+    getlist = sql.all_fed_chats(fed_id)
+    if len(getlist) == 0:
+        await event.reply(
+            "No users are fbanned from the federation {}".format(info['fname']),
+            parse_mode="html")
+        return
+
+    text = "<b>New chat joined the federation {}:</b>\n".format(info['fname'])
+    for chats in getlist:
+        try:
+            chat_name = await tbot.get_entity(chats).title
+        except Exception as e:
+            sql.chat_leave_fed(chats)
+            print (e)
+            continue
+        text += " • {} (<code>{}</code>)\n".format(chat_name, chats)
+
+    try:
+        await event.reply(text, parse_mode="html")
+    except:
+        cleanr = re.compile('<.*?>')
+        cleantext = re.sub(cleanr, '', text)
+        with BytesIO(str.encode(cleantext)) as output:
+            output.name = "fedchats.txt"
+            await tbot.send_file(
+                file=output,
+                filename="fedchats.txt",
+                caption="Here is a list of all the chats that joined the federation {}."
+                .format(info['fname']))
+ except Exception as e:
+        print (e)
+
+
 
 # Temporary data
 def put_chat(chat_id, value, chat_data):
