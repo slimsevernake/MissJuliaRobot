@@ -70,7 +70,15 @@ async def virusscan(event):
        await event.reply("Thats not a file.")
        return
     h = c.media
+    try:
+       k = h.document.attributes
+    except Exception:
+       await event.reply("Thats not a file.")
+       return
     if not isinstance(h, MessageMediaDocument):
+       await event.reply("Thats not a file.")
+       return
+    if not isinstance(k[0], DocumentAttributeFilename):
        await event.reply("Thats not a file.")
        return
     try:
