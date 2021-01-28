@@ -172,6 +172,7 @@ async def _(event):
         buttons=[[Button.inline("⚠️ Delete Federation", data="rmfed_{}".format(fed_id))], [Button.inline("Cancel", data="rmfed_cancel")]], reply_to=message)
  except Exception as e:
      print (e)
+     pass
 
 @tbot.on(events.CallbackQuery(pattern=r"rmfed(\_(.*))"))
 async def delete_fed(event):
@@ -287,11 +288,15 @@ async def _(event):
 
         get_fedlog = sql.get_fed_log(args)
         if get_fedlog:
+         try:
                 await tbot.send_message(
                     get_fedlog,
                     "Chat **{}** has joined the federation **{}**".format(
                         event.chat.title, getfed['fname']),
                     parse_mode="markdown")       
+         except Exception as e:
+                         print (e)
+                         pass
         await event.reply("This group has joined the federation: **{}**".format(getfed['fname']))
 
 
@@ -327,11 +332,15 @@ async def _(event):
     if sql.chat_leave_fed(chat) is True:
             get_fedlog = sql.get_fed_log(fed_id)
             if get_fedlog:
+             try:
                     await tbot.send_message(
                         get_fedlog,
                         "Chat **{}** has left the federation **{}**".format(
                             event.chat.title, fed_info['fname']),
                         parse_mode="markdown")
+             except Exception as e:
+                         print (e)
+                         pass
             await event.reply(
                 "This group has left the federation **{}**".format(
                     fed_info['fname']))
@@ -512,6 +521,7 @@ async def _(event):
     await event.reply(text, parse_mode="html")
  except Exception as e :
     print (e)
+    pass
 
 @register(pattern="^/fedadmins$")
 async def _(event):   
@@ -568,6 +578,7 @@ async def _(event):
     await event.reply(text, parse_mode="html")
  except Exception as e :
     print (e)
+    pass
    
 @register(pattern="^/fban (.*)")
 async def _(event):   
@@ -694,27 +705,36 @@ async def _(event):
               "\n<b>Reason:</b> {}".format(fed_name, f"<p><a href='tg://user?id={user.id}'>{user.first_name}</a></p>", user_target, fban_user_id, reason), parse_mode="html")
         # Send message to owner if fednotif is enabled
         if getfednotif:
+         try:
             await tbot.send_message(info['owner'], "<b>FedBan reason updated</b>" \
                  "\n<b>Federation:</b> {}" \
                  "\n<b>Federation Admin:</b> {}" \
                  "\n<b>User:</b> {}" \
                  "\n<b>User ID:</b> <code>{}</code>" \
                  "\n<b>Reason:</b> {}".format(fed_name, f"<p><a href='tg://user?id={user.id}'>{user.first_name}</a></p>", user_target, fban_user_id, reason), parse_mode="html")
+         except Exception as e:
+                      print (e)
+                      pass
         # If fedlog is set, then send message, except fedlog is current chat
         get_fedlog = sql.get_fed_log(fed_id)
         if get_fedlog:
             if int(get_fedlog) != int(chat):
+             try:
                 await tbot.send_message(get_fedlog, "<b>FedBan reason updated</b>" \
                     "\n<b>Federation:</b> {}" \
                     "\n<b>Federation Admin:</b> {}" \
                     "\n<b>User:</b> {}" \
                     "\n<b>User ID:</b> <code>{}</code>" \
                     "\n<b>Reason:</b> {}".format(fed_name, f"<p><a href='tg://user?id={user.id}'>{user.first_name}</a></p>", user_target, fban_user_id, reason), parse_mode="html")
+             except Exception as e:
+                         print (e)
+                         pass
         for fedschat in fed_chats:
             try:
                 await tbot.kick_participant(fedschat, fban_user_id)
             except Exception as e:
-                 print (e)                                  
+                 print (e)         
+                 pass                         
 
         # Fban for fed subscriber
         subscriber = list(sql.get_subscriber(fed_id))
@@ -749,22 +769,30 @@ async def _(event):
           "\n<b>Reason:</b> {}".format(fed_name, f"<p><a href='tg://user?id={user.id}'>{user.first_name}</a></p>", user_target, fban_user_id, reason), parse_mode="html")
     # Send message to owner if fednotif is enabled
     if getfednotif:
+     try:
         await tbot.send_message(info['owner'], "<b>FedBan reason updated</b>" \
              "\n<b>Federation:</b> {}" \
              "\n<b>Federation Admin:</b> {}" \
              "\n<b>User:</b> {}" \
              "\n<b>User ID:</b> <code>{}</code>" \
              "\n<b>Reason:</b> {}".format(fed_name, f"<p><a href='tg://user?id={user.id}'>{user.first_name}</a></p>", user_target, fban_user_id, reason), parse_mode="html")
+     except Exception as e:
+                  print (e)
+                  pass
     # If fedlog is set, then send message, except fedlog is current chat
     get_fedlog = sql.get_fed_log(fed_id)
     if get_fedlog:
         if int(get_fedlog) != int(chat):
+         try:
             await tbot.send_message(get_fedlog, "<b>FedBan reason updated</b>" \
                 "\n<b>Federation:</b> {}" \
                 "\n<b>Federation Admin:</b> {}" \
                 "\n<b>User:</b> {}" \
                 "\n<b>User ID:</b> <code>{}</code>" \
                 "\n<b>Reason:</b> {}".format(fed_name, f"<p><a href='tg://user?id={user.id}'>{user.first_name}</a></p>", user_target, fban_user_id, reason), parse_mode="html")
+     except Exception as e:
+                  print (e)
+                  pass
     chats_in_fed = 0
     for fedschat in fed_chats:
         chats_in_fed += 1
@@ -772,6 +800,7 @@ async def _(event):
             await tbot.kick_participant(fedschat, fban_user_id)
         except Exception as e:
             print (e)
+            pass
 
         # Fban for fed subscriber
         subscriber = list(sql.get_subscriber(fed_id))
@@ -783,8 +812,10 @@ async def _(event):
                         await tbot.kick_participant(fedschat, fban_user_id)
                     except Exception as e:
                         print (e)
+                        pass
  except Exception as e:
-       print (e)                          
+       print (e)                         
+       pass 
 
 @register(pattern="^/frules$")
 async def _(event):   
@@ -848,11 +879,15 @@ async def _(event):
         get_fedlog = sql.get_fed_log(fed_id)
         if get_fedlog:
             if eval(get_fedlog):
+             try:
                 await tbot.send_message(
                     get_fedlog,
                     "**{}** has updated federation rules for fed **{}**".format(
                         user.first_name, getfed['fname']),
-                    parse_mode="markdown")
+                    parse_mode="markdown")                    
+             except Exception as e:
+                         print (e)
+                         pass
         await event.reply(
             f"Rules have been changed to :\n\n{rules}")
     else:
@@ -860,6 +895,7 @@ async def _(event):
             "Please give some rules to set.")
  except Exception as e:
     print (e)
+    pass
 
 @tbot.on(events.NewMessage(pattern="^/unfban (.*)"))
 async def _(event):   
@@ -950,20 +986,28 @@ async def _(event):
           "\n<b>User ID:</b> <code>{}</code>".format(info['fname'], f"<p><a href='tg://user?id={user.id}'>{user.first_name}</a></p>", user_target, fban_user_id), parse_mode="HTML")
     # Send message to owner if fednotif is enabled
     if getfednotif:
+     try:
         await tbot.send_message(info['owner'], "<b>Un-FedBan</b>" \
              "\n<b>Federation:</b> {}" \
              "\n<b>Federation Admin:</b> {}" \
              "\n<b>User:</b> {}" \
              "\n<b>User ID:</b> <code>{}</code>".format(info['fname'], f"<p><a href='tg://user?id={user.id}'>{user.first_name}</a></p>", user_target, fban_user_id), parse_mode="HTML")
+     except Exception as e:
+                         print (e)
+                         pass
     # If fedlog is set, then send message, except fedlog is current chat
     get_fedlog = sql.get_fed_log(fed_id)
     if get_fedlog:
         if int(get_fedlog) != int(chat):
+         try:
             await tbot.send_message(get_fedlog, "<b>Un-FedBan</b>" \
                 "\n<b>Federation:</b> {}" \
                 "\n<b>Federation Admin:</b> {}" \
                 "\n<b>User:</b> {}" \
                 "\n<b>User ID:</b> <code>{}</code>".format(info['fname'], f"<p><a href='tg://user?id={user.id}'>{user.first_name}</a></p>", user_target, fban_user_id), parse_mode="HTML")
+         except Exception as e:
+                         print (e)
+                         pass
     unfbanned_in_chats = 0
     for fedchats in chat_list:
         unfbanned_in_chats += 1
@@ -986,6 +1030,7 @@ async def _(event):
                 unfbanned_in_chats))
  except Exception as e:
     print (e)
+    pass
 
 @tbot.on(events.NewMessage(pattern="^/setfedlog (.*)"))
 async def _(event):   
@@ -1024,6 +1069,7 @@ async def _(event):
                      "You have not provided your federated ID!")
  except Exception as e:
     print (e)
+    pass
 
 @tbot.on(events.NewMessage(pattern="^/unsetfedlog (.*)"))
 async def _(event):   
@@ -1062,6 +1108,7 @@ async def _(event):
                      "You have not provided your federated ID!")
  except Exception as e:
     print (e)
+    pass
 
 @tbot.on(events.NewMessage(pattern="^/fedsubs$"))
 async def _(event):   
@@ -1109,6 +1156,7 @@ async def _(event):
         await event.reply(listfed, parse_mode="markdown")
  except Exception as e:
         print (e)
+        pass
 
 @tbot.on(events.NewMessage(pattern="^/myfeds$"))
 async def _(event):   
@@ -1130,6 +1178,7 @@ async def _(event):
 
  except Exception as e:
     print (e)
+    pass
 
 @tbot.on(events.NewMessage(pattern="^/fbanlist$"))
 async def _(event):   
@@ -1210,6 +1259,7 @@ async def _(event):
                 .format(info['fname']))
  except Exception as e:
         print (e)
+        pass
 
 @tbot.on(events.NewMessage(pattern="^/exportfbans$"))
 async def _(event):   
@@ -1285,6 +1335,7 @@ async def _(event):
             return
  except Exception as e:
         print (e)
+        pass
 
 @tbot.on(events.NewMessage(pattern="^/subfed ?(.*)"))
 async def _(event):   
@@ -1328,11 +1379,15 @@ async def _(event):
             get_fedlog = sql.get_fed_log(args)
             if get_fedlog:
                 if int(get_fedlog) != int(chat):
+                 try:
                     await tbot.send_message(
                         get_fedlog,
                         "Federation `{}` has subscribed the federation `{}`"
                         .format(fedinfo['fname'], getfed['fname']),
                         parse_mode="markdown")
+                except Exception as e:
+                         print (e)
+                         pass
         else:
             await event.reply(
                 "Federation `{}` already subscribed the federation `{}`.".format(
@@ -1343,6 +1398,7 @@ async def _(event):
                      "You have not provided your federated ID!")
  except Exception as e:
         print (e)
+        pass
 
 @tbot.on(events.NewMessage(pattern="^/unsubfed ?(.*)"))
 async def _(event):   
@@ -1386,11 +1442,15 @@ async def _(event):
             get_fedlog = sql.get_fed_log(args)
             if get_fedlog:
                 if int(get_fedlog) != int(chat):
+                 try:
                     await tbot.send_message(
                         get_fedlog,
                         "Federation `{}` has unsubscribed fed `{}`.".format(
                             fedinfo['fname'], getfed['fname']),
-                        parse_mode="markdown")
+                        parse_mode="markdown")                        
+                 except Exception as e:
+                         print (e)
+                         pass
         else:
             await event.reply(
                 "Federation `{}` is not subscribed to `{}`.".format(
@@ -1401,6 +1461,7 @@ async def _(event):
                      "You have not provided your federated ID!")
  except Exception as e:
         print (e)
+        pass
 
 @tbot.on(events.NewMessage(pattern="^/fedbroadcast ?(.*)"))
 async def _(event):   
@@ -1439,6 +1500,7 @@ async def _(event):
             except Exception as e:
                 failed += 1
                 print (e)
+                pass
 
         send_text = "The federation broadcast is complete\n"
         if failed >= 1:
@@ -1447,6 +1509,7 @@ async def _(event):
         await event.reply(send_text)
  except Exception as e:
     print (e)
+    pass
 
 # Temporary data
 def put_chat(chat_id, value, chat_data):
