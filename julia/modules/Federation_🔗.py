@@ -1532,12 +1532,12 @@ async def _(event):
         return
 
     if args:
-        if args == "yes":
+        if args == "on":
             sql.set_feds_setting(user.id, True)
             await event.reply(
                 "Reporting Federation back up! Every user who is fban / unfban you will be notified via PM."
             )
-        elif args == "no":
+        elif args == "off":
             sql.set_feds_setting(user.id, False)
             await event.reply(
                 "Reporting Federation has stopped! Every user who is fban / unfban you will not be notified via PM."
