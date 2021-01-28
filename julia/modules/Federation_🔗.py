@@ -290,7 +290,7 @@ async def _(event):
         if get_fedlog:
          try:
                 await tbot.send_message(
-                    get_fedlog,
+                    int(get_fedlog),
                     "Chat **{}** has joined the federation **{}**".format(
                         event.chat.title, getfed['fname']),
                     parse_mode="markdown")       
@@ -334,7 +334,7 @@ async def _(event):
             if get_fedlog:
              try:
                     await tbot.send_message(
-                        get_fedlog,
+                        int(get_fedlog),
                         "Chat **{}** has left the federation **{}**".format(
                             event.chat.title, fed_info['fname']),
                         parse_mode="markdown")
@@ -706,7 +706,7 @@ async def _(event):
         # Send message to owner if fednotif is enabled
         if getfednotif:
          try:
-            await tbot.send_message(info['owner'], "<b>FedBan reason updated</b>" \
+            await tbot.send_message(int(info['owner']), "<b>FedBan reason updated</b>" \
                  "\n<b>Federation:</b> {}" \
                  "\n<b>Federation Admin:</b> {}" \
                  "\n<b>User:</b> {}" \
@@ -720,7 +720,7 @@ async def _(event):
         if get_fedlog:
             if int(get_fedlog) != int(chat):
              try:
-                await tbot.send_message(get_fedlog, "<b>FedBan reason updated</b>" \
+                await tbot.send_message(int(get_fedlog), "<b>FedBan reason updated</b>" \
                     "\n<b>Federation:</b> {}" \
                     "\n<b>Federation Admin:</b> {}" \
                     "\n<b>User:</b> {}" \
@@ -771,7 +771,7 @@ async def _(event):
     # Send message to owner if fednotif is enabled
     if getfednotif:
      try:
-        await tbot.send_message(info['owner'], "<b>FedBan reason updated</b>" \
+        await tbot.send_message(int(info['owner']), "<b>FedBan reason updated</b>" \
              "\n<b>Federation:</b> {}" \
              "\n<b>Federation Admin:</b> {}" \
              "\n<b>User:</b> {}" \
@@ -785,7 +785,7 @@ async def _(event):
     if get_fedlog:
         if int(get_fedlog) != int(chat):
          try:
-            await tbot.send_message(get_fedlog, "<b>FedBan reason updated</b>" \
+            await tbot.send_message(int(get_fedlog), "<b>FedBan reason updated</b>" \
                 "\n<b>Federation:</b> {}" \
                 "\n<b>Federation Admin:</b> {}" \
                 "\n<b>User:</b> {}" \
@@ -882,7 +882,7 @@ async def _(event):
             if eval(get_fedlog):
              try:
                 await tbot.send_message(
-                    get_fedlog,
+                    int(get_fedlog),
                     "**{}** has updated federation rules for fed **{}**".format(
                         user.first_name, getfed['fname']),
                     parse_mode="markdown")                    
@@ -988,7 +988,7 @@ async def _(event):
     # Send message to owner if fednotif is enabled
     if getfednotif:
      try:
-        await tbot.send_message(info['owner'], "<b>Un-FedBan</b>" \
+        await tbot.send_message(int(info['owner']), "<b>Un-FedBan</b>" \
              "\n<b>Federation:</b> {}" \
              "\n<b>Federation Admin:</b> {}" \
              "\n<b>User:</b> {}" \
@@ -1001,7 +1001,7 @@ async def _(event):
     if get_fedlog:
         if int(get_fedlog) != int(chat):
          try:
-            await tbot.send_message(get_fedlog, "<b>Un-FedBan</b>" \
+            await tbot.send_message(int(get_fedlog), "<b>Un-FedBan</b>" \
                 "\n<b>Federation:</b> {}" \
                 "\n<b>Federation Admin:</b> {}" \
                 "\n<b>User:</b> {}" \
@@ -1382,7 +1382,7 @@ async def _(event):
                 if int(get_fedlog) != int(chat):
                  try:
                     await tbot.send_message(
-                        get_fedlog,
+                        int(get_fedlog),
                         "Federation `{}` has subscribed the federation `{}`"
                         .format(fedinfo['fname'], getfed['fname']),
                         parse_mode="markdown")
@@ -1445,7 +1445,7 @@ async def _(event):
                 if int(get_fedlog) != int(chat):
                  try:
                     await tbot.send_message(
-                        get_fedlog,
+                        int(get_fedlog),
                         "Federation `{}` has unsubscribed fed `{}`.".format(
                             fedinfo['fname'], getfed['fname']),
                         parse_mode="markdown")                        
@@ -1611,8 +1611,7 @@ async def _(event):
                 .format(info['fname']))
  except Exception as e:
         print (e)
-
-
+        
 
 # Temporary data
 def put_chat(chat_id, value, chat_data):
