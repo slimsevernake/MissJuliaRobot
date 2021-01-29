@@ -1355,6 +1355,9 @@ async def _(event):
 
     fed_id = sql.get_fed_id(chat)
     fedinfo = sql.get_fed_info(fed_id)
+    if args == fed_id:
+      await event.reply("You cannot subscribe a federation to it's own")
+      return
 
     if not fed_id:
         await event.reply(
@@ -1418,6 +1421,9 @@ async def _(event):
 
     fed_id = sql.get_fed_id(chat)
     fedinfo = sql.get_fed_info(fed_id)
+    if args == fed_id:
+      await event.reply("You cannot unsubscribe a federation to it's own")
+      return
 
     if not fed_id:
         await event.reply(
