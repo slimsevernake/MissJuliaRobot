@@ -1640,7 +1640,7 @@ async def _(event):
             "Only Federation owners can do this!")
         return
     
-    if event.reply_to_message_id:
+    if event.reply_to_msg_id:
         op = await event.get_reply_message()
         try:
           op.media.document
@@ -1759,6 +1759,9 @@ async def _(event):
             return
         await event.reply(text)
         os.remove(op.file.name)
+    else:
+        await event.reply("Reply to the backup(export) file to import it.")
+        return
  except Exception as e:
      print (e)
 
