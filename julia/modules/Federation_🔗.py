@@ -1611,6 +1611,157 @@ async def _(event):
  except Exception as e:
         print (e)
         
+@tbot.on(events.NewMessage(pattern="^/importfbans$"))
+async def _(event):   
+ try:
+    chat = event.chat_id
+    user = event.sender    
+    chat_data = {}
+    if event.is_group:
+        if (await is_register_admin(event.input_chat, event.sender_id)):
+            pass
+        else:
+            return
+    if event.is_private:
+        await event.reply("This command is specific to the group, not to my pm !")
+        return
+
+    fed_id = sql.get_fed_id(chat)
+    info = sql.get_fed_info(fed_id)
+    getfed = sql.get_fed_info(fed_id)
+
+    if not fed_id:
+        await event.reply(
+            "This group is not a part of any federation!")
+        return
+
+    if is_user_fed_owner(fed_id, user.id) is False:
+        await event.reply(
+            "Only Federation owners can do this!")
+        return
+    
+    if event.reply_to_message_id:
+        op = await event.get_reply_message()
+        try:
+          op.media.document
+        except Exception:
+          await event.reply("Thats not a file.")
+          return
+        h = op.media
+        try:
+            k = h.document.attributes
+        except Exception:
+          await event.reply("Thats not a file.")
+          return
+        if not isinstance(h, MessageMediaDocument):
+          await event.reply("Thats not a file.")
+          return
+        if not isinstance(k[0], DocumentAttributeFilename):
+          await event.reply("Thats not a file.")
+          return
+        jam = time.time()
+        new_jam = jam + 1800
+        cek = get_chat(chat, chat_data)
+        if cek.get('status'):
+            if jam <= int(cek.get('value')):
+                waktu = time.strftime("%H:%M:%S %d/%m/%Y",
+                                      time.localtime(cek.get('value')))
+                await event.reply(
+                    "You can import your data once every 30 minutes!\nYou can get data again at `{}`"
+                    .format(waktu),
+                    parse_mode="markdown")
+                return
+            else:
+                if user.id != OWNER_ID:
+                    put_chat(chat, new_jam, chat_data)
+        else:
+            if user.id != OWNER_ID:
+                put_chat(chat, new_jam, chat_data)
+        success = 0
+        failed = 0
+        fileformat = op.file.name.split('.')[-1]
+        if fileformat == 'json':
+            try:
+                file_info = await tbot.download_file(op, op.file.name)
+            except Exception:
+                await event.reply("Try downloading and re-uploading the file, this one seems broken!")
+                return
+            multi_fed_id = []
+            multi_import_userid = []
+            multi_import_firstname = []
+            multi_import_lastname = []
+            multi_import_username = []
+            multi_import_reason = []
+            with open(op.file.name) as file:
+                file.seek(0)
+                reading = file.read().decode('UTF-8')
+                splitting = reading.split('\n')
+                for x in splitting:
+                    if x == '':
+                        continue
+                    try:
+                        data = json.loads(x)
+                    except json.decoder.JSONDecodeError as err:
+                        failed += 1
+                        continue
+                    try:
+                        import_userid = int(data['user_id'])  # Make sure it int
+                        import_firstname = str(data['first_name'])
+                        import_lastname = str(data['last_name'])
+                        import_username = str(data['user_name'])
+                        import_reason = str(data['reason'])
+                    except ValueError:
+                        failed += 1
+                        continue
+                    # Checking user
+                    if int(import_userid) == BOT_ID:
+                        failed += 1
+                        continue
+                    if is_user_fed_owner(fed_id, import_userid) is True:
+                        failed += 1
+                        continue
+                    if is_user_fed_admin(fed_id, import_userid) is True:
+                        failed += 1
+                        continue
+                    if str(import_userid) == str(OWNER_ID):
+                        failed += 1
+                        continue
+                    multi_fed_id.append(fed_id)
+                    multi_import_userid.append(str(import_userid))
+                    multi_import_firstname.append(import_firstname)
+                    multi_import_lastname.append(import_lastname)
+                    multi_import_username.append(import_username)
+                    multi_import_reason.append(import_reason)
+                    success += 1
+                sql.multi_fban_user(multi_fed_id, multi_import_userid,
+                                    multi_import_firstname,
+                                    multi_import_lastname,
+                                    multi_import_username, multi_import_reason)
+            text = "Blocks were successfully imported.\n`{}` people are blocked.".format(
+                success)
+            if failed >= 1:
+                text += " {} Failed to import.".format(failed)
+            get_fedlog = sql.get_fed_log(fed_id)
+            if get_fedlog:
+                if eval(get_fedlog):
+                    teks = "Fed **{}** has successfully imported data.\n{} banned.".format(
+                        getfed['fname'], success)
+                    if failed >= 1:
+                        teks += " {} Failed to import.".format(failed)
+                    try:
+                       await tbot.send_message(int(get_fedlog), teks, parse_mode="markdown")
+                    except Exception as e:
+                       print (e)
+                       pass
+        else:
+            await event.reply(
+                         "This file is not supported.")
+            return
+        await event.reply(text)
+        os.remove(op.file.name)
+ except Exception as e:
+     print (e)
+
 
 # Temporary data
 def put_chat(chat_id, value, chat_data):
