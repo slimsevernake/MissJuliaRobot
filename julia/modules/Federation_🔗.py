@@ -1766,6 +1766,121 @@ async def _(event):
  except Exception as e:
      print (e)
 
+@tbot.on(events.NewMessage(pattern="^/fbanstat"))
+async def _(event):   
+ try:
+    chat = event.chat_id
+    user = event.sender    
+    if event.is_group:
+        if (await is_register_admin(event.input_chat, event.sender_id)):
+            pass
+        else:
+            return  
+    cmd = event.text
+    args = cmd.split(" ")   
+    if len(args) > 2:
+        await event.reply("You can pass only 2 arguments")
+        return
+    if args:
+        if args[0].isdigit() and len(str(args[0])) == 10:
+            user_idd = args[0]
+            user_id = await tbot.get_input_entity(int(user_idd)).user_id
+        else:
+            user_idd = args[0]
+            user_id = await tbot.get_input_entity(user_idd).user_id
+    else:
+        user_id = event.sender_id
+
+    if user_id:
+        if len(args) == 2 and args[0].isdigit():
+            fed_id = args[1]
+            user_name, reason, fbantime = sql.get_user_fban(fed_id, str(user_id))
+            if fbantime:
+                fbantime = time.strftime("%d/%m/%Y", time.localtime(fbantime))
+            else:
+                fbantime = "Unavailable"
+            if user_name is False:
+                await event.reply(
+                    "Fed {} not found!".format(fed_id),
+                    parse_mode="markdown",
+                )
+                return
+            if user_name == "" or user_name is None:
+                user_name = "He/she"
+            if not reason:
+                await event.reply(
+                    "{} is not banned in this federation!".format(user_name),
+                )
+            else:
+                teks = "{} banned in this federation because:\n`{}`\n**Banned at:** `{}`".format(
+                    user_name, reason, fbantime
+                )
+                await event.reply(teks, parse_mode="markdown")
+            return
+        user_name, fbanlist = sql.get_user_fbanlist(str(user_id))
+        if user_name == "":
+            try:
+                user_name = await tbot.get_entity(int(user_id)).first_name
+            except BadRequest:
+                user_name = "He/she"
+            if user_name == "" or user_name is None:
+                user_name = "He/she"
+        if len(fbanlist) == 0:
+            await event.reply(
+                "{} is not banned in any federation!".format(user_name),
+            )
+            return
+        else:
+            teks = "{} has been banned in this federation:\n".format(user_name)
+            for x in fbanlist:
+                teks += "- `{}`: {}\n".format(x[0], x[1][:20])
+            teks += "\nIf you want to find out more about the reasons for fedban specifically, use `/fbanstat <FedID>`"
+            await event.reply(teks, parse_mode="markdown")
+
+    elif event.reply_to_message_id and not args:
+        c = await event.get_reply_message()
+        user_id = c.sender_id
+        user_name, fbanlist = sql.get_user_fbanlist(user_id)
+        if user_name == "":
+            user_name = c.sender.first_name
+        if len(fbanlist) == 0:
+            await event.reply(
+                "{} is not banned in any federation!".format(user_name),
+            )
+        else:
+            teks = "{} has been banned in this federation:\n".format(user_name)
+            for x in fbanlist:
+                teks += "- `{}`: {}\n".format(x[0], x[1][:20])
+            teks += "\nIf you want to find out more about the reasons for fedban specifically, use `/fbanstat <FedID>`"
+            await event.reply(teks, parse_mode="markdown")
+
+    else:
+        fed_id = args[0]
+        fedinfo = sql.get_fed_info(fed_id)
+        if not fedinfo:
+            await event.reply("Fed {} not found!".format(fed_id))
+            return
+        name, reason, fbantime = sql.get_user_fban(fed_id, c.sender_id)
+        if fbantime:
+            fbantime = time.strftime("%d/%m/%Y", time.localtime(fbantime))
+        else:
+            fbantime = "Unavaiable"
+        if not name:
+            name = event.sender.first_name
+        if not reason:
+            await event.reply(
+                "{} is not banned in this federation".format(name),
+            )
+            return
+        await event.reply(
+            "{} banned in this federation because:\n`{}`\n**Banned at:** `{}`".format(
+                name, reason, fbantime
+            ),
+            parse_mode="markdown",
+        )
+ except Exception as e:
+     print (e)
+
 
 # Temporary data
 def put_chat(chat_id, value, chat_data):
