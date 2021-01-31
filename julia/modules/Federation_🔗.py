@@ -1791,7 +1791,7 @@ async def _(event):
             user_id = user_iddd.user_id
         else:
             user_idd = args[0]
-            user_iddd = await tbot.get_input_entity(user_idd).user_id
+            user_iddd = await tbot.get_input_entity(user_idd)
             user_id = user_iddd.user_id
     else:
         user_id = event.sender_id
@@ -1825,7 +1825,8 @@ async def _(event):
         user_name, fbanlist = sql.get_user_fbanlist(str(user_id))
         if user_name == "":
             try:
-                user_name = await tbot.get_entity(int(user_id)).first_name
+                user_namee = await tbot.get_entity(int(user_id))
+                user_name = user_namee.first_name
             except Exception:
                 user_name = "He/she"
             if user_name == "" or user_name is None:
