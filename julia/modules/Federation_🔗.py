@@ -1781,6 +1781,9 @@ async def _(event):
     if len(args) > 2:
         await event.reply("You can pass only 2 arguments")
         return
+    if event.is_private:
+        await event.reply("You need to pass the federation id.")
+        return
     if len(args) > 1:
         if args[0].isdigit() and len(str(args[0])) == 10:
             user_idd = args[0]
