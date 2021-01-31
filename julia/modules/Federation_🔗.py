@@ -1784,10 +1784,12 @@ async def _(event):
     if args:
         if args[0].isdigit() and len(str(args[0])) == 10:
             user_idd = args[0]
-            user_id = await tbot.get_input_entity(int(user_idd)).user_id
+            user_iddd = await tbot.get_input_entity(int(user_idd))
+            user_id = user_iddd.user_id
         else:
             user_idd = args[0]
-            user_id = await tbot.get_input_entity(user_idd).user_id
+            user_iddd = await tbot.get_input_entity(user_idd).user_id
+            user_id = user_iddd.user_id
     else:
         user_id = event.sender_id
 
@@ -1821,7 +1823,7 @@ async def _(event):
         if user_name == "":
             try:
                 user_name = await tbot.get_entity(int(user_id)).first_name
-            except BadRequest:
+            except Exception:
                 user_name = "He/she"
             if user_name == "" or user_name is None:
                 user_name = "He/she"
