@@ -1695,7 +1695,7 @@ async def _(event):
             multi_import_reason = []
             with open(op.file.name) as file:
                 file.seek(0)
-                reading = file.read().decode('UTF-8')
+                reading = file.read()
                 splitting = reading.split('\n')
                 for x in splitting:
                     if x == '':
