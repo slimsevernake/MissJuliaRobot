@@ -10,6 +10,7 @@ from telethon import *
 from telethon.tl import *
 from telethon.tl.types import User
 from julia import *
+from telethon.tl.types import MessageMediaDocument, DocumentAttributeFilename
 from julia.events import register
 from pymongo import MongoClient
 
