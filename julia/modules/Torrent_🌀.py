@@ -100,7 +100,7 @@ async def paginate_news(event):
     size = results[int(num)].get('size')
     typ= results[int(num)].get('type')
     header = f"**#{num} **"
-    lastisthis = f"{header} **Name:** {name}\n__Uploaded {age} ago__\n**Seeders:** {seed}\n**Leechers:** {leech}\n**Size:** {size}\n**Type:** {typ}\n**Magnet Link:** [click here]({mag})"
+    lastisthis = f"{header} **Name:** {name}\n**Uploaded:** {age} ago\n**Seeders:** {seed}\n**Leechers:** {leech}\n**Size:** {size}\n**Type:** {typ}\n**Magnet Link:** `{mag}`"
     await tbot.edit_message(chatid, msgid, lastisthis, link_preview=False, buttons=[[Button.inline('◀️', data=f'prevtorrent-{sender}|{search}|{num}|{chatid}|{msgid}'), Button.inline('❌', data=f'torrentstop-{sender}|{chatid}|{msgid}'), Button.inline('▶️', data=f'nexttorrent-{sender}|{search}|{num}|{chatid}|{msgid}')], [Button.inline('Refresh 🔁', data=f'newtorrent-{sender}|{search}|{chatid}|{msgid}')]])
 
 @tbot.on(events.CallbackQuery(pattern=r"prevtorrent(\-(.*))"))
@@ -148,6 +148,7 @@ async def paginate_prevtorrent(event):
     size = results[int(num)].get('size')
     typ= results[int(num)].get('type')
     header = f"**#{num} **"
+    lastisthis = f"{header} **Name:** {name}\n**Uploaded:** {age} ago\n**Seeders:** {seed}\n**Leechers:** {leech}\n**Size:** {size}\n**Type:** {typ}\n**Magnet Link:** `{mag}`"
     await tbot.edit_message(chatid, msgid, lastisthis, link_preview=False, buttons=[[Button.inline('◀️', data=f'prevtorrent-{sender}|{search}|{num}|{chatid}|{msgid}'), Button.inline('❌', data=f'torrentstop-{sender}|{chatid}|{msgid}'), Button.inline('▶️', data=f'nexttorrent-{sender}|{search}|{num}|{chatid}|{msgid}')], [Button.inline('Refresh 🔁', data=f'newtorrent-{sender}|{search}|{chatid}|{msgid}')]])
 
 @tbot.on(events.CallbackQuery(pattern=r"nexttorrent(\-(.*))"))
@@ -195,6 +196,7 @@ async def paginate_nexttorrent(event):
     size = results[int(num)].get('size')
     typ= results[int(num)].get('type')
     header = f"**#{num} **"
+    lastisthis = f"{header} **Name:** {name}\n**Uploaded:** {age} ago\n**Seeders:** {seed}\n**Leechers:** {leech}\n**Size:** {size}\n**Type:** {typ}\n**Magnet Link:** `{mag}`"
     await tbot.edit_message(chatid, msgid, lastisthis, link_preview=False, buttons=[[Button.inline('◀️', data=f'prevtorrent-{sender}|{search}|{num}|{chatid}|{msgid}'), Button.inline('❌', data=f'torrentstop-{sender}|{chatid}|{msgid}'), Button.inline('▶️', data=f'nexttorrent-{sender}|{search}|{num}|{chatid}|{msgid}')], [Button.inline('Refresh 🔁', data=f'newtorrent-{sender}|{search}|{chatid}|{msgid}')]])
 
 @tbot.on(events.CallbackQuery(pattern=r"torrentstop(\-(.*))"))
@@ -222,7 +224,7 @@ async def torrentstop(event):
     if not event.sender_id == sender:
        await event.answer("You haven't send that command !")
        return
-    await tbot.edit_message(chatid, msgid, "Thanks for reading.\n❤️ from Google News !")
+    await tbot.edit_message(chatid, msgid, "Thanks for using.\n❤️ from [Julia](t.me/MissJuliaRobot) !")
 
 @tbot.on(events.CallbackQuery(pattern=r"newtorrent(\-(.*))"))
 async def paginate_nexttorrent(event):
@@ -268,6 +270,7 @@ async def paginate_nexttorrent(event):
     size = results[int(num)].get('size')
     typ= results[int(num)].get('type')
     header = f"**#{num} **"
+    lastisthis = f"{header} **Name:** {name}\n**Uploaded:** {age} ago\n**Seeders:** {seed}\n**Leechers:** {leech}\n**Size:** {size}\n**Type:** {typ}\n**Magnet Link:** `{mag}`"
     await tbot.edit_message(chatid, msgid, lastisthis, link_preview=False, buttons=[[Button.inline('◀️', data=f'prevtorrent-{sender}|{search}|{num}|{chatid}|{msgid}'), Button.inline('❌', data=f'torrentstop-{sender}|{chatid}|{msgid}'), Button.inline('▶️', data=f'nexttorrent-{sender}|{search}|{num}|{chatid}|{msgid}')], [Button.inline('Refresh 🔁', data=f'newtorrent-{sender}|{search}|{chatid}|{msgid}')]])
 
 file_help = os.path.basename(__file__)
