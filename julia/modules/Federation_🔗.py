@@ -1225,7 +1225,7 @@ async def _(event):
                 info['fname'])
             break
         user_name = getuserinfo['first_name']
-        if getuserinfo['last_name']:
+        if not getuserinfo['last_name'] is None:
             user_name += " " + getuserinfo['last_name']
         text += " • {} (<code>{}</code>)\n".format(
             f"<p><a href='tg://user?id={users}'>{user_name}</a></p>", users)
@@ -1495,9 +1495,9 @@ async def _(event):
             return
         text = args
         try:
-            broadcaster = user.first_name
-        except:
             broadcaster = user.first_name + " " + user.last_name
+        except:
+            broadcaster = user.first_name 
         text += f"\n\n- [{broadcaster}](tg://user?id={user.id})"
         chat_list = sql.all_fed_chats(fed_id)
         failed = 0
