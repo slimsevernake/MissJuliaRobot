@@ -224,7 +224,7 @@ async def torrentstop(event):
     if not event.sender_id == sender:
        await event.answer("You haven't send that command !")
        return
-    await tbot.edit_message(chatid, msgid, "Thanks for using.\n❤️ from [Julia](t.me/MissJuliaRobot) !")
+    await tbot.edit_message(chatid, msgid, "Thanks for using.\n❤️ from [Julia](t.me/MissJuliaRobot) !", link_preview=False)
 
 @tbot.on(events.CallbackQuery(pattern=r"newtorrent(\-(.*))"))
 async def paginate_nexttorrent(event):
