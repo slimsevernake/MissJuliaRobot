@@ -2,6 +2,7 @@ import threading
 from julia.modules.sql import BASE, SESSION
 from sqlalchemy import Boolean, Column, Integer, String, UnicodeText
 
+
 class Federations(BASE):
     __tablename__ = "feds"
     owner_id = Column(String(14))
@@ -122,16 +123,14 @@ def get_fed_id(chat_id):
     get = FEDERATION_CHATS.get(str(chat_id))
     if get is None:
         return False
-    else:
-        return get['fid']
+    return get['fid']
 
 
 def get_fed_name(chat_id):
     get = FEDERATION_CHATS.get(str(chat_id))
     if get is None:
         return False
-    else:
-        return get['chat_name']
+    return get['chat_name']
 
 
 def get_user_fban(fed_id, user_id):
@@ -313,7 +312,8 @@ def chat_join_fed(fed_id, chat_name, chat_id):
         global FEDERATION_CHATS, FEDERATION_CHATS_BYID
         r = ChatF(chat_id, chat_name, fed_id)
         SESSION.add(r)
-        FEDERATION_CHATS[str(chat_id)] = {'chat_name': chat_name, 'fid': fed_id}
+        FEDERATION_CHATS[str(chat_id)] = {
+            'chat_name': chat_name, 'fid': fed_id}
         checkid = FEDERATION_CHATS_BYID.get(fed_id)
         if checkid is None:
             FEDERATION_CHATS_BYID[fed_id] = []
@@ -336,8 +336,7 @@ def search_user_in_fed(fed_id, user_id):
     getfed = eval(getfed['fusers'])['members']
     if user_id in eval(getfed):
         return True
-    else:
-        return False
+    return False
 
 
 def user_demote_fed(fed_id, user_id):
@@ -455,8 +454,7 @@ def all_fed_chats(fed_id):
         getfed = FEDERATION_CHATS_BYID.get(fed_id)
         if getfed is None:
             return []
-        else:
-            return getfed
+        return getfed
 
 
 def all_fed_users(fed_id):
@@ -602,8 +600,7 @@ def get_fban_user(fed_id, user_id):
                     reason = I.reason
                     time = I.time
         return True, reason, time
-    else:
-        return False, None, None
+    return False, None, None
 
 
 def get_all_fban_users(fed_id):
@@ -643,8 +640,7 @@ def search_fed_by_id(fed_id):
     get = FEDERATION_BYFEDID.get(fed_id)
     if get is None:
         return False
-    else:
-        return get
+    return get
     result = False
     for Q in curr:
         if Q.fed_id == fed_id:
@@ -680,10 +676,9 @@ def get_fed_log(fed_id):
         return fed_setting
     if fed_setting.get('flog') is None:
         return False
-    elif fed_setting.get('flog'):
+    if fed_setting.get('flog'):
         return fed_setting.get('flog')
-    else:
-        return False
+    return False
 
 
 def set_fed_log(fed_id, chat_id):
@@ -749,8 +744,7 @@ def get_all_subs(fed_id):
 def get_spec_subs(fed_id, fed_target):
     if FEDS_SUBSCRIBER.get(fed_id, set()) == set():
         return {}
-    else:
-        return FEDS_SUBSCRIBER.get(fed_id, fed_target)
+    return FEDS_SUBSCRIBER.get(fed_id, fed_target)
 
 
 def get_mysubs(my_fed):
