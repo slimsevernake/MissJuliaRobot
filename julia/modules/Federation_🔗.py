@@ -1776,11 +1776,8 @@ async def _(event):
             pass
         else:
             return       
-    if event.is_private:
-        args = event.pattern_match.group(1)
-        if not args:
-            await event.reply("Syntax: `/fbanstat <userid/entity>`")
-            return
+    args = event.pattern_match.group(1)
+    if args:      
         userid = args        
         if args.isdigit():
             user_idd = args
@@ -1805,17 +1802,17 @@ async def _(event):
                 user_name = "He/she" 
           if len(fbanlist) == 0:
             await event.reply(
-                "{} is not banned in any federation!".format(user_name),
+                "**{}** is not banned in any federation!".format(user_name),
             )
             return            
           else:
-            teks = "{} has been banned in these federations:\n\n".format(user_name)
+            teks = "**{}** has been banned in these federations:\n\n".format(user_name)
             for x in fbanlist:
                 teks += "- `{}`: {}\n".format(x[0], x[1][:20])
             await event.reply(teks, parse_mode="markdown")
     else:
-          await event.reply("This command is specific to my PM.")
-          return
+            await event.reply("Syntax: `/fbanstat <userid/entity>`")
+            return         
  except Exception as e:
      print (e)
 
