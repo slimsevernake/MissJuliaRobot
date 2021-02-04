@@ -47,7 +47,7 @@ async def _(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -68,7 +68,7 @@ async def _(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -89,7 +89,7 @@ async def _(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -110,7 +110,7 @@ async def _(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -131,7 +131,7 @@ async def _(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -152,7 +152,7 @@ async def _(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -173,7 +173,7 @@ async def _(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -194,7 +194,7 @@ async def _(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -211,7 +211,7 @@ async def _(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -229,7 +229,7 @@ async def _(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -247,7 +247,7 @@ async def _(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -265,7 +265,7 @@ async def _(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -283,7 +283,7 @@ async def _(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -301,7 +301,7 @@ async def _(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -319,7 +319,7 @@ async def _(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -328,6 +328,7 @@ async def _(event):
     args = int(event.pattern_match.group(1))
 
     await event.reply(str(math.log(int(args))))
+
 
 file_help = os.path.basename(__file__)
 file_help = file_help.replace(".py", "")
@@ -356,9 +357,4 @@ To find the area under a function, send the request as c:d|f(x) where c is the s
 To compute fractions, enter expressions as numerator(over)denominator. For example, to process 2/4 you must send in your expression as 2(over)4. The result expression will be in standard math notation (1/2, 3/4).
 """
 
-CMD_HELP.update({
-    file_helpo: [
-        file_helpo,
-        __help__
-    ]
-})
+CMD_HELP.update({file_helpo: [file_helpo, __help__]})

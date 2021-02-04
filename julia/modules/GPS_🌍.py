@@ -18,21 +18,23 @@ async def is_register_admin(chat, user):
     if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
 
         return isinstance(
-            (await
-             tbot(functions.channels.GetParticipantRequest(chat,
-                                                           user))).participant,
+            (
+                await tbot(functions.channels.GetParticipantRequest(chat, user))
+            ).participant,
             (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
         )
     if isinstance(chat, types.InputPeerChat):
 
         ui = await tbot.get_peer_id(user)
-        ps = (await tbot(functions.messages.GetFullChatRequest(chat.chat_id)
-                         )).full_chat.participants.participants
+        ps = (
+            await tbot(functions.messages.GetFullChatRequest(chat.chat_id))
+        ).full_chat.participants.participants
         return isinstance(
             next((p for p in ps if p.user_id == ui), None),
             (types.ChatParticipantAdmin, types.ChatParticipantCreator),
         )
     return None
+
 
 GMAPS_LOC = "https://maps.googleapis.com/maps/api/geocode/json"
 
@@ -58,9 +60,13 @@ async def _(event):
         geoloc = geolocator.geocode(location)
         longitude = geoloc.longitude
         latitude = geoloc.latitude
-        gm = "https://www.google.com/maps/search/{},{}".format(
-            latitude, longitude)
-        await tbot.send_file(event.chat_id, file=types.InputMediaGeoPoint(types.InputGeoPoint(float(latitude), float(longitude))))
+        gm = "https://www.google.com/maps/search/{},{}".format(latitude, longitude)
+        await tbot.send_file(
+            event.chat_id,
+            file=types.InputMediaGeoPoint(
+                types.InputGeoPoint(float(latitude), float(longitude))
+            ),
+        )
         await event.reply(
             "Open with: [Google Maps]({})".format(gm),
             link_preview=False,
@@ -68,6 +74,7 @@ async def _(event):
     except Exception as e:
         print(e)
         await event.reply("I can't find that")
+
 
 file_help = os.path.basename(__file__)
 file_help = file_help.replace(".py", "")
@@ -77,9 +84,4 @@ __help__ = """
  - /gps: <location> Get gps location.
 """
 
-CMD_HELP.update({
-    file_helpo: [
-        file_helpo,
-        __help__
-    ]
-})
+CMD_HELP.update({file_helpo: [file_helpo, __help__]})

@@ -62,7 +62,7 @@ async def parseqr(qr_e):
         userss = ch["user"]
 
     if qr_e.is_group:
-        if (await is_register_admin(qr_e.input_chat, qr_e.message.sender_id)):
+        if await is_register_admin(qr_e.input_chat, qr_e.message.sender_id):
             pass
         elif qr_e.chat_id == iid and qr_e.sender_id == userss:
             pass
@@ -98,7 +98,7 @@ async def make_qr(qrcode):
         userss = ch["user"]
 
     if qrcode.is_group:
-        if (await is_register_admin(qrcode.input_chat, qrcode.message.sender_id)):
+        if await is_register_admin(qrcode.input_chat, qrcode.message.sender_id):
             pass
         elif qrcode.chat_id == iid and qrcode.sender_id == userss:
             pass
@@ -148,6 +148,7 @@ size=200x200&charset-source=UTF-8&charset-target=UTF-8\
     duration = (datetime.now() - start).seconds
     await qrcode.reply("Created QRCode in {} seconds".format(duration))
 
+
 file_help = os.path.basename(__file__)
 file_help = file_help.replace(".py", "")
 file_helpo = file_help.replace("_", " ")
@@ -157,9 +158,4 @@ __help__ = """
  - /makeqr <content>: make a qr code from the given message (text, link, etc...)
 """
 
-CMD_HELP.update({
-    file_helpo: [
-        file_helpo,
-        __help__
-    ]
-})
+CMD_HELP.update({file_helpo: [file_helpo, __help__]})

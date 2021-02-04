@@ -15,8 +15,9 @@ async def can_change_info(message):
         )
     )
     p = result.participant
-    return isinstance(p, types.ChannelParticipantCreator) or (isinstance(
-        p, types.ChannelParticipantAdmin) and p.admin_rights.change_info)
+    return isinstance(p, types.ChannelParticipantCreator) or (
+        isinstance(p, types.ChannelParticipantAdmin) and p.admin_rights.change_info
+    )
 
 
 @register(pattern="^/rules$")
@@ -27,30 +28,35 @@ async def _(event):
     sender = event.sender_id
     rules = sql.get_rules(chat_id)
     if rules:
-        await event.reply("Click on the below button to get this group's rules 👇", buttons=[[Button.inline('Rules', data=f'start-rules-{sender}')]])
+        await event.reply(
+            "Click on the below button to get this group's rules 👇",
+            buttons=[[Button.inline("Rules", data=f"start-rules-{sender}")]],
+        )
     else:
         await event.reply(
             "The group admins haven't set any rules for this chat yet. "
             "This probably doesn't mean it's lawless though...!"
         )
 
+
 @tbot.on(events.CallbackQuery(pattern=r"start-rules-(\d+)"))
 async def rm_warn(event):
     rules = sql.get_rules(event.chat_id)
     # print(rules)
-    user_id = int(event.pattern_match.group(1))        
+    user_id = int(event.pattern_match.group(1))
     if not event.sender_id == user_id:
-       await event.answer("You haven't send that command !")
-       return
+        await event.answer("You haven't send that command !")
+        return
     text = f"The rules for **{event.chat.title}** are:\n\n{rules}"
     try:
         await tbot.send_message(
-            user_id,
-            text,
-            parse_mode="markdown",
-            link_preview=False)
+            user_id, text, parse_mode="markdown", link_preview=False
+        )
     except Exception:
-        await event.answer("I can't send you the rules as you haven't started me in PM, first start me !", alert=True)
+        await event.answer(
+            "I can't send you the rules as you haven't started me in PM, first start me !",
+            alert=True,
+        )
 
 
 @register(pattern="^/setrules")
@@ -80,6 +86,7 @@ async def _(event):
     sql.set_rules(chat_id, "")
     await event.reply("Successfully cleared rules for this chat !")
 
+
 file_help = os.path.basename(__file__)
 file_help = file_help.replace(".py", "")
 file_helpo = file_help.replace("_", " ")
@@ -90,9 +97,4 @@ __help__ = """
  - /rules: get the rules for this chat
 """
 
-CMD_HELP.update({
-    file_helpo: [
-        file_helpo,
-        __help__
-    ]
-})
+CMD_HELP.update({file_helpo: [file_helpo, __help__]})

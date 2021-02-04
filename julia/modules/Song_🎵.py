@@ -5,11 +5,16 @@ import json
 from telethon.tl.types import DocumentAttributeAudio
 from youtube_dl import YoutubeDL
 
-from youtube_dl.utils import (DownloadError, ContentTooShortError,
-
-                              ExtractorError, GeoRestrictedError,
-                              MaxDownloadsReached, PostProcessingError,
-                              UnavailableVideoError, XAttrMetadataError)
+from youtube_dl.utils import (
+    DownloadError,
+    ContentTooShortError,
+    ExtractorError,
+    GeoRestrictedError,
+    MaxDownloadsReached,
+    PostProcessingError,
+    UnavailableVideoError,
+    XAttrMetadataError,
+)
 
 from julia import tbot
 from telethon import types
@@ -47,17 +52,19 @@ async def is_register_admin(chat, user):
         )
     return None
 
+
 JULIASONG = "@MissJuliaRobotMP3"
 JULIAVSONG = "@MissJuliaRobotMP4"
+
 
 @register(pattern="^/song (.*)")
 async def download_song(v_url):
     approved_userss = approved_users.find({})
     for ch in approved_userss:
-        iid = ch['id']
-        userss = ch['user']
+        iid = ch["id"]
+        userss = ch["user"]
     if v_url.is_group:
-        if (await is_register_admin(v_url.input_chat, v_url.message.sender_id)):
+        if await is_register_admin(v_url.input_chat, v_url.message.sender_id):
             pass
         elif v_url.chat_id == iid and v_url.sender_id == userss:
             pass
@@ -70,40 +77,32 @@ async def download_song(v_url):
     search = SearchVideos(url, offset=1, mode="json", max_results=1)
     test = search.result()
     p = json.loads(test)
-    q = p.get('search_result')
+    q = p.get("search_result")
     try:
-        url = q[0]['link']
+        url = q[0]["link"]
     except BaseException:
         return await rkp.edit("`Failed to find that song`")
     type = "audio"
     await rkp.edit("`Preparing to download ...`")
     if type == "audio":
         opts = {
-            'format':
-            'bestaudio',
-            'addmetadata':
-            True,
-            'key':
-            'FFmpegMetadata',
-            'writethumbnail':
-            True,
-            'prefer_ffmpeg':
-            True,
-            'geo_bypass':
-            True,
-            'nocheckcertificate':
-            True,
-            'postprocessors': [{
-                'key': 'FFmpegExtractAudio',
-                'preferredcodec': 'mp3',
-                'preferredquality': '320',
-            }],
-            'outtmpl':
-            '%(id)s.mp3',
-            'quiet':
-            True,
-            'logtostderr':
-            False
+            "format": "bestaudio",
+            "addmetadata": True,
+            "key": "FFmpegMetadata",
+            "writethumbnail": True,
+            "prefer_ffmpeg": True,
+            "geo_bypass": True,
+            "nocheckcertificate": True,
+            "postprocessors": [
+                {
+                    "key": "FFmpegExtractAudio",
+                    "preferredcodec": "mp3",
+                    "preferredquality": "320",
+                }
+            ],
+            "outtmpl": "%(id)s.mp3",
+            "quiet": True,
+            "logtostderr": False,
         }
         video = False
         song = True
@@ -151,10 +150,13 @@ async def download_song(v_url):
             force_document=False,
             allow_cache=False,
             attributes=[
-                DocumentAttributeAudio(duration=int(rip_data['duration']),
-                                       title=str(rip_data['title']),
-                                       performer=str(rip_data['uploader']))
-            ])
+                DocumentAttributeAudio(
+                    duration=int(rip_data["duration"]),
+                    title=str(rip_data["title"]),
+                    performer=str(rip_data["uploader"]),
+                )
+            ],
+        )
         await y.forward_to(JULIASONG)
         os.system("rm -rf *.mp3")
         os.system("rm -rf *.webp")
@@ -164,10 +166,10 @@ async def download_song(v_url):
 async def download_video(v_url):
     approved_userss = approved_users.find({})
     for ch in approved_userss:
-        iid = ch['id']
-        userss = ch['user']
+        iid = ch["id"]
+        userss = ch["user"]
     if v_url.is_group:
-        if (await is_register_admin(v_url.input_chat, v_url.message.sender_id)):
+        if await is_register_admin(v_url.input_chat, v_url.message.sender_id):
             pass
         elif v_url.chat_id == iid and v_url.sender_id == userss:
             pass
@@ -180,37 +182,27 @@ async def download_video(v_url):
     search = SearchVideos(url, offset=1, mode="json", max_results=1)
     test = search.result()
     p = json.loads(test)
-    q = p.get('search_result')
+    q = p.get("search_result")
     try:
-        url = q[0]['link']
+        url = q[0]["link"]
     except BaseException:
         return await rkp.edit("`Failed to find that video song`")
     type = "video"
     await rkp.edit("`Preparing to download ...`")
     if type == "video":
         opts = {
-            'format':
-            'best',
-            'addmetadata':
-            True,
-            'key':
-            'FFmpegMetadata',
-            'prefer_ffmpeg':
-            True,
-            'geo_bypass':
-            True,
-            'nocheckcertificate':
-            True,
-            'postprocessors': [{
-                'key': 'FFmpegVideoConvertor',
-                'preferedformat': 'mp4'
-            }],
-            'outtmpl':
-            '%(id)s.mp4',
-            'logtostderr':
-            False,
-            'quiet':
-            True
+            "format": "best",
+            "addmetadata": True,
+            "key": "FFmpegMetadata",
+            "prefer_ffmpeg": True,
+            "geo_bypass": True,
+            "nocheckcertificate": True,
+            "postprocessors": [
+                {"key": "FFmpegVideoConvertor", "preferedformat": "mp4"}
+            ],
+            "outtmpl": "%(id)s.mp4",
+            "logtostderr": False,
+            "quiet": True,
         }
         song = False
         video = True
@@ -255,7 +247,8 @@ async def download_video(v_url):
             v_url.chat_id,
             f"{rip_data['id']}.mp4",
             supports_streaming=True,
-            caption=rip_data['title'])
+            caption=rip_data["title"],
+        )
 
         await y.forward_to(JULIAVSONG)
         os.system("rm -rf *.mp4")
@@ -266,10 +259,10 @@ async def download_video(v_url):
 async def download_lyrics(v_url):
     approved_userss = approved_users.find({})
     for ch in approved_userss:
-        iid = ch['id']
-        userss = ch['user']
+        iid = ch["id"]
+        userss = ch["user"]
     if v_url.is_group:
-        if (await is_register_admin(v_url.input_chat, v_url.message.sender_id)):
+        if await is_register_admin(v_url.input_chat, v_url.message.sender_id):
             pass
         elif v_url.chat_id == iid and v_url.sender_id == userss:
             pass
@@ -294,9 +287,12 @@ async def download_lyrics(v_url):
             await v_url.client.send_file(
                 v_url.chat_id,
                 file=f,
-                caption="Message length exceeded max limit! Sending as a text file.")
+                caption="Message length exceeded max limit! Sending as a text file.",
+            )
     else:
         await v_url.reply(reply)
+
+
 file_help = os.path.basename(__file__)
 file_help = file_help.replace(".py", "")
 file_helpo = file_help.replace("_", " ")
@@ -311,9 +307,4 @@ __help__ = """
  @MissJuliaRobotMP4
 """
 
-CMD_HELP.update({
-    file_helpo: [
-        file_helpo,
-        __help__
-    ]
-})
+CMD_HELP.update({file_helpo: [file_helpo, __help__]})

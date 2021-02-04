@@ -21,8 +21,9 @@ async def can_approve_users(message):
         )
     )
     p = result.participant
-    return isinstance(p, types.ChannelParticipantCreator) or (isinstance(
-        p, types.ChannelParticipantAdmin) and p.admin_rights.add_admins)
+    return isinstance(p, types.ChannelParticipantCreator) or (
+        isinstance(p, types.ChannelParticipantAdmin) and p.admin_rights.add_admins
+    )
 
 
 async def is_register_admin(chat, user):
@@ -49,6 +50,7 @@ async def is_register_admin(chat, user):
 
 # ------ THANKS TO LONAMI ------#
 
+
 async def get_user_from_event(event):
     """ Get the user from argument or replied message. """
     if event.reply_to_msg_id:
@@ -67,8 +69,7 @@ async def get_user_from_event(event):
         if event.message.entities is not None:
             probable_user_mention_entity = event.message.entities[0]
 
-            if isinstance(probable_user_mention_entity,
-                          MessageEntityMentionName):
+            if isinstance(probable_user_mention_entity, MessageEntityMentionName):
                 user_id = probable_user_mention_entity.user_id
                 user_obj = await tbot.get_entity(user_id)
                 return user_obj
@@ -79,6 +80,7 @@ async def get_user_from_event(event):
             return None
 
     return user_obj
+
 
 @register(pattern="^/approve(?: |$)(.*)")
 async def approve(event):
@@ -277,6 +279,7 @@ async def disapprlst(event):
             return
     await event.reply("No one is approved in this chat.")
 
+
 file_help = os.path.basename(__file__)
 file_help = file_help.replace(".py", "")
 file_helpo = file_help.replace("_", " ")
@@ -289,9 +292,4 @@ __help__ = """
  - /disapproveall: Disapproves all users who were approved in the chat
 """
 
-CMD_HELP.update({
-    file_helpo: [
-        file_helpo,
-        __help__
-    ]
-})
+CMD_HELP.update({file_helpo: [file_helpo, __help__]})

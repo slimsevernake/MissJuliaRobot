@@ -52,7 +52,7 @@ async def _(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -118,6 +118,8 @@ def ReTrieveFile(input_file_name):
         stream=True,
     )
     return r
+
+
 file_help = os.path.basename(__file__)
 file_help = file_help.replace(".py", "")
 file_helpo = file_help.replace("_", " ")
@@ -126,9 +128,4 @@ __help__ = """
  - /rmbg: Type in reply to a media to remove it's background
 """
 
-CMD_HELP.update({
-    file_helpo: [
-        file_helpo,
-        __help__
-    ]
-})
+CMD_HELP.update({file_helpo: [file_helpo, __help__]})

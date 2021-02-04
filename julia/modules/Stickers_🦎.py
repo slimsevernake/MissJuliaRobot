@@ -37,16 +37,17 @@ async def is_register_admin(chat, user):
     if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
 
         return isinstance(
-            (await
-             tbot(functions.channels.GetParticipantRequest(chat,
-                                                           user))).participant,
+            (
+                await tbot(functions.channels.GetParticipantRequest(chat, user))
+            ).participant,
             (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
         )
     if isinstance(chat, types.InputPeerChat):
 
         ui = await tbot.get_peer_id(user)
-        ps = (await tbot(functions.messages.GetFullChatRequest(chat.chat_id)
-                         )).full_chat.participants.participants
+        ps = (
+            await tbot(functions.messages.GetFullChatRequest(chat.chat_id))
+        ).full_chat.participants.participants
         return isinstance(
             next((p for p in ps if p.user_id == ui), None),
             (types.ChatParticipantAdmin, types.ChatParticipantCreator),
@@ -61,7 +62,7 @@ async def _(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -76,8 +77,7 @@ async def _(event):
         await event.reply("Reply to any sticker to get it's pack info.")
         return
     stickerset_attr_s = rep_msg.document.attributes
-    stickerset_attr = find_instance(
-        stickerset_attr_s, DocumentAttributeSticker)
+    stickerset_attr = find_instance(stickerset_attr_s, DocumentAttributeSticker)
     if not stickerset_attr.stickerset:
         await event.reply("sticker does not belong to a pack.")
         return
@@ -121,7 +121,7 @@ async def _(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -144,9 +144,7 @@ async def _(event):
     first_name = user.first_name
     packname = f"{first_name}'s Sticker Vol.{pack}"
     packshortname = f"MissJuliaRobot_sticker_{userid}"
-    kanga = await event.reply(
-        "`Kanging .`"
-    )
+    kanga = await event.reply("`Kanging .`")
     is_a_s = is_it_animated_sticker(reply_message)
     file_ext_ns_ion = "@MissJuliaRobot.png"
     file = await event.client.download_file(reply_message.media)
@@ -180,18 +178,24 @@ async def _(event):
             else:
                 response = await silently_send_message(bot_conv, "/newpack")
             if "Yay!" not in response.text:
-                await tbot.edit_message(kanga, f"**FAILED**! @Stickers replied: {response.text}")
+                await tbot.edit_message(
+                    kanga, f"**FAILED**! @Stickers replied: {response.text}"
+                )
                 return
             response = await silently_send_message(bot_conv, packname)
             if not response.text.startswith("Alright!"):
-                await tbot.edit_message(kanga, f"**FAILED**! @Stickers replied: {response.text}")
+                await tbot.edit_message(
+                    kanga, f"**FAILED**! @Stickers replied: {response.text}"
+                )
                 return
             w = await bot_conv.send_file(
                 file=uploaded_sticker, allow_cache=False, force_document=True
             )
             response = await bot_conv.get_response()
             if "Sorry" in response.text:
-                await tbot.edit_message(kanga, f"**FAILED**! @Stickers replied: {response.text}")
+                await tbot.edit_message(
+                    kanga, f"**FAILED**! @Stickers replied: {response.text}"
+                )
                 return
             await silently_send_message(bot_conv, sticker_emoji)
             await silently_send_message(bot_conv, "/publish")
@@ -199,7 +203,9 @@ async def _(event):
             await silently_send_message(bot_conv, "/skip")
             response = await silently_send_message(bot_conv, packshortname)
             if response.text == "Sorry, this short name is already taken.":
-                await tbot.edit_message(kanga, f"**FAILED**! @Stickers replied: {response.text}")
+                await tbot.edit_message(
+                    kanga, f"**FAILED**! @Stickers replied: {response.text}"
+                )
                 return
         else:
             await silently_send_message(bot_conv, "/cancel")
@@ -217,12 +223,13 @@ async def _(event):
                     packshortname = f"Vol_{pack}_with_{userid}"
 
                     if not await stickerset_exists(bot_conv, packshortname):
-                        await tbot.edit_message(kanga,
-                                                "**Pack No. **"
-                                                + str(prevv)
-                                                + "** is full! Making a new Pack, Vol. **"
-                                                + str(pack)
-                                                )
+                        await tbot.edit_message(
+                            kanga,
+                            "**Pack No. **"
+                            + str(prevv)
+                            + "** is full! Making a new Pack, Vol. **"
+                            + str(pack),
+                        )
                         if is_a_s:
                             response = await silently_send_message(
                                 bot_conv, "/newanimated"
@@ -230,15 +237,15 @@ async def _(event):
                         else:
                             response = await silently_send_message(bot_conv, "/newpack")
                         if "Yay!" not in response.text:
-                            await tbot.edit_message(kanga,
-                                                    f"**FAILED**! @Stickers replied: {response.text}"
-                                                    )
+                            await tbot.edit_message(
+                                kanga, f"**FAILED**! @Stickers replied: {response.text}"
+                            )
                             return
                         response = await silently_send_message(bot_conv, packname)
                         if not response.text.startswith("Alright!"):
-                            await tbot.edit_message(kanga,
-                                                    f"**FAILED**! @Stickers replied: {response.text}"
-                                                    )
+                            await tbot.edit_message(
+                                kanga, f"**FAILED**! @Stickers replied: {response.text}"
+                            )
                             return
                         w = await bot_conv.send_file(
                             file=uploaded_sticker,
@@ -247,9 +254,9 @@ async def _(event):
                         )
                         response = await bot_conv.get_response()
                         if "Sorry" in response.text:
-                            await tbot.edit_message(kanga,
-                                                    f"**FAILED**! @Stickers replied: {response.text}"
-                                                    )
+                            await tbot.edit_message(
+                                kanga, f"**FAILED**! @Stickers replied: {response.text}"
+                            )
                             return
                         await silently_send_message(bot_conv, sticker_emoji)
                         await silently_send_message(bot_conv, "/publish")
@@ -259,17 +266,18 @@ async def _(event):
                         await silently_send_message(bot_conv, "/skip")
                         response = await silently_send_message(bot_conv, packshortname)
                         if response.text == "Sorry, this short name is already taken.":
-                            await tbot.edit_message(kanga,
-                                                    f"**FAILED**! @Stickers replied: {response.text}"
-                                                    )
+                            await tbot.edit_message(
+                                kanga, f"**FAILED**! @Stickers replied: {response.text}"
+                            )
                             return
                     else:
-                        await tbot.edit_message(kanga,
-                                                "**Pack No. **"
-                                                + str(prevv)
-                                                + "** is full! Switching to Vol. **"
-                                                + str(pack)
-                                                )
+                        await tbot.edit_message(
+                            kanga,
+                            "**Pack No. **"
+                            + str(prevv)
+                            + "** is full! Switching to Vol. **"
+                            + str(pack),
+                        )
                         await silently_send_message(bot_conv, "/addsticker")
                         await silently_send_message(bot_conv, packshortname)
                         await bot_conv.send_file(
@@ -279,15 +287,17 @@ async def _(event):
                         )
                         response = await bot_conv.get_response()
                         if "Sorry" in response.text:
-                            await tbot.edit_message(kanga,
-                                                    f"**FAILED**! @Stickers replied: {response.text}"
-                                                    )
+                            await tbot.edit_message(
+                                kanga, f"**FAILED**! @Stickers replied: {response.text}"
+                            )
                             return
                         await silently_send_message(bot_conv, sticker_emoji)
                         await silently_send_message(bot_conv, "/done")
             else:
                 if "Sorry" in response.text:
-                    await tbot.edit_message(kanga, f"**FAILED**! @Stickers replied: {response.text}")
+                    await tbot.edit_message(
+                        kanga, f"**FAILED**! @Stickers replied: {response.text}"
+                    )
                     return
                 await silently_send_message(bot_conv, response)
                 await silently_send_message(bot_conv, sticker_emoji)
@@ -298,6 +308,7 @@ async def _(event):
     )
     os.system("rm -rf *.webp")
 
+
 @register(pattern="^/getsticker$")
 async def _(event):
     approved_userss = approved_users.find({})
@@ -305,7 +316,7 @@ async def _(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -330,7 +341,13 @@ async def _(event):
             uploaded_sticker = await tbot.upload_file(
                 sticker, file_name=file_ext_ns_ion
             )
-        await tbot.send_file(event.chat_id, file=uploaded_sticker, allow_cache=False, force_document=True, reply_to=event.sender_id)
+        await tbot.send_file(
+            event.chat_id,
+            file=uploaded_sticker,
+            allow_cache=False,
+            force_document=True,
+            reply_to=event.sender_id,
+        )
 
 
 def is_it_animated_sticker(message):
@@ -416,7 +433,7 @@ async def _(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -425,17 +442,18 @@ async def _(event):
     input_str = event.pattern_match.group(1)
     combot_stickers_url = "https://combot.org/telegram/stickers?q="
     text = requests.get(combot_stickers_url + input_str)
-    soup = bs(text.text, 'lxml')
-    results = soup.find_all("a", {'class': "sticker-pack__btn"})
+    soup = bs(text.text, "lxml")
+    results = soup.find_all("a", {"class": "sticker-pack__btn"})
     titles = soup.find_all("div", "sticker-pack__title")
     if not results:
-        await event.reply('No results found :(')
+        await event.reply("No results found :(")
         return
     reply = f"Stickers for **{input_str}**:"
     for result, title in zip(results, titles):
-        link = result['href']
+        link = result["href"]
         reply += f"\n• [{title.get_text()}]({link})"
     await event.reply(reply)
+
 
 file_help = os.path.basename(__file__)
 file_help = file_help.replace(".py", "")
@@ -449,9 +467,4 @@ __help__ = """
  - /searchsticker <text>: Find stickers for given term on combot sticker catalogue
 """
 
-CMD_HELP.update({
-    file_helpo: [
-        file_helpo,
-        __help__
-    ]
-})
+CMD_HELP.update({file_helpo: [file_helpo, __help__]})

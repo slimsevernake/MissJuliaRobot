@@ -1,14 +1,20 @@
 from julia import tbot
-from telethon.errors import (ChatAdminRequiredError, ImageProcessFailedError,
-                             PhotoCropSizeSmallError)
+from telethon.errors import (
+    ChatAdminRequiredError,
+    ImageProcessFailedError,
+    PhotoCropSizeSmallError,
+)
 
-from telethon.tl.functions.channels import (EditAdminRequest,
-                                            EditPhotoRequest)
+from telethon.tl.functions.channels import EditAdminRequest, EditPhotoRequest
 
 from telethon.tl.functions.messages import UpdatePinnedMessageRequest
-from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,
-                               ChatBannedRights, MessageEntityMentionName,
-                               MessageMediaPhoto)
+from telethon.tl.types import (
+    ChannelParticipantsAdmins,
+    ChatAdminRights,
+    ChatBannedRights,
+    MessageEntityMentionName,
+    MessageMediaPhoto,
+)
 
 from telethon import *
 from telethon.tl import *
@@ -40,9 +46,11 @@ NO_ADMIN = "I am not an admin"
 NO_PERM = "I don't have sufficient permissions!"
 
 CHAT_PP_CHANGED = "Chat Picture Changed"
-CHAT_PP_ERROR = "Some issue with updating the pic," \
-                "maybe you aren't an admin," \
-                "or don't have the desired rights."
+CHAT_PP_ERROR = (
+    "Some issue with updating the pic,"
+    "maybe you aren't an admin,"
+    "or don't have the desired rights."
+)
 INVALID_MEDIA = "Invalid Extension"
 
 
@@ -77,6 +85,7 @@ UNMUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=False)
 
 
 # ================================================
+
 
 async def is_register_admin(chat, user):
     if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
@@ -118,10 +127,12 @@ async def can_ban_users(message):
         functions.channels.GetParticipantRequest(
             channel=message.chat_id,
             user_id=message.sender_id,
-        ))
+        )
+    )
     p = result.participant
-    return isinstance(p, types.ChannelParticipantCreator) or (isinstance(
-        p, types.ChannelParticipantAdmin) and p.admin_rights.ban_users)
+    return isinstance(p, types.ChannelParticipantCreator) or (
+        isinstance(p, types.ChannelParticipantAdmin) and p.admin_rights.ban_users
+    )
 
 
 async def can_change_info(message):
@@ -132,8 +143,9 @@ async def can_change_info(message):
         )
     )
     p = result.participant
-    return isinstance(p, types.ChannelParticipantCreator) or (isinstance(
-        p, types.ChannelParticipantAdmin) and p.admin_rights.change_info)
+    return isinstance(p, types.ChannelParticipantCreator) or (
+        isinstance(p, types.ChannelParticipantAdmin) and p.admin_rights.change_info
+    )
 
 
 async def can_del(message):
@@ -144,8 +156,9 @@ async def can_del(message):
         )
     )
     p = result.participant
-    return isinstance(p, types.ChannelParticipantCreator) or (isinstance(
-        p, types.ChannelParticipantAdmin) and p.admin_rights.delete_messages)
+    return isinstance(p, types.ChannelParticipantCreator) or (
+        isinstance(p, types.ChannelParticipantAdmin) and p.admin_rights.delete_messages
+    )
 
 
 async def can_pin_msg(message):
@@ -156,8 +169,9 @@ async def can_pin_msg(message):
         )
     )
     p = result.participant
-    return isinstance(p, types.ChannelParticipantCreator) or (isinstance(
-        p, types.ChannelParticipantAdmin) and p.admin_rights.pin_messages)
+    return isinstance(p, types.ChannelParticipantCreator) or (
+        isinstance(p, types.ChannelParticipantAdmin) and p.admin_rights.pin_messages
+    )
 
 
 async def get_user_sender_id(user, event):
@@ -191,8 +205,7 @@ async def get_user_from_event(event):
         if event.message.entities is not None:
             probable_user_mention_entity = event.message.entities[0]
 
-            if isinstance(probable_user_mention_entity,
-                          MessageEntityMentionName):
+            if isinstance(probable_user_mention_entity, MessageEntityMentionName):
                 user_id = probable_user_mention_entity.user_id
                 user_obj = await tbot.get_entity(user_id)
                 return user_obj
@@ -229,12 +242,14 @@ async def promote(promt):
     else:
         return
 
-    new_rights = ChatAdminRights(add_admins=True,
-                                 invite_users=True,
-                                 change_info=True,
-                                 ban_users=True,
-                                 delete_messages=True,
-                                 pin_messages=True)
+    new_rights = ChatAdminRights(
+        add_admins=True,
+        invite_users=True,
+        change_info=True,
+        ban_users=True,
+        delete_messages=True,
+        pin_messages=True,
+    )
 
     if user:
         pass
@@ -243,8 +258,7 @@ async def promote(promt):
 
     # Try to promote if current user is admin or creator
     try:
-        await tbot(
-            EditAdminRequest(promt.chat_id, user.id, new_rights, "Admin"))
+        await tbot(EditAdminRequest(promt.chat_id, user.id, new_rights, "Admin"))
         await promt.reply("Promoted Successfully!")
 
     # If Telethon spit BadRequestError, assume
@@ -277,16 +291,17 @@ async def demote(dmod):
         return
 
     # New rights after demotion
-    newrights = ChatAdminRights(add_admins=None,
-                                invite_users=None,
-                                change_info=None,
-                                ban_users=None,
-                                delete_messages=None,
-                                pin_messages=None)
+    newrights = ChatAdminRights(
+        add_admins=None,
+        invite_users=None,
+        change_info=None,
+        ban_users=None,
+        delete_messages=None,
+        pin_messages=None,
+    )
     # Edit Admin Permission
     try:
-        await tbot(
-            EditAdminRequest(dmod.chat_id, user.id, newrights, "Admin"))
+        await tbot(EditAdminRequest(dmod.chat_id, user.id, newrights, "Admin"))
         await dmod.reply("Demoted Successfully!")
 
     # If we catch BadRequestError from Telethon
@@ -294,7 +309,7 @@ async def demote(dmod):
     except Exception:
         await dmod.reply("Failed to demote.")
         return
-    
+
 
 @register(pattern="^/pin(?: |$)(.*)")
 async def pin(msg):
@@ -317,12 +332,12 @@ async def pin(msg):
         is_silent = False
 
     try:
-        await tbot(
-            UpdatePinnedMessageRequest(msg.to_id, to_pin, is_silent))
+        await tbot(UpdatePinnedMessageRequest(msg.to_id, to_pin, is_silent))
         await msg.reply("Pinned Successfully!")
     except Exception:
         await msg.reply("Failed to pin.")
         return
+
 
 @register(pattern="^/unpin$")
 async def pin(msg):
@@ -330,27 +345,29 @@ async def pin(msg):
         if not await can_pin_msg(message=msg):
             return
     try:
-      c = await msg.get_reply_message()
-      await tbot.unpin_message(msg.chat_id, c)
-      await msg.reply("Unpinned Successfully.")
+        c = await msg.get_reply_message()
+        await tbot.unpin_message(msg.chat_id, c)
+        await msg.reply("Unpinned Successfully.")
     except Exception:
-      await msg.reply("Failed to unpin.")
+        await msg.reply("Failed to unpin.")
+
 
 @register(pattern="^/adminlist$")
 async def get_admin(show):
     if show.is_group:
         if not await is_register_admin(show.input_chat, show.sender_id):
-           return
+            return
     else:
         return
     info = await tbot.get_entity(show.chat_id)
     title = info.title if info.title else "this chat"
-    mentions = f'<b>Admins in {title}:</b> \n'
+    mentions = f"<b>Admins in {title}:</b> \n"
     try:
         async for user in tbot.iter_participants(
-                show.chat_id, filter=ChannelParticipantsAdmins):
+            show.chat_id, filter=ChannelParticipantsAdmins
+        ):
             if not user.deleted:
-                link_unf = "<a href=\"tg://user?id={}\">{}</a>"
+                link_unf = '<a href="tg://user?id={}">{}</a>'
                 link = link_unf.format(user.id, user.first_name)
                 userid = f"<code>{user.id}</code>"
                 mentions += f"\n{link} {userid}"
@@ -376,7 +393,7 @@ async def set_group_photo(gpic):
     if replymsg and replymsg.media:
         if isinstance(replymsg.media, MessageMediaPhoto):
             photo = await tbot.download_media(message=replymsg.photo)
-        elif "image" in replymsg.media.document.mime_type.split('/'):
+        elif "image" in replymsg.media.document.mime_type.split("/"):
             photo = await tbot.download_file(replymsg.media.document)
         else:
             await gpic.reply(INVALID_MEDIA)
@@ -420,14 +437,22 @@ async def settitle(promt):
         pass
 
     try:
-        result = await tbot(functions.channels.GetParticipantRequest(
-            channel=promt.chat_id,
-            user_id=user.id,
-        ))
+        result = await tbot(
+            functions.channels.GetParticipantRequest(
+                channel=promt.chat_id,
+                user_id=user.id,
+            )
+        )
         p = result.participant
 
         await tbot(
-            EditAdminRequest(promt.chat_id, user_id=user.id, admin_rights=p.admin_rights, rank=title_admin))
+            EditAdminRequest(
+                promt.chat_id,
+                user_id=user.id,
+                admin_rights=p.admin_rights,
+                rank=title_admin,
+            )
+        )
 
         await promt.reply("Title set successfully !")
 
@@ -441,8 +466,8 @@ async def get_users(show):
     if not show.is_group:
         return
     if show.is_group:
-       if not await is_register_admin(show.input_chat, show.sender_id):
-          return
+        if not await is_register_admin(show.input_chat, show.sender_id):
+            return
     info = await tbot.get_entity(show.chat_id)
     title = info.title if info.title else "this chat"
     mentions = "Users in {}: \n".format(title)
@@ -485,7 +510,7 @@ async def rm_deletedacc(show):
     # Well
     if not admin and not creator:
         await show.reply("`I don't have enough permissions!`")
-        return   
+        return
 
     if con != "clean":
         await show.reply("`Searching for zombie accounts...`")
@@ -507,16 +532,14 @@ async def rm_deletedacc(show):
     async for user in tbot.iter_participants(show.chat_id):
         if user.deleted:
             try:
-                await tbot(
-                    EditBannedRequest(show.chat_id, user.id, BANNED_RIGHTS))
+                await tbot(EditBannedRequest(show.chat_id, user.id, BANNED_RIGHTS))
             except ChatAdminRequiredError:
                 await show.reply("`I don't have ban rights in this group`")
                 return
             except UserAdminInvalidError:
                 del_u -= 1
                 del_a += 1
-            await tbot(
-                EditBannedRequest(show.chat_id, user.id, UNBAN_RIGHTS))
+            await tbot(EditBannedRequest(show.chat_id, user.id, UNBAN_RIGHTS))
             del_u += 1
 
     if del_u > 0:
@@ -540,7 +563,7 @@ async def _(event):
     else:
         return
 
-   # Here laying the sanity check
+    # Here laying the sanity check
     chat = await event.get_chat()
     admin = chat.admin_rights.ban_users
     creator = chat.creator
@@ -548,7 +571,7 @@ async def _(event):
     # Well
     if not admin and not creator:
         await event.reply("`I don't have enough permissions!`")
-        return   
+        return
 
     c = 0
     KICK_RIGHTS = ChatBannedRights(until_date=None, view_messages=True)
@@ -556,15 +579,13 @@ async def _(event):
     async for i in tbot.iter_participants(event.chat_id):
 
         if isinstance(i.status, UserStatusLastMonth):
-            status = await tbot(
-                EditBannedRequest(event.chat_id, i, KICK_RIGHTS))
+            status = await tbot(EditBannedRequest(event.chat_id, i, KICK_RIGHTS))
             if not status:
                 return
             c = c + 1
 
         if isinstance(i.status, UserStatusLastWeek):
-            status = await tbot(
-                EditBannedRequest(event.chat_id, i, KICK_RIGHTS))
+            status = await tbot(EditBannedRequest(event.chat_id, i, KICK_RIGHTS))
             if not status:
                 return
             c = c + 1
@@ -594,16 +615,16 @@ async def _(event):
     # Well
     if not admin and not creator:
         await event.reply("`I don't have enough permissions!`")
-        return   
+        return
 
     done = await event.reply("Searching Participant Lists.")
     p = 0
     async for i in tbot.iter_participants(
-            event.chat_id, filter=ChannelParticipantsKicked, aggressive=True):
+        event.chat_id, filter=ChannelParticipantsKicked, aggressive=True
+    ):
         rights = ChatBannedRights(until_date=0, view_messages=False)
         try:
-            await tbot(
-                functions.channels.EditBannedRequest(event.chat_id, i, rights))
+            await tbot(functions.channels.EditBannedRequest(event.chat_id, i, rights))
         except FloodWaitError as ex:
             logger.warn("sleeping for {} seconds".format(ex.seconds))
             sleep(ex.seconds)
@@ -635,19 +656,19 @@ async def _(event):
     # Well
     if not admin and not creator:
         await event.reply("`I don't have enough permissions!`")
-        return   
+        return
 
     done = await event.reply("Working ...")
     p = 0
     async for i in tbot.iter_participants(
-            event.chat_id, filter=ChannelParticipantsBanned, aggressive=True):
+        event.chat_id, filter=ChannelParticipantsBanned, aggressive=True
+    ):
         rights = ChatBannedRights(
             until_date=0,
             send_messages=False,
         )
         try:
-            await tbot(
-                functions.channels.EditBannedRequest(event.chat_id, i, rights))
+            await tbot(functions.channels.EditBannedRequest(event.chat_id, i, rights))
         except FloodWaitError as ex:
             logger.warn("sleeping for {} seconds".format(ex.seconds))
             sleep(ex.seconds)
@@ -669,11 +690,11 @@ async def ban(bon):
     # Here laying the sanity check
 
     if not bon.is_group:
-        #print("1")
+        # print("1")
         return
     if bon.is_group:
         if not await can_ban_users(message=bon):
-            #print("2")
+            # print("2")
             return
 
     user = await get_user_from_event(bon)
@@ -693,8 +714,7 @@ async def ban(bon):
         return
 
     try:
-        await tbot(EditBannedRequest(bon.chat_id, user.id,
-                                     BANNED_RIGHTS))
+        await tbot(EditBannedRequest(bon.chat_id, user.id, BANNED_RIGHTS))
         await bon.reply("Banned Successfully")
 
     except Exception as e:
@@ -761,8 +781,7 @@ async def unban(bon):
         return
 
     try:
-        await tbot(EditBannedRequest(bon.chat_id, user.id,
-                                     UNBAN_RIGHTS))
+        await tbot(EditBannedRequest(bon.chat_id, user.id, UNBAN_RIGHTS))
         await bon.reply("Unbanned Successfully")
 
     except BaseException:
@@ -776,8 +795,7 @@ async def banme(bon):
         return
 
     try:
-        await tbot(EditBannedRequest(bon.chat_id, sender,
-                                     BANNED_RIGHTS))
+        await tbot(EditBannedRequest(bon.chat_id, sender, BANNED_RIGHTS))
         await bon.reply("Ok Banned !")
 
     except Exception as e:
@@ -823,8 +841,7 @@ async def spider(spdr):
         return
 
     try:
-        await tbot(EditBannedRequest(spdr.chat_id, user.id,
-                                     MUTE_RIGHTS))
+        await tbot(EditBannedRequest(spdr.chat_id, user.id, MUTE_RIGHTS))
 
         await spdr.reply("Muted Successfully !")
 
@@ -832,6 +849,7 @@ async def spider(spdr):
         print(e)
         await spdr.reply("Failed to mute.")
         return
+
 
 @register(pattern="^/unmute(?: |$)(.*)")
 async def spiderr(spdr):
@@ -859,14 +877,14 @@ async def spiderr(spdr):
         return
 
     try:
-        await tbot(EditBannedRequest(spdr.chat_id, user.id,
-                                     UNMUTE_RIGHTS))
+        await tbot(EditBannedRequest(spdr.chat_id, user.id, UNMUTE_RIGHTS))
 
         await spdr.reply("Unmuted Successfully !")
 
     except BaseException:
         await spdr.reply("Failed to unmute.")
         return
+
 
 @register(pattern="^/lock ?(.*)")
 async def locks(event):
@@ -1051,12 +1069,17 @@ async def rem_locks(event):
         send_polls=gpoll,
         invite_users=adduser,
         pin_messages=cpin,
-        change_info=changeinfo)
+        change_info=changeinfo,
+    )
 
     # print(input_str)
     # print (unlock_rights)
     try:
-        await tbot(EditChatDefaultBannedRightsRequest(event.chat_id, banned_rights=unlock_rights))
+        await tbot(
+            EditChatDefaultBannedRightsRequest(
+                event.chat_id, banned_rights=unlock_rights
+            )
+        )
         await event.reply(f"Unlocked Successfully !")
     except Exception:
         await event.reply("Failed to unlock.")
@@ -1070,7 +1093,9 @@ async def ltypes(event):
     if event.is_group:
         if not await can_ban_users(message=event):
             return
-    await event.reply("**These are the valid lock types:**\n\nmsg\nmedia\nurl\nsticker\ngif\ngame\ninline\npoll\ninvite\npin\ninfo\nall")
+    await event.reply(
+        "**These are the valid lock types:**\n\nmsg\nmedia\nurl\nsticker\ngif\ngame\ninline\npoll\ninvite\npin\ninfo\nall"
+    )
 
 
 @register(pattern="^/chatlocks$")
@@ -1155,13 +1180,15 @@ async def set_group_title(gpic):
         return
 
     try:
-        await tbot(functions.messages.EditChatTitleRequest(
-            chat_id=gpic.chat_id,
-            title=input_str))
+        await tbot(
+            functions.messages.EditChatTitleRequest(
+                chat_id=gpic.chat_id, title=input_str
+            )
+        )
     except BaseException:
-        await tbot(functions.channels.EditTitleRequest(
-            channel=gpic.chat_id,
-            title=input_str))
+        await tbot(
+            functions.channels.EditTitleRequest(channel=gpic.chat_id, title=input_str)
+        )
 
     if gpic.chat.title == input_str:
         await gpic.reply("Successfully set new group title.")
@@ -1180,9 +1207,9 @@ async def set_group_des(gpic):
         return
 
     try:
-        await tbot(functions.messages.EditChatAboutRequest(
-            peer=gpic.chat_id,
-            about=input_str))
+        await tbot(
+            functions.messages.EditChatAboutRequest(peer=gpic.chat_id, about=input_str)
+        )
         await gpic.reply("Successfully set new group description.")
     except BaseException:
         await gpic.reply("Failed to set group description.")
@@ -1201,8 +1228,7 @@ async def set_group_sticker(gpic):
         await gpic.reply("Reply to any sticker plox.")
         return
     stickerset_attr_s = rep_msg.document.attributes
-    stickerset_attr = find_instance(
-        stickerset_attr_s, DocumentAttributeSticker)
+    stickerset_attr = find_instance(stickerset_attr_s, DocumentAttributeSticker)
     if not stickerset_attr.stickerset:
         await gpic.reply("Sticker does not belong to a pack.")
         return
@@ -1211,15 +1237,17 @@ async def set_group_sticker(gpic):
         access_hash = stickerset_attr.stickerset.access_hash
         print(id)
         print(access_hash)
-        await tbot(functions.channels.SetStickersRequest(
-            channel=gpic.chat_id,
-            stickerset=types.InputStickerSetID(
-                id=id,
-                access_hash=access_hash)))
+        await tbot(
+            functions.channels.SetStickersRequest(
+                channel=gpic.chat_id,
+                stickerset=types.InputStickerSetID(id=id, access_hash=access_hash),
+            )
+        )
         await gpic.reply("Group sticker pack successfully set !")
     except Exception as e:
         print(e)
         await gpic.reply("Failed to set group sticker pack.")
+
 
 __help__ = """
  - /adminlist : list of admins in the chat
@@ -1256,9 +1284,4 @@ file_help = os.path.basename(__file__)
 file_help = file_help.replace(".py", "")
 file_helpo = file_help.replace("_", " ")
 
-CMD_HELP.update({
-    file_helpo: [
-        file_helpo,
-        __help__
-    ]
-})
+CMD_HELP.update({file_helpo: [file_helpo, __help__]})

@@ -50,7 +50,7 @@ async def _(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -89,9 +89,7 @@ async def _(event):
             await event.reply("Currency Not Supported.")
             return
         new_cur_amount = round(orig_cur_amount * current_rate, 5)
-        await event.reply(
-            f"{orig_cur_amount} {orig_cur} = {new_cur_amount} {new_cur}"
-        )
+        await event.reply(f"{orig_cur_amount} {orig_cur} = {new_cur_amount} {new_cur}")
 
     elif len(args) == 1:
         await event.reply(__help__)
@@ -100,6 +98,8 @@ async def _(event):
         await event.reply(
             f"**Invalid Args!!:** Required 3 But Passed {len(args) -1}",
         )
+
+
 file_help = os.path.basename(__file__)
 file_help = file_help.replace(".py", "")
 file_helpo = file_help.replace("_", " ")
@@ -109,9 +109,4 @@ __help__ = """
 Example syntax: `/cash 1 USD INR`
 """
 
-CMD_HELP.update({
-    file_helpo: [
-        file_helpo,
-        __help__
-    ]
-})
+CMD_HELP.update({file_helpo: [file_helpo, __help__]})

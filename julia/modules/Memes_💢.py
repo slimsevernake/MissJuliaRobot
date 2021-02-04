@@ -48,16 +48,17 @@ async def is_register_admin(chat, user):
     if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
 
         return isinstance(
-            (await
-             tbot(functions.channels.GetParticipantRequest(chat,
-                                                           user))).participant,
+            (
+                await tbot(functions.channels.GetParticipantRequest(chat, user))
+            ).participant,
             (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
         )
     if isinstance(chat, types.InputPeerChat):
 
         ui = await tbot.get_peer_id(user)
-        ps = (await tbot(functions.messages.GetFullChatRequest(chat.chat_id)
-                         )).full_chat.participants.participants
+        ps = (
+            await tbot(functions.messages.GetFullChatRequest(chat.chat_id))
+        ).full_chat.participants.participants
         return isinstance(
             next((p for p in ps if p.user_id == ui), None),
             (types.ChatParticipantAdmin, types.ChatParticipantCreator),
@@ -72,7 +73,7 @@ async def msg(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -124,7 +125,7 @@ async def msg(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -191,7 +192,7 @@ async def msg(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -214,7 +215,7 @@ async def msg(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -238,7 +239,7 @@ async def msg(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -250,9 +251,7 @@ async def msg(event):
         await event.reply("Reply to a message to make meme.")
         return
     count = random.randint(3, 10)
-    reply_text = re.sub(
-        r"([aeiouAEIOUａｅｉｏｕＡＥＩＯＵ])", (r"\1" * count), rtext
-    )
+    reply_text = re.sub(r"([aeiouAEIOUａｅｉｏｕＡＥＩＯＵ])", (r"\1" * count), rtext)
     await event.reply(reply_text)
 
 
@@ -263,7 +262,7 @@ async def msg(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -291,7 +290,7 @@ async def msg(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -313,7 +312,7 @@ async def msg(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -350,7 +349,7 @@ async def msg(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -385,7 +384,7 @@ async def msg(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -413,7 +412,7 @@ async def msg(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -445,7 +444,7 @@ async def carbon_api(e):
         iid = ch["id"]
         userss = ch["user"]
     if e.is_group:
-        if (await is_register_admin(e.input_chat, e.message.sender_id)):
+        if await is_register_admin(e.input_chat, e.message.sender_id):
             pass
         elif e.chat_id == iid and e.sender_id == userss:
             pass
@@ -471,9 +470,7 @@ async def carbon_api(e):
     chrome_options.add_argument("--disable-gpu")
     prefs = {"download.default_directory": "./"}
     chrome_options.add_experimental_option("prefs", prefs)
-    driver = webdriver.Chrome(
-        executable_path=CHROME_DRIVER,
-        options=chrome_options)
+    driver = webdriver.Chrome(executable_path=CHROME_DRIVER, options=chrome_options)
     driver.get(url)
     await gg.edit("`Processing..\n50%`")
     download_path = "./"
@@ -511,7 +508,7 @@ async def deepfryer(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -680,10 +677,9 @@ async def sticklet(event):
         font = ImageFont.truetype(FONT_FILE, size=fontsize)
 
     width, height = draw.multiline_textsize(sticktext, font=font)
-    draw.multiline_text(((512 - width) / 2, (512 - height) / 2),
-                        sticktext,
-                        font=font,
-                        fill=(R, G, B))
+    draw.multiline_text(
+        ((512 - width) / 2, (512 - height) / 2), sticktext, font=font, fill=(R, G, B)
+    )
 
     image_stream = io.BytesIO()
     image_stream.name = "@Julia.webp"
@@ -691,8 +687,7 @@ async def sticklet(event):
     image_stream.seek(0)
 
     # finally, reply the sticker
-    await event.reply(file=image_stream,
-                      reply_to=event.message.reply_to_msg_id)
+    await event.reply(file=image_stream, reply_to=event.message.reply_to_msg_id)
     # replacing upper line with this to get reply tags
 
     # cleanup
@@ -725,8 +720,7 @@ async def univsaye(cowmsg):
         iid = ch["id"]
         userss = ch["user"]
     if cowmsg.is_group:
-        if await is_register_admin(cowmsg.input_chat,
-                                   cowmsg.message.sender_id):
+        if await is_register_admin(cowmsg.input_chat, cowmsg.message.sender_id):
             pass
         elif cowmsg.chat_id == iid and cowmsg.sender_id == userss:
             pass
@@ -773,6 +767,7 @@ async def _(event):
         except BaseException:
             pass
 
+
 @register(pattern="^/jackpot$")
 async def _(event):
     if event.fwd_from:
@@ -817,6 +812,7 @@ async def _(event):
         except BaseException:
             pass
 
+
 # Oringinal Source from Nicegrill: https://github.com/erenmetesar/NiceGrill/
 # Ported to Lynda by: @pokurt
 
@@ -857,21 +853,11 @@ async def process(msg, user, client, reply, replied=None):
         )
 
     # Importıng fonts and gettings the size of text
-    font = ImageFont.truetype("resources/Roboto-Medium.ttf",
-                              43,
-                              encoding="utf-16")
-    font2 = ImageFont.truetype("resources/Roboto-Regular.ttf",
-                               33,
-                               encoding="utf-16")
-    mono = ImageFont.truetype("resources/DroidSansMono.ttf",
-                              30,
-                              encoding="utf-16")
-    italic = ImageFont.truetype("resources/Roboto-Italic.ttf",
-                                33,
-                                encoding="utf-16")
-    fallback = ImageFont.truetype("resources/Quivira.otf",
-                                  43,
-                                  encoding="utf-16")
+    font = ImageFont.truetype("resources/Roboto-Medium.ttf", 43, encoding="utf-16")
+    font2 = ImageFont.truetype("resources/Roboto-Regular.ttf", 33, encoding="utf-16")
+    mono = ImageFont.truetype("resources/DroidSansMono.ttf", 30, encoding="utf-16")
+    italic = ImageFont.truetype("resources/Roboto-Italic.ttf", 33, encoding="utf-16")
+    fallback = ImageFont.truetype("resources/Quivira.otf", 43, encoding="utf-16")
 
     # Splitting text
     maxlength = 0
@@ -901,7 +887,8 @@ async def process(msg, user, client, reply, replied=None):
     title = ""
     try:
         details = await client(
-            functions.channels.GetParticipantRequest(reply.chat_id, user.id))
+            functions.channels.GetParticipantRequest(reply.chat_id, user.id)
+        )
         if isinstance(details.participant, types.ChannelParticipantCreator):
             title = details.participant.rank if details.participant.rank else "Creator"
         elif isinstance(details.participant, types.ChannelParticipantAdmin):
@@ -918,8 +905,7 @@ async def process(msg, user, client, reply, replied=None):
 
     if namewidth > width:
         width = namewidth
-    width += titlewidth + 30 if titlewidth > width - namewidth else -(
-        titlewidth - 30)
+    width += titlewidth + 30 if titlewidth > width - namewidth else -(titlewidth - 30)
     height = len(text) * 40
 
     # Profile Photo BG
@@ -966,13 +952,10 @@ async def process(msg, user, client, reply, replied=None):
         if reply.sticker:
             sticker = await reply.download_media()
             stimg = Image.open(sticker)
-            canvas = canvas.resize(
-                (stimg.width + pfpbg.width, stimg.height + 160))
-            top = Image.new("RGBA", (200 + stimg.width, 300),
-                            (29, 29, 29, 255))
+            canvas = canvas.resize((stimg.width + pfpbg.width, stimg.height + 160))
+            top = Image.new("RGBA", (200 + stimg.width, 300), (29, 29, 29, 255))
             draw = ImageDraw.Draw(top)
-            await replied_user(draw, reptot,
-                               replied.message.replace("\n", " "), 20)
+            await replied_user(draw, reptot, replied.message.replace("\n", " "), 20)
             top = top.crop((135, 70, top.width, 300))
             canvas.paste(pfpbg, (0, 0))
             canvas.paste(top, (pfpbg.width + 10, 0))
@@ -1007,28 +990,27 @@ async def process(msg, user, client, reply, replied=None):
     elif reply.sticker:
         sticker = await reply.download_media()
         stimg = Image.open(sticker)
-        canvas = canvas.resize(
-            (stimg.width + pfpbg.width + 30, stimg.height + 10))
+        canvas = canvas.resize((stimg.width + pfpbg.width + 30, stimg.height + 10))
         canvas.paste(pfpbg, (0, 0))
         canvas.paste(stimg, (pfpbg.width + 10, 10))
         os.remove(sticker)
         return True, canvas
     elif reply.document and not reply.audio and not reply.audio:
-        docname = ".".join(
-            reply.document.attributes[-1].file_name.split(".")[:-1])
-        doctype = reply.document.attributes[-1].file_name.split(
-            ".")[-1].upper()
+        docname = ".".join(reply.document.attributes[-1].file_name.split(".")[:-1])
+        doctype = reply.document.attributes[-1].file_name.split(".")[-1].upper()
         if reply.document.size < 1024:
             docsize = str(reply.document.size) + " Bytes"
         elif reply.document.size < 1048576:
             docsize = str(round(reply.document.size / 1024, 2)) + " KB "
         elif reply.document.size < 1073741824:
-            docsize = str(round(reply.document.size / 1024**2, 2)) + " MB "
+            docsize = str(round(reply.document.size / 1024 ** 2, 2)) + " MB "
         else:
-            docsize = str(round(reply.document.size / 1024**3, 2)) + " GB "
-        docbglen = (font.getsize(docsize)[0]
-                    if font.getsize(docsize)[0] > font.getsize(docname)[0] else
-                    font.getsize(docname)[0])
+            docsize = str(round(reply.document.size / 1024 ** 3, 2)) + " GB "
+        docbglen = (
+            font.getsize(docsize)[0]
+            if font.getsize(docsize)[0] > font.getsize(docname)[0]
+            else font.getsize(docname)[0]
+        )
         canvas = canvas.resize((pfpbg.width + width + docbglen, 160 + height))
         top, middle, bottom = await drawer(width + docbglen, height + 30)
         canvas.paste(pfpbg, (0, 0))
@@ -1046,9 +1028,7 @@ async def process(msg, user, client, reply, replied=None):
 
     # Writing User's Name
     space = pfpbg.width + 30
-    namefallback = ImageFont.truetype("resources/Quivira.otf",
-                                      43,
-                                      encoding="utf-16")
+    namefallback = ImageFont.truetype("resources/Quivira.otf", 43, encoding="utf-16")
     for letter in tot:
         if letter in emoji.UNICODE_EMOJI:
             newemoji, mask = await emoji_fetch(letter)
@@ -1063,10 +1043,9 @@ async def process(msg, user, client, reply, replied=None):
                 space += font.getsize(letter)[0]
 
     if title:
-        draw.text((canvas.width - titlewidth - 20, 25),
-                  title,
-                  font=font2,
-                  fill="#898989")
+        draw.text(
+            (canvas.width - titlewidth - 20, 25), title, font=font2, fill="#898989"
+        )
 
     # Writing all separating emojis and regular texts
     x = pfpbg.width + 30
@@ -1074,37 +1053,36 @@ async def process(msg, user, client, reply, replied=None):
     mdlength = 0
     index = 0
     emojicount = 0
-    textfallback = ImageFont.truetype("resources/Quivira.otf",
-                                      33,
-                                      encoding="utf-16")
+    textfallback = ImageFont.truetype("resources/Quivira.otf", 33, encoding="utf-16")
     textcolor = "white"
     for line in text:
         for letter in line:
-            index = (msg.find(letter)
-                     if emojicount == 0 else msg.find(letter) + emojicount)
+            index = (
+                msg.find(letter) if emojicount == 0 else msg.find(letter) + emojicount
+            )
             for offset, length in bold.items():
                 if index in range(offset, length):
-                    font2 = ImageFont.truetype("resources/Roboto-Medium.ttf",
-                                               33,
-                                               encoding="utf-16")
+                    font2 = ImageFont.truetype(
+                        "resources/Roboto-Medium.ttf", 33, encoding="utf-16"
+                    )
                     textcolor = "white"
             for offset, length in italic.items():
                 if index in range(offset, length):
-                    font2 = ImageFont.truetype("resources/Roboto-Italic.ttf",
-                                               33,
-                                               encoding="utf-16")
+                    font2 = ImageFont.truetype(
+                        "resources/Roboto-Italic.ttf", 33, encoding="utf-16"
+                    )
                     textcolor = "white"
             for offset, length in mono.items():
                 if index in range(offset, length):
-                    font2 = ImageFont.truetype("resources/DroidSansMono.ttf",
-                                               30,
-                                               encoding="utf-16")
+                    font2 = ImageFont.truetype(
+                        "resources/DroidSansMono.ttf", 30, encoding="utf-16"
+                    )
                     textcolor = "white"
             for offset, length in link.items():
                 if index in range(offset, length):
-                    font2 = ImageFont.truetype("resources/Roboto-Regular.ttf",
-                                               30,
-                                               encoding="utf-16")
+                    font2 = ImageFont.truetype(
+                        "resources/Roboto-Regular.ttf", 30, encoding="utf-16"
+                    )
                     textcolor = "#898989"
             if letter in emoji.UNICODE_EMOJI:
                 newemoji, mask = await emoji_fetch(letter)
@@ -1113,10 +1091,7 @@ async def process(msg, user, client, reply, replied=None):
                 emojicount += 1
             else:
                 if not await fontTest(letter):
-                    draw.text((x, y),
-                              letter,
-                              font=textfallback,
-                              fill=textcolor)
+                    draw.text((x, y), letter, font=textfallback, fill=textcolor)
                     x += textfallback.getsize(letter)[0]
                 else:
                     draw.text((x, y), letter, font=font2, fill=textcolor)
@@ -1133,10 +1108,7 @@ async def drawer(width, height):
     draw = ImageDraw.Draw(top)
     draw.line((10, 0, top.width - 20, 0), fill=(29, 29, 29, 255), width=50)
     draw.pieslice((0, 0, 30, 50), 180, 270, fill=(29, 29, 29, 255))
-    draw.pieslice((top.width - 75, 0, top.width, 50),
-                  270,
-                  360,
-                  fill=(29, 29, 29, 255))
+    draw.pieslice((top.width - 75, 0, top.width, 50), 270, 360, fill=(29, 29, 29, 255))
 
     # Middle part
     middle = Image.new("RGBA", (top.width, height + 75), (29, 29, 29, 255))
@@ -1207,14 +1179,17 @@ async def emoji_fetch(emoji):
     emojis = json.loads(
         urllib.request.urlopen(
             "https://github.com/erenmetesar/modules-repo/raw/master/emojis.txt"
-        ).read().decode())
+        )
+        .read()
+        .decode()
+    )
     if emoji in emojis:
         img = emojis[emoji]
         return await transparent(
-            urllib.request.urlretrieve(img, "resources/emoji.png")[0])
+            urllib.request.urlretrieve(img, "resources/emoji.png")[0]
+        )
     img = emojis["⛔"]
-    return await transparent(
-        urllib.request.urlretrieve(img, "resources/emoji.png")[0])
+    return await transparent(urllib.request.urlretrieve(img, "resources/emoji.png")[0])
 
 
 async def transparent(emoji):
@@ -1234,15 +1209,12 @@ async def replied_user(draw, tot, text, maxlength, title):
     textfont = ImageFont.truetype("resources/Roboto-Regular.ttf", 32)
     textfallback = ImageFont.truetype("resources/Roboto-Medium.ttf", 38)
     maxlength = maxlength + 7 if maxlength < 10 else maxlength
-    text = text[:maxlength - 2] + ".." if len(text) > maxlength else text
+    text = text[: maxlength - 2] + ".." if len(text) > maxlength else text
     draw.line((165, 90, 165, 170), width=5, fill="white")
     space = 0
     for letter in tot:
         if not await fontTest(letter):
-            draw.text((180 + space, 86),
-                      letter,
-                      font=namefallback,
-                      fill="#888888")
+            draw.text((180 + space, 86), letter, font=namefallback, fill="#888888")
             space += namefallback.getsize(letter)[0]
         else:
             draw.text((180 + space, 86), letter, font=namefont, fill="#888888")
@@ -1250,10 +1222,7 @@ async def replied_user(draw, tot, text, maxlength, title):
     space = 0
     for letter in text:
         if not await fontTest(letter):
-            draw.text((180 + space, 132),
-                      letter,
-                      font=textfallback,
-                      fill="#888888")
+            draw.text((180 + space, 132), letter, font=textfallback, fill="#888888")
             space += textfallback.getsize(letter)[0]
         else:
             draw.text((180 + space, 132), letter, font=textfont, fill="white")
@@ -1279,16 +1248,20 @@ async def _(event):
     reply = await event.get_reply_message()
     msg = reply.message
     repliedreply = await reply.get_reply_message()
-    user = (await event.client.get_entity(reply.forward.sender)
-            if reply.fwd_from else reply.sender)
+    user = (
+        await event.client.get_entity(reply.forward.sender)
+        if reply.fwd_from
+        else reply.sender
+    )
     res, canvas = await process(msg, user, event.client, reply, repliedreply)
     if not res:
         return
     canvas.save("sticker.webp")
-    await event.client.send_file(event.chat_id,
-                                 "sticker.webp",
-                                 reply_to=event.reply_to_msg_id)
+    await event.client.send_file(
+        event.chat_id, "sticker.webp", reply_to=event.reply_to_msg_id
+    )
     os.remove("sticker.webp")
+
 
 EMOJI_PATTERN = re.compile(
     "["
@@ -1303,12 +1276,14 @@ EMOJI_PATTERN = re.compile(
     "\U0001FA00-\U0001FA6F"  # Chess Symbols
     "\U0001FA70-\U0001FAFF"  # Symbols and Pictographs Extended-A
     "\U00002702-\U000027B0"  # Dingbats
-    "]+")
+    "]+"
+)
 
 
 def deEmojify(inputString: str) -> str:
     """Remove emojis and other non-safe characters from string"""
     return re.sub(EMOJI_PATTERN, "", inputString)
+
 
 # Made By @MissJulia_Robot
 
@@ -1329,7 +1304,8 @@ async def stickerizer(event):
     newtext = event.pattern_match.group(1)
     animus = [20, 32, 33, 40, 41, 42, 58]
     sticcers = await ubot.inline_query(
-        "stickerizerbot", f"#{random.choice(animus)}{(deEmojify(newtext))}")
+        "stickerizerbot", f"#{random.choice(animus)}{(deEmojify(newtext))}"
+    )
     null = await sticcers[0].download_media(TEMP_DOWNLOAD_DIRECTORY)
     bara = str(null)
     await event.client.send_file(event.chat_id, bara, reply_to=event.id)
@@ -1587,7 +1563,7 @@ async def msg(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -1603,7 +1579,7 @@ async def msg(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -1619,7 +1595,7 @@ async def msg(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -1630,7 +1606,9 @@ async def msg(event):
         replyto = reply.sender_id
     else:
         replyto = event.sender_id
-    await tbot.send_message(event.chat_id, random.choice(ABUSE_STRINGS), reply_to=replyto)
+    await tbot.send_message(
+        event.chat_id, random.choice(ABUSE_STRINGS), reply_to=replyto
+    )
 
 
 @register(pattern="^/bluetext$")
@@ -1640,7 +1618,7 @@ async def msg(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -1651,7 +1629,11 @@ async def msg(event):
         replyto = reply.sender_id
     else:
         replyto = event.sender_id
-    await tbot.send_message(event.chat_id, "/BLUE /TEXT /MUST /CLICK /I /AM /A /STUPID /ANIMAL /THAT /IS /ATTRACTED /TO /COLORS", reply_to=replyto)
+    await tbot.send_message(
+        event.chat_id,
+        "/BLUE /TEXT /MUST /CLICK /I /AM /A /STUPID /ANIMAL /THAT /IS /ATTRACTED /TO /COLORS",
+        reply_to=replyto,
+    )
 
 
 @register(pattern="^/rlg$")
@@ -1661,7 +1643,7 @@ async def _(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -1681,7 +1663,7 @@ async def _(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -1703,7 +1685,7 @@ async def _(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -1715,8 +1697,7 @@ async def _(event):
     elif r <= 90:
         await event.reply("Send money to buy new table to flip")
     else:
-        await event.reply(
-            "Go do some work instead of flipping tables ma boy.")
+        await event.reply("Go do some work instead of flipping tables ma boy.")
 
 
 SFW_STRINGS = (
@@ -1797,7 +1778,7 @@ async def _(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -2088,7 +2069,7 @@ async def _(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -2110,7 +2091,7 @@ async def _(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -2132,7 +2113,7 @@ async def _(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -2145,6 +2126,8 @@ async def _(event):
         replyto = event.sender_id
     rangry = random.choice(reactionangry)
     await event.reply(rangry, reply_to=replyto)
+
+
 file_help = os.path.basename(__file__)
 file_help = file_help.replace(".py", "")
 file_helpo = file_help.replace("_", " ")
@@ -2188,9 +2171,4 @@ __help__ = """
  - /animate: Enwrap your text in a beautiful anime
 """
 
-CMD_HELP.update({
-    file_helpo: [
-        file_helpo,
-        __help__
-    ]
-})
+CMD_HELP.update({file_helpo: [file_helpo, __help__]})

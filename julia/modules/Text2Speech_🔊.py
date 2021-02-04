@@ -24,16 +24,17 @@ async def is_register_admin(chat, user):
     if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
 
         return isinstance(
-            (await
-             tbot(functions.channels.GetParticipantRequest(chat,
-                                                           user))).participant,
+            (
+                await tbot(functions.channels.GetParticipantRequest(chat, user))
+            ).participant,
             (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
         )
     if isinstance(chat, types.InputPeerChat):
 
         ui = await tbot.get_peer_id(user)
-        ps = (await tbot(functions.messages.GetFullChatRequest(chat.chat_id)
-                         )).full_chat.participants.participants
+        ps = (
+            await tbot(functions.messages.GetFullChatRequest(chat.chat_id))
+        ).full_chat.participants.participants
         return isinstance(
             next((p for p in ps if p.user_id == ui), None),
             (types.ChatParticipantAdmin, types.ChatParticipantCreator),
@@ -75,9 +76,11 @@ async def _(event):
         tts = gTTS(text, tld="com", lang=lan)
         tts.save("k.mp3")
     except AssertionError:
-        await event.reply("The text is empty.\n"
-                          "Nothing left to speak after pre-precessing, "
-                          "tokenizing and cleaning.")
+        await event.reply(
+            "The text is empty.\n"
+            "Nothing left to speak after pre-precessing, "
+            "tokenizing and cleaning."
+        )
         return
     except ValueError:
         await event.reply("Language is not supported.")
@@ -89,11 +92,12 @@ async def _(event):
         await event.reply("Error in Google Text-to-Speech API request !")
         return
     with open("k.mp3", "r"):
-        await tbot.send_file(event.chat_id,
-                             "k.mp3",
-                             voice_note=True,
-                             reply_to=reply_to_id)
+        await tbot.send_file(
+            event.chat_id, "k.mp3", voice_note=True, reply_to=reply_to_id
+        )
         os.remove("k.mp3")
+
+
 file_help = os.path.basename(__file__)
 file_help = file_help.replace(".py", "")
 file_helpo = file_help.replace("_", " ")
@@ -102,9 +106,4 @@ __help__ = """
  - /tts <lang | text>: Returns a speech note of the text provided
 """
 
-CMD_HELP.update({
-    file_helpo: [
-        file_helpo,
-        __help__
-    ]
-})
+CMD_HELP.update({file_helpo: [file_helpo, __help__]})

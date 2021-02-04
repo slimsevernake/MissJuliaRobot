@@ -45,7 +45,7 @@ async def _(event):
     cid = iid.strip()
     reason = reasonn.strip()
     if cid.isnumeric():
-       cid = int(cid)
+        cid = int(cid)
     entity = await tbot.get_input_entity(cid)
     try:
         r_sender_id = entity.user_id
@@ -67,21 +67,35 @@ async def _(event):
     for c in chats:
         if r_sender_id == c["user"]:
             to_check = get_reason(id=r_sender_id)
-            gbanned.update_one({"_id": to_check["_id"], "bannerid": to_check["bannerid"], "user": to_check["user"], "reason": to_check["reason"]}, {
-                               "$set": {"reason": reason, "bannerid": event.sender_id}})
-            await event.reply("This user is already gbanned, I am updating the reason of the gban with your reason.")
+            gbanned.update_one(
+                {
+                    "_id": to_check["_id"],
+                    "bannerid": to_check["bannerid"],
+                    "user": to_check["user"],
+                    "reason": to_check["reason"],
+                },
+                {"$set": {"reason": reason, "bannerid": event.sender_id}},
+            )
+            await event.reply(
+                "This user is already gbanned, I am updating the reason of the gban with your reason."
+            )
             await event.client.send_message(
                 GBAN_LOGS,
-                "**GLOBAL BAN UPDATE**\n\n**PERMALINK:** [user](tg://user?id={})\n**UPDATER:** `{}`**\nREASON:** `{}`".format(r_sender_id, event.sender_id, reason))
+                "**GLOBAL BAN UPDATE**\n\n**PERMALINK:** [user](tg://user?id={})\n**UPDATER:** `{}`**\nREASON:** `{}`".format(
+                    r_sender_id, event.sender_id, reason
+                ),
+            )
             return
 
-    gbanned.insert_one({"bannerid": event.sender_id,
-                        "user": r_sender_id, "reason": reason})
+    gbanned.insert_one(
+        {"bannerid": event.sender_id, "user": r_sender_id, "reason": reason}
+    )
 
     await event.client.send_message(
         GBAN_LOGS,
         "**NEW GLOBAL BAN**\n\n**PERMALINK:** [user](tg://user?id={})\n**BANNER:** `{}`\n**REASON:** `{}`".format(
-            r_sender_id, event.sender_id, reason)
+            r_sender_id, event.sender_id, reason
+        ),
     )
     await event.reply("Gbanned Successfully !")
 
@@ -104,7 +118,7 @@ async def _(event):
     cid = iid.strip()
     reason = reasonn.strip()
     if cid.isnumeric():
-       cid = int(cid)
+        cid = int(cid)
     entity = await tbot.get_input_entity(cid)
     try:
         r_sender_id = entity.user_id
@@ -130,7 +144,8 @@ async def _(event):
             await event.client.send_message(
                 GBAN_LOGS,
                 "**REMOVAL OF GLOBAL BAN**\n\n**PERMALINK:** [user](tg://user?id={})\n**REMOVER:** `{}`\n**REASON:** `{}`".format(
-                    r_sender_id, event.sender_id, reason)
+                    r_sender_id, event.sender_id, reason
+                ),
             )
             await event.reply("Ungbanned Successfully !")
             return
@@ -154,7 +169,11 @@ async def join_ban(event):
                     reason = to_check["reason"]
                     bannerid = to_check["bannerid"]
                     await tbot(EditBannedRequest(event.chat_id, user, BANNED_RIGHTS))
-                    await event.reply("This user is gbanned and has been removed !\n\n**Gbanned By**: `{}`\n**Reason**: `{}`".format(bannerid, reason))
+                    await event.reply(
+                        "This user is gbanned and has been removed !\n\n**Gbanned By**: `{}`\n**Reason**: `{}`".format(
+                            bannerid, reason
+                        )
+                    )
                 except Exception as e:
                     print(e)
                     return
@@ -174,7 +193,13 @@ async def type_ban(event):
                 to_check = get_reason(id=event.sender_id)
                 reason = to_check["reason"]
                 bannerid = to_check["bannerid"]
-                await tbot(EditBannedRequest(event.chat_id, event.sender_id, BANNED_RIGHTS))
-                await event.reply("This user is gbanned and has been removed !\n\n**Gbanned By**: `{}`\n**Reason**: `{}`".format(bannerid, reason))
+                await tbot(
+                    EditBannedRequest(event.chat_id, event.sender_id, BANNED_RIGHTS)
+                )
+                await event.reply(
+                    "This user is gbanned and has been removed !\n\n**Gbanned By**: `{}`\n**Reason**: `{}`".format(
+                        bannerid, reason
+                    )
+                )
             except Exception:
                 return

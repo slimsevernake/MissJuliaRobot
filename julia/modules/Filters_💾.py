@@ -35,8 +35,9 @@ async def can_change_info(message):
         )
     )
     p = result.participant
-    return isinstance(p, types.ChannelParticipantCreator) or (isinstance(
-        p, types.ChannelParticipantAdmin) and p.admin_rights.change_info)
+    return isinstance(p, types.ChannelParticipantCreator) or (
+        isinstance(p, types.ChannelParticipantAdmin) and p.admin_rights.change_info
+    )
 
 
 @tbot.on(events.NewMessage(pattern=None))
@@ -99,7 +100,7 @@ async def on_snip(event):
                 try:
                     filter = filter.strip()
                     button = options.strip()
-                    params = re.findall(r'\'(.*?)\'', button)
+                    params = re.findall(r"\'(.*?)\'", button)
                     butto = [Button.url(*params)]
                 except BaseException:
                     filter = filter.strip()
@@ -229,6 +230,7 @@ async def on_snip_delete(event):
 
     await event.reply(f"Filter **{name}** deleted successfully")
 
+
 @register(pattern="^/stopallfilters$")
 async def on_all_snip_delete(event):
     if event.is_group:
@@ -238,6 +240,7 @@ async def on_all_snip_delete(event):
         return
     remove_all_filters(event.chat_id)
     await event.reply(f"Filters in current chat deleted successfully !")
+
 
 file_help = os.path.basename(__file__)
 file_help = file_help.replace(".py", "")
@@ -253,9 +256,4 @@ You can also include buttons in filters, example send `/savefilter google` in re
  - /listfilters: List all active filters in the chat
 """
 
-CMD_HELP.update({
-    file_helpo: [
-        file_helpo,
-        __help__
-    ]
-})
+CMD_HELP.update({file_helpo: [file_helpo, __help__]})

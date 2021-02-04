@@ -26,8 +26,9 @@ async def can_change_info(message):
             )
         )
         p = result.participant
-        return isinstance(p, types.ChannelParticipantCreator) or (isinstance(
-            p, types.ChannelParticipantAdmin) and p.admin_rights.change_info)
+        return isinstance(p, types.ChannelParticipantCreator) or (
+            isinstance(p, types.ChannelParticipantAdmin) and p.admin_rights.change_info
+        )
     except Exception:
         return False
 
@@ -118,11 +119,12 @@ async def _(event):
         except ValueError:
             pass
         try:
-            async with tbot.action(event.chat_id, 'typing'):
+            async with tbot.action(event.chat_id, "typing"):
                 rep = api_client.think_thought(sesh, query)
                 await event.reply(rep)
         except CFError as e:
             print(e)
+
 
 file_help = os.path.basename(__file__)
 file_help = file_help.replace(".py", "")
@@ -133,9 +135,4 @@ __help__ = """
  - /rmchat: Deactivates AI mode in the chat the bot will stop giving auto replies to anyone who tags the bot
 """
 
-CMD_HELP.update({
-    file_helpo: [
-        file_helpo,
-        __help__
-    ]
-})
+CMD_HELP.update({file_helpo: [file_helpo, __help__]})

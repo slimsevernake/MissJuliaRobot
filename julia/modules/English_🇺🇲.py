@@ -1,4 +1,4 @@
-from google_trans_new import google_translator  
+from google_trans_new import google_translator
 from julia import tbot
 import json
 import requests
@@ -20,20 +20,22 @@ client = MongoClient(MONGO_DB_URI)
 db = client["missjuliarobot"]
 approved_users = db.approve
 
+
 async def is_register_admin(chat, user):
     if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
 
         return isinstance(
-            (await
-             tbot(functions.channels.GetParticipantRequest(chat,
-                                                           user))).participant,
+            (
+                await tbot(functions.channels.GetParticipantRequest(chat, user))
+            ).participant,
             (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
         )
     if isinstance(chat, types.InputPeerChat):
 
         ui = await tbot.get_peer_id(user)
-        ps = (await tbot(functions.messages.GetFullChatRequest(chat.chat_id)
-                         )).full_chat.participants.participants
+        ps = (
+            await tbot(functions.messages.GetFullChatRequest(chat.chat_id))
+        ).full_chat.participants.participants
         return isinstance(
             next((p for p in ps if p.user_id == ui), None),
             (types.ChatParticipantAdmin, types.ChatParticipantCreator),
@@ -48,7 +50,7 @@ async def _(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -62,22 +64,19 @@ async def _(event):
     elif "|" in input_str:
         lan, text = input_str.split("|")
     else:
-        await event.reply("`/tr <LanguageCode>` as reply to a message or `/tr <LanguageCode> | <text>`")
+        await event.reply(
+            "`/tr <LanguageCode>` as reply to a message or `/tr <LanguageCode> | <text>`"
+        )
         return
     text = text.strip()
     lan = lan.strip()
-    translator = google_translator()  
+    translator = google_translator()
     try:
-        translated = translator.translate(text,lang_tgt=lan)  
+        translated = translator.translate(text, lang_tgt=lan)
         after_tr_text = translated
         detect_result = translator.detect(text)
-        output_str = (
-            "**TRANSLATED** from {} to {}\n\n"
-            "{}"
-        ).format(
-            detect_result[0],
-            lan,
-            after_tr_text
+        output_str = ("**TRANSLATED** from {} to {}\n\n" "{}").format(
+            detect_result[0], lan, after_tr_text
         )
         await event.reply(output_str)
     except Exception as exc:
@@ -95,7 +94,7 @@ async def _(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -134,13 +133,13 @@ async def _(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
         else:
             return
-    text = event.text[len("/define "):]
+    text = event.text[len("/define ") :]
     word = f"{text}"
     let = dictionary.meaning(word)
     set = str(let)
@@ -157,13 +156,13 @@ async def _(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
         else:
             return
-    text = event.text[len("/synonyms "):]
+    text = event.text[len("/synonyms ") :]
     word = f"{text}"
     let = dictionary.synonym(word)
     set = str(let)
@@ -180,13 +179,13 @@ async def _(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
         else:
             return
-    text = message.text[len("/antonyms "):]
+    text = message.text[len("/antonyms ") :]
     word = f"{text}"
     let = dictionary.antonym(word)
     set = str(let)
@@ -210,9 +209,4 @@ __help__ = """
  - /antonyms <word>: Find the antonyms of a word
 """
 
-CMD_HELP.update({
-    file_helpo: [
-        file_helpo,
-        __help__
-    ]
-})
+CMD_HELP.update({file_helpo: [file_helpo, __help__]})

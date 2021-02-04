@@ -20,8 +20,9 @@ async def can_change_info(message):
         )
     )
     p = result.participant
-    return isinstance(p, types.ChannelParticipantCreator) or (isinstance(
-        p, types.ChannelParticipantAdmin) and p.admin_rights.change_info)
+    return isinstance(p, types.ChannelParticipantCreator) or (
+        isinstance(p, types.ChannelParticipantAdmin) and p.admin_rights.change_info
+    )
 
 
 async def is_register_admin(chat, user):
@@ -124,7 +125,9 @@ async def on_delete_blacklist(event):
     for trigger in to_unblacklist:
         if sql.rm_from_blacklist(event.chat_id, trigger.lower()):
             successful += 1
-    await event.reply(f"Removed {successful} / {len(to_unblacklist)} from the blacklist")
+    await event.reply(
+        f"Removed {successful} / {len(to_unblacklist)} from the blacklist"
+    )
 
 
 @register(pattern="^/addurl")
@@ -142,29 +145,37 @@ async def _(event):
     urls = event.text.split(None, 1)
     if len(urls) > 1:
         urls = urls[1]
-        to_blacklist = list(
-            {uri.strip() for uri in urls.split("\n") if uri.strip()})
+        to_blacklist = list({uri.strip() for uri in urls.split("\n") if uri.strip()})
         blacklisted = []
 
         for uri in to_blacklist:
             extract_url = tldextract.extract(uri)
             if extract_url.domain and extract_url.suffix:
-                blacklisted.append(extract_url.domain + "." +
-                                   extract_url.suffix)
+                blacklisted.append(extract_url.domain + "." + extract_url.suffix)
                 urlsql.blacklist_url(
-                    chat.id, extract_url.domain + "." + extract_url.suffix)
+                    chat.id, extract_url.domain + "." + extract_url.suffix
+                )
 
         if len(to_blacklist) == 1:
             extract_url = tldextract.extract(to_blacklist[0])
             if extract_url.domain and extract_url.suffix:
-                await event.reply("Added <code>{}</code> domain to the blacklist!".format(html.escape(extract_url.domain + "." + extract_url.suffix)), parse_mode="html")
+                await event.reply(
+                    "Added <code>{}</code> domain to the blacklist!".format(
+                        html.escape(extract_url.domain + "." + extract_url.suffix)
+                    ),
+                    parse_mode="html",
+                )
             else:
                 await event.reply("You are trying to blacklist an invalid url")
         else:
-            await event.reply("Added <code>{}</code> domains to the blacklist.".format(len(blacklisted)), parse_mode="html")
+            await event.reply(
+                "Added <code>{}</code> domains to the blacklist.".format(
+                    len(blacklisted)
+                ),
+                parse_mode="html",
+            )
     else:
         await event.reply("Tell me which urls you would like to add to the blacklist.")
-
 
 
 @register(pattern="^/delurl")
@@ -180,32 +191,49 @@ async def _(event):
             return
     chat = event.chat
     urls = event.text.split(None, 1)
-  
+
     if len(urls) > 1:
         urls = urls[1]
-        to_unblacklist = list(
-            {uri.strip() for uri in urls.split("\n") if uri.strip()})
+        to_unblacklist = list({uri.strip() for uri in urls.split("\n") if uri.strip()})
         unblacklisted = 0
         for uri in to_unblacklist:
             extract_url = tldextract.extract(uri)
             success = urlsql.rm_url_from_blacklist(
-                chat.id, extract_url.domain + "." + extract_url.suffix)
+                chat.id, extract_url.domain + "." + extract_url.suffix
+            )
             if success:
                 unblacklisted += 1
 
         if len(to_unblacklist) == 1:
             if unblacklisted:
-                await event.reply("Removed <code>{}</code> from the blacklist!".format(html.escape(to_unblacklist[0])), parse_mode="html")
+                await event.reply(
+                    "Removed <code>{}</code> from the blacklist!".format(
+                        html.escape(to_unblacklist[0])
+                    ),
+                    parse_mode="html",
+                )
             else:
                 await event.reply("This isn't a blacklisted domain...!")
         elif unblacklisted == len(to_unblacklist):
-            await event.reply("Removed <code>{}</code> domains from the blacklist.".format(unblacklisted), parse_mode="html")
+            await event.reply(
+                "Removed <code>{}</code> domains from the blacklist.".format(
+                    unblacklisted
+                ),
+                parse_mode="html",
+            )
         elif not unblacklisted:
             await event.reply("None of these domains exist, so they weren't removed.")
         else:
-            await event.reply("Removed <code>{}</code> domains from the blacklist. {} did not exist, so were not removed.".format(unblacklisted, len(to_unblacklist) - unblacklisted), parse_mode="html")
+            await event.reply(
+                "Removed <code>{}</code> domains from the blacklist. {} did not exist, so were not removed.".format(
+                    unblacklisted, len(to_unblacklist) - unblacklisted
+                ),
+                parse_mode="html",
+            )
     else:
-        await event.reply("Tell me which domains you would like to remove from the blacklist.")
+        await event.reply(
+            "Tell me which domains you would like to remove from the blacklist."
+        )
 
 
 @tbot.on(events.NewMessage(incoming=True))
@@ -213,18 +241,19 @@ async def on_url_message(event):
     chat = event.chat
     extracted_domains = []
     for (ent, txt) in event.get_entities_text():
-      if ent.offset != 0:
-          break
-      if isinstance(ent, types.MessageEntityUrl):
-          url = txt
-          extract_url = tldextract.extract(url)
-          extracted_domains.append(extract_url.domain + "." + extract_url.suffix)
+        if ent.offset != 0:
+            break
+        if isinstance(ent, types.MessageEntityUrl):
+            url = txt
+            extract_url = tldextract.extract(url)
+            extracted_domains.append(extract_url.domain + "." + extract_url.suffix)
     for url in urlsql.get_blacklisted_urls(chat.id):
         if url in extracted_domains:
             try:
                 await event.delete()
             except:
                 return
+
 
 @register(pattern="^/geturl$")
 async def _(event):
@@ -237,7 +266,7 @@ async def _(event):
             pass
         else:
             return
-    chat = event.chat    
+    chat = event.chat
     base_string = "Current <b>blacklisted</b> domains:\n"
     blacklisted = urlsql.get_blacklisted_urls(chat.id)
     if not blacklisted:
@@ -246,6 +275,8 @@ async def _(event):
     for domain in blacklisted:
         base_string += "- <code>{}</code>\n".format(domain)
     await event.reply(base_string, parse_mode="html")
+
+
 file_help = os.path.basename(__file__)
 file_help = file_help.replace(".py", "")
 file_helpo = file_help.replace("_", " ")
@@ -263,9 +294,4 @@ __help__ = """
  - /addurl bit.ly: This would delete any message containing url "bit.ly"
 """
 
-CMD_HELP.update({
-    file_helpo: [
-        file_helpo,
-        __help__
-    ]
-})
+CMD_HELP.update({file_helpo: [file_helpo, __help__]})

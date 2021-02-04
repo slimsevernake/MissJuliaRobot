@@ -4,11 +4,7 @@ from julia import tbot
 from telethon.tl import types
 from julia import *
 
-from julia.modules.sql.notes_sql import (
-    add_note,
-    get_all_notes,
-    get_notes,
-    remove_note)
+from julia.modules.sql.notes_sql import add_note, get_all_notes, get_notes, remove_note
 
 from telethon import events
 from telethon.tl import functions
@@ -22,8 +18,9 @@ async def can_change_info(message):
         )
     )
     p = result.participant
-    return isinstance(p, types.ChannelParticipantCreator) or (isinstance(
-        p, types.ChannelParticipantAdmin) and p.admin_rights.change_info)
+    return isinstance(p, types.ChannelParticipantCreator) or (
+        isinstance(p, types.ChannelParticipantAdmin) and p.admin_rights.change_info
+    )
 
 
 @tbot.on(events.NewMessage(pattern=r"\#(\S+)"))
@@ -100,6 +97,7 @@ async def on_note_delete(event):
     remove_note(event.chat_id, name)
     await event.reply("Note **{}** deleted successfully".format(name))
 
+
 file_help = os.path.basename(__file__)
 file_help = file_help.replace(".py", "")
 file_helpo = file_help.replace("_", " ")
@@ -114,9 +112,4 @@ __help__ = """
  - #<word> : get the note registered to that word
 """
 
-CMD_HELP.update({
-    file_helpo: [
-        file_helpo,
-        __help__
-    ]
-})
+CMD_HELP.update({file_helpo: [file_helpo, __help__]})

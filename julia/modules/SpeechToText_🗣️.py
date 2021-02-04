@@ -91,8 +91,7 @@ async def _(event):
                 transcript_confidence = ""
                 for alternative in results:
                     alternatives = alternative["alternatives"][0]
-                    transcript_response += " " + \
-                        str(alternatives["transcript"])
+                    transcript_response += " " + str(alternatives["transcript"])
                     transcript_confidence += (
                         " " + str(alternatives["confidence"]) + " + "
                     )
@@ -100,10 +99,12 @@ async def _(event):
                 ms = (end - start).seconds
                 if transcript_response != "":
                     string_to_show = "TRANSCRIPT: `{}`\nTime Taken: {} seconds\nConfidence: `{}`".format(
-                        transcript_response, ms, transcript_confidence)
+                        transcript_response, ms, transcript_confidence
+                    )
                 else:
                     string_to_show = "TRANSCRIPT: `Nil`\nTime Taken: {} seconds\n\n**No Results Found**".format(
-                        ms)
+                        ms
+                    )
                 await event.reply(string_to_show)
             else:
                 await event.reply(r["error"])
@@ -111,6 +112,7 @@ async def _(event):
             os.remove(required_file_name)
     else:
         await event.reply("Reply to a voice message, to get the text out of it.")
+
 
 file_help = os.path.basename(__file__)
 file_help = file_help.replace(".py", "")
@@ -120,9 +122,4 @@ __help__ = """
  - /stt: Type in reply to a voice message(english only) to extract text from it.
 """
 
-CMD_HELP.update({
-    file_helpo: [
-        file_helpo,
-        __help__
-    ]
-})
+CMD_HELP.update({file_helpo: [file_helpo, __help__]})

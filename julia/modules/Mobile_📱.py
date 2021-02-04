@@ -18,6 +18,7 @@ client = MongoClient(MONGO_DB_URI)
 db = client["missjuliarobot"]
 approved_users = db.approve
 
+
 async def is_register_admin(chat, user):
     if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
 
@@ -39,6 +40,7 @@ async def is_register_admin(chat, user):
         )
     return None
 
+
 @register(pattern=r"^/specs(?: |)([\S]*)(?: |)([\s\S]*)")
 async def devices_specifications(request):
     approved_userss = approved_users.find({})
@@ -46,7 +48,7 @@ async def devices_specifications(request):
         iid = ch["id"]
         userss = ch["user"]
     if request.is_group:
-        if (await is_register_admin(request.input_chat, request.message.sender_id)):
+        if await is_register_admin(request.input_chat, request.message.sender_id):
             pass
         elif request.chat_id == iid and request.sender_id == userss:
             pass
@@ -66,11 +68,11 @@ async def devices_specifications(request):
         return
     all_brands = (
         BeautifulSoup(
-            get("https://www.devicespecifications.com/en/brand-more").content,
-            "lxml") .find(
-            "div",
-            {
-                "class": "brand-listing-container-news"}) .findAll("a"))
+            get("https://www.devicespecifications.com/en/brand-more").content, "lxml"
+        )
+        .find("div", {"class": "brand-listing-container-news"})
+        .findAll("a")
+    )
     brand_page_url = None
     try:
         brand_page_url = [
@@ -109,6 +111,7 @@ async def devices_specifications(request):
             reply += f"**{title}**: {data}\n"
     await request.reply(reply)
 
+
 file_help = os.path.basename(__file__)
 file_help = file_help.replace(".py", "")
 file_helpo = file_help.replace("_", " ")
@@ -117,9 +120,4 @@ __help__ = """
  - /specs <brand> <device>: Get device specifications info
 """
 
-CMD_HELP.update({
-    file_helpo: [
-        file_helpo,
-        __help__
-    ]
-})
+CMD_HELP.update({file_helpo: [file_helpo, __help__]})

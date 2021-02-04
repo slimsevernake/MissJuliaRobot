@@ -52,7 +52,7 @@ async def _(event):
         iid = ch["id"]
         userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
         elif event.chat_id == iid and event.sender_id == userss:
             pass
@@ -153,8 +153,7 @@ async def _(event):
                     if metadata.has("duration"):
                         duration = metadata.get("duration").seconds
                     if os.path.exists(thumb_image_path):
-                        metadata = extractMetadata(
-                            createParser(thumb_image_path))
+                        metadata = extractMetadata(createParser(thumb_image_path))
                         if metadata.has("width"):
                             width = metadata.get("width")
                         if metadata.has("height"):
@@ -176,7 +175,7 @@ async def _(event):
                         supports_streaming=supports_streaming,
                         allow_cache=False,
                         reply_to=event.message.id,
-                        attributes=document_attributes
+                        attributes=document_attributes,
                     )
                 except Exception as e:
                     await tbot.send_message(
@@ -197,6 +196,8 @@ def get_lst_of_files(input_directory, output_lst):
             return get_lst_of_files(current_file_name, output_lst)
         output_lst.append(current_file_name)
     return output_lst
+
+
 file_help = os.path.basename(__file__)
 file_help = file_help.replace(".py", "")
 file_helpo = file_help.replace("_", " ")
@@ -207,9 +208,4 @@ __help__ = """
 """
 
 
-CMD_HELP.update({
-    file_helpo: [
-        file_helpo,
-        __help__
-    ]
-})
+CMD_HELP.update({file_helpo: [file_helpo, __help__]})

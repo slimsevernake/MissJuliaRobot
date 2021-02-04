@@ -83,8 +83,7 @@ async def _(event):
         message = "SYNTAX: `.barcode <long text to include>`"
     bar_code_type = "code128"
     try:
-        bar_code_mode_f = barcode.get(
-            bar_code_type, message, writer=ImageWriter())
+        bar_code_mode_f = barcode.get(bar_code_type, message, writer=ImageWriter())
         filename = bar_code_mode_f.save(bar_code_type)
         await event.client.send_file(
             event.chat_id,
@@ -99,6 +98,8 @@ async def _(event):
     end = datetime.now()
     ms = (end - start).seconds
     await event.reply("Created BarCode in {} seconds".format(ms))
+
+
 file_help = os.path.basename(__file__)
 file_help = file_help.replace(".py", "")
 file_helpo = file_help.replace("_", " ")
@@ -107,9 +108,4 @@ __help__ = """
  - /barcode <text>: makes a barcode out of the text, crop the barcode if you don't want to reveal the text
 """
 
-CMD_HELP.update({
-    file_helpo: [
-        file_helpo,
-        __help__
-    ]
-})
+CMD_HELP.update({file_helpo: [file_helpo, __help__]})

@@ -45,10 +45,10 @@ async def is_register_admin(chat, user):
 async def imdb(e):
     approved_userss = approved_users.find({})
     for ch in approved_userss:
-        iid = ch['id']
-        userss = ch['user']
+        iid = ch["id"]
+        userss = ch["user"]
     if e.is_group:
-        if (await is_register_admin(e.input_chat, e.message.sender_id)):
+        if await is_register_admin(e.input_chat, e.message.sender_id):
             pass
         elif e.chat_id == iid and e.sender_id == userss:
             pass
@@ -59,14 +59,16 @@ async def imdb(e):
         movie_name = e.pattern_match.group(1)
         remove_space = movie_name.split(" ")
         final_name = "+".join(remove_space)
-        page = requests.get("https://www.imdb.com/find?ref_=nv_sr_fn&q=" +
-                            final_name + "&s=all")
+        page = requests.get(
+            "https://www.imdb.com/find?ref_=nv_sr_fn&q=" + final_name + "&s=all"
+        )
         lnk = str(page.status_code)
         soup = bs4.BeautifulSoup(page.content, "lxml")
         odds = soup.findAll("tr", "odd")
         mov_title = odds[0].findNext("td").findNext("td").text
-        mov_link = ("http://www.imdb.com/" +
-                    odds[0].findNext("td").findNext("td").a["href"])
+        mov_link = (
+            "http://www.imdb.com/" + odds[0].findNext("td").findNext("td").a["href"]
+        )
         page1 = requests.get(mov_link)
         soup = bs4.BeautifulSoup(page1.content, "lxml")
         if soup.find("div", "poster"):
@@ -100,8 +102,7 @@ async def imdb(e):
             actors.pop()
             stars = actors[0] + "," + actors[1] + "," + actors[2]
         if soup.find("div", "inline canwrap"):
-            story_line = soup.find("div",
-                                   "inline canwrap").findAll("p")[0].text
+            story_line = soup.find("div", "inline canwrap").findAll("p")[0].text
         else:
             story_line = "Not available"
         info = soup.findAll("div", "txt-block")
@@ -122,20 +123,33 @@ async def imdb(e):
             mov_rating = "Not available"
         await e.reply(
             "<a href=" + poster + ">&#8203;</a>"
-            "<b>Title : </b><code>" + mov_title + "</code>\n<code>" +
-            mov_details + "</code>\n<b>Rating : </b><code>" + mov_rating +
-            "</code>\n<b>Country : </b><code>" + mov_country[0] +
-            "</code>\n<b>Language : </b><code>" + mov_language[0] +
-            "</code>\n<b>Director : </b><code>" + director +
-            "</code>\n<b>Writer : </b><code>" + writer +
-            "</code>\n<b>Stars : </b><code>" + stars +
-            "</code>\n<b>IMDB Url : </b>" + mov_link +
-            "\n<b>Story Line : </b>" + story_line,
+            "<b>Title : </b><code>"
+            + mov_title
+            + "</code>\n<code>"
+            + mov_details
+            + "</code>\n<b>Rating : </b><code>"
+            + mov_rating
+            + "</code>\n<b>Country : </b><code>"
+            + mov_country[0]
+            + "</code>\n<b>Language : </b><code>"
+            + mov_language[0]
+            + "</code>\n<b>Director : </b><code>"
+            + director
+            + "</code>\n<b>Writer : </b><code>"
+            + writer
+            + "</code>\n<b>Stars : </b><code>"
+            + stars
+            + "</code>\n<b>IMDB Url : </b>"
+            + mov_link
+            + "\n<b>Story Line : </b>"
+            + story_line,
             link_preview=True,
             parse_mode="HTML",
         )
     except IndexError:
         await e.reply("Please enter a valid movie name !")
+
+
 file_help = os.path.basename(__file__)
 file_help = file_help.replace(".py", "")
 file_helpo = file_help.replace("_", " ")
@@ -144,9 +158,4 @@ __help__ = """
  - /imdb - Get full info about a movie with imdb.com
 """
 
-CMD_HELP.update({
-    file_helpo: [
-        file_helpo,
-        __help__
-    ]
-})
+CMD_HELP.update({file_helpo: [file_helpo, __help__]})

@@ -52,7 +52,7 @@ async def upstream(ups):
     force_update = False
 
     try:
-        txt = "`Oops.. Updater cannot continue "        
+        txt = "`Oops.. Updater cannot continue "
         repo = Repo()
     except NoSuchPathError as error:
         await lol.edit(f"{txt}\n`directory {error} is not found`")

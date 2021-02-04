@@ -22,8 +22,9 @@ spammers = db.spammer
 cleanservices = db.cleanservice
 globalchat = db.globchat
 
-CMD_STARTERS = '/'
-profanity.load_censor_words_from_file('./profanity_wordlist.txt')
+CMD_STARTERS = "/"
+profanity.load_censor_words_from_file("./profanity_wordlist.txt")
+
 
 async def can_change_info(message):
     result = await tbot(
@@ -33,8 +34,9 @@ async def can_change_info(message):
         )
     )
     p = result.participant
-    return isinstance(p, types.ChannelParticipantCreator) or (isinstance(
-        p, types.ChannelParticipantAdmin) and p.admin_rights.change_info)
+    return isinstance(p, types.ChannelParticipantCreator) or (
+        isinstance(p, types.ChannelParticipantAdmin) and p.admin_rights.change_info
+    )
 
 
 async def is_register_admin(chat, user):
@@ -110,7 +112,8 @@ async def _(event):
         added = sql.chat_ignore_command(chat.id, val)
         if added:
             reply = "<b>{}</b> has been added to bluetext cleaner ignore list.".format(
-                args)
+                args
+            )
         else:
             reply = "Command is already ignored."
         await event.reply(reply, parse_mode="html")
@@ -135,7 +138,8 @@ async def _(event):
         added = sql.chat_unignore_command(chat.id, val)
         if added:
             reply = "<b>{}</b> has been added to bluetext cleaner ignore list.".format(
-                args)
+                args
+            )
         else:
             reply = "Command isn't ignored currently."
         await event.reply(reply, parse_mode="html")
@@ -184,10 +188,10 @@ async def _(event):
 async def _(event):
     approved_userss = approved_users.find({})
     for ch in approved_userss:
-        iid = ch['id']
-        userss = ch['user']
+        iid = ch["id"]
+        userss = ch["user"]
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             return
         if str(event.sender_id) in str(userss) and str(event.chat_id) in str(iid):
             return
@@ -201,14 +205,16 @@ async def _(event):
 
     if sql.is_enabled(event.chat_id):
         fst_word = event.text.strip().split(None, 1)[0]
-        command = fst_word[1:].split('@')
-        if len(fst_word) > 1 and any(fst_word.startswith(start)
-                                     for start in CMD_STARTERS):
+        command = fst_word[1:].split("@")
+        if len(fst_word) > 1 and any(
+            fst_word.startswith(start) for start in CMD_STARTERS
+        ):
 
             ignored = sql.is_command_ignored(event.chat_id, command[0])
             if ignored:
                 return
             await event.delete()
+
 
 @register(pattern="^/profanity(?: |$)(.*)")
 async def profanity(event):
@@ -239,24 +245,24 @@ async def profanity(event):
             for c in chats:
                 if event.chat_id == c["id"]:
                     await event.reply(
-                        "Profanity filter is already activated for this chat.")
+                        "Profanity filter is already activated for this chat."
+                    )
                     return
             spammers.insert_one({"id": event.chat_id})
             await event.reply("Profanity filter turned on for this chat.")
     if input == "off":
-        if event.is_group:  
+        if event.is_group:
             chats = spammers.find({})
             for c in chats:
                 if event.chat_id == c["id"]:
                     spammers.delete_one({"id": event.chat_id})
-                    await event.reply(
-                        "Profanity filter turned off for this chat.")
+                    await event.reply("Profanity filter turned off for this chat.")
                     return
-        await event.reply(
-                    "Profanity filter isn't turned on for this chat.")
+        await event.reply("Profanity filter isn't turned on for this chat.")
     if not input == "on" and not input == "off":
         await event.reply("I only understand by on or off")
         return
+
 
 @register(pattern="^/globalmode(?: |$)(.*)")
 async def profanity(event):
@@ -286,22 +292,19 @@ async def profanity(event):
             chats = globalchat.find({})
             for c in chats:
                 if event.chat_id == c["id"]:
-                    await event.reply(
-                        "Global mode is already activated for this chat.")
+                    await event.reply("Global mode is already activated for this chat.")
                     return
             globalchat.insert_one({"id": event.chat_id})
             await event.reply("Global mode turned on for this chat.")
     if input == "off":
-        if event.is_group:  
+        if event.is_group:
             chats = globalchat.find({})
             for c in chats:
                 if event.chat_id == c["id"]:
                     globalchat.delete_one({"id": event.chat_id})
-                    await event.reply(
-                        "Global mode turned off for this chat.")
+                    await event.reply("Global mode turned off for this chat.")
                     return
-        await event.reply(
-                    "Global mode isn't turned on for this chat.")
+        await event.reply("Global mode isn't turned on for this chat.")
     if not input == "on" and not input == "off":
         await event.reply("I only understand by on or off")
         return
@@ -336,7 +339,8 @@ async def cleanservice(event):
             for c in chats:
                 if event.chat_id == c["id"]:
                     await event.reply(
-                        "Clean service message already enabled for this chat.")
+                        "Clean service message already enabled for this chat."
+                    )
                     return
             cleanservices.insert_one({"id": event.chat_id})
             await event.reply("I will clean all service messages from now.")
@@ -346,15 +350,14 @@ async def cleanservice(event):
             for c in chats:
                 if event.chat_id == c["id"]:
                     cleanservices.delete_one({"id": event.chat_id})
-                    await event.reply(
-                        "I will not clean service messages anymore.")
+                    await event.reply("I will not clean service messages anymore.")
                     return
-        await event.reply(
-                    "Service message cleaning isn't turned on for this chat.")       
-    
+        await event.reply("Service message cleaning isn't turned on for this chat.")
+
     if not input == "on" and not input == "off":
         await event.reply("I only understand by on or off")
         return
+
 
 @tbot.on(events.NewMessage(pattern=None))
 async def del_profanity(event):
@@ -366,13 +369,13 @@ async def del_profanity(event):
     sender = await event.get_sender()
     let = sender.username
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             return
         pass
     chats = spammers.find({})
     for c in chats:
         if event.text:
-            if event.chat_id == c['id']:
+            if event.chat_id == c["id"]:
                 if better_profanity.profanity.contains_profanity(msg):
                     await event.delete()
                     if sender.username is None:
@@ -380,14 +383,14 @@ async def del_profanity(event):
                         hh = sender.id
                         final = f"[{st}](tg://user?id={hh}) **{msg}** is detected as a slang word and your message has been deleted"
                     else:
-                        final = f'@{let} **{msg}** is detected as a slang word and your message has been deleted'
+                        final = f"@{let} **{msg}** is detected as a slang word and your message has been deleted"
                     dev = await event.respond(final)
                     await asyncio.sleep(10)
                     await dev.delete()
         if event.photo:
-            if event.chat_id == c['id']:
+            if event.chat_id == c["id"]:
                 await event.client.download_media(event.photo, "nudes.jpg")
-                if nude.is_nude('./nudes.jpg'):
+                if nude.is_nude("./nudes.jpg"):
                     await event.delete()
                     st = sender.first_name
                     hh = sender.id
@@ -397,6 +400,7 @@ async def del_profanity(event):
                     await dev.delete()
                     os.remove("nudes.jpg")
 
+
 @tbot.on(events.NewMessage(pattern=None))
 async def del_profanity(event):
     if event.is_private:
@@ -407,17 +411,17 @@ async def del_profanity(event):
     sender = await event.get_sender()
     let = sender.username
     if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if await is_register_admin(event.input_chat, event.message.sender_id):
             return
         pass
     chats = globalchat.find({})
     for c in chats:
         if event.text:
-            if event.chat_id == c['id']:
+            if event.chat_id == c["id"]:
                 a = TextBlob(msg)
                 b = a.detect_language()
                 if not b == "en":
-                    await event.delete()                   
+                    await event.delete()
                     st = sender.first_name
                     hh = sender.id
                     final = f"[{st}](tg://user?id={hh}) you should only speak in english here !"
@@ -430,11 +434,12 @@ async def del_profanity(event):
 async def del_cleanservice(event):
     chats = cleanservices.find({})
     for c in chats:
-      if event.chat_id == c['id']:       
-       try:       
-        await event.delete()
-       except Exception as e:
-        print(e)
+        if event.chat_id == c["id"]:
+            try:
+                await event.delete()
+            except Exception as e:
+                print(e)
+
 
 file_help = os.path.basename(__file__)
 file_help = file_help.replace(".py", "")
@@ -450,9 +455,4 @@ __help__ = """
  - /globalmode: let users only speak in english in your group (automatically deletes messages in other languages)
 """
 
-CMD_HELP.update({
-    file_helpo: [
-        file_helpo,
-        __help__
-    ]
-})
+CMD_HELP.update({file_helpo: [file_helpo, __help__]})

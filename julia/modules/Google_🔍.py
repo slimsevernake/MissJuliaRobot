@@ -33,16 +33,17 @@ async def is_register_admin(chat, user):
     if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
 
         return isinstance(
-            (await
-             tbot(functions.channels.GetParticipantRequest(chat,
-                                                           user))).participant,
+            (
+                await tbot(functions.channels.GetParticipantRequest(chat, user))
+            ).participant,
             (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
         )
     if isinstance(chat, types.InputPeerChat):
 
         ui = await tbot.get_peer_id(user)
-        ps = (await tbot(functions.messages.GetFullChatRequest(chat.chat_id)
-                         )).full_chat.participants.participants
+        ps = (
+            await tbot(functions.messages.GetFullChatRequest(chat.chat_id))
+        ).full_chat.participants.participants
         return isinstance(
             next((p for p in ps if p.user_id == ui), None),
             (types.ChatParticipantAdmin, types.ChatParticipantCreator),
@@ -78,9 +79,9 @@ async def _(event):
         description = result.get("description")
         last = html2text.html2text(description)
         output_str += "[{}]({})\n{}\n".format(text, url, last)
-    await event.reply("{}".format(output_str),
-                      link_preview=False,
-                      parse_mode="Markdown")
+    await event.reply(
+        "{}".format(output_str), link_preview=False, parse_mode="Markdown"
+    )
 
 
 @register(pattern="^/img (.*)")
@@ -113,9 +114,7 @@ async def img_sampler(event):
     files_grabbed = []
     for files in types:
         files_grabbed.extend(glob.glob(files))
-    await tbot.send_file(event.chat_id,
-                         files_grabbed,
-                         reply_to=event.id)
+    await tbot.send_file(event.chat_id, files_grabbed, reply_to=event.id)
     os.chdir("/app")
     os.system("rm -rf store")
 
@@ -161,17 +160,8 @@ async def okgoogle(img):
         image.close()
         # https://stackoverflow.com/questions/23270175/google-reverse-image-search-using-post-request#28792943
         searchUrl = "https://www.google.com/searchbyimage/upload"
-        multipart = {
-            "encoded_image": (
-                name,
-                open(
-                    name,
-                    "rb")),
-            "image_content": ""}
-        response = requests.post(
-            searchUrl,
-            files=multipart,
-            allow_redirects=False)
+        multipart = {"encoded_image": (name, open(name, "rb")), "image_content": ""}
+        response = requests.post(searchUrl, files=multipart, allow_redirects=False)
         fetchUrl = response.headers["Location"]
 
         if response != 400:
@@ -226,8 +216,9 @@ async def ParseSauce(googleurl):
 
     try:
         for similar_image in soup.findAll("input", {"class": "gLFyf"}):
-            url = "https://www.google.com/search?tbm=isch&q=" + \
-                urllib.parse.quote_plus(similar_image.get("value"))
+            url = "https://www.google.com/search?tbm=isch&q=" + urllib.parse.quote_plus(
+                similar_image.get("value")
+            )
             results["similar_images"] = url
     except BaseException:
         pass
@@ -276,39 +267,67 @@ async def apk(e):
         app_name = e.pattern_match.group(1)
         remove_space = app_name.split(" ")
         final_name = "+".join(remove_space)
-        page = requests.get("https://play.google.com/store/search?q=" +
-                            final_name + "&c=apps")
+        page = requests.get(
+            "https://play.google.com/store/search?q=" + final_name + "&c=apps"
+        )
         lnk = str(page.status_code)
         soup = bs4.BeautifulSoup(page.content, "lxml", from_encoding="utf-8")
         results = soup.findAll("div", "ZmHEEd")
-        app_name = (results[0].findNext("div", "Vpfmgd").findNext(
-            "div", "WsMG1c nnK0zc").text)
-        app_dev = results[0].findNext("div",
-                                      "Vpfmgd").findNext("div", "KoLSrc").text
-        app_dev_link = ("https://play.google.com" + results[0].findNext(
-            "div", "Vpfmgd").findNext("a", "mnKHRc")["href"])
-        app_rating = (results[0].findNext("div", "Vpfmgd").findNext(
-            "div", "pf5lIe").find("div")["aria-label"])
-        app_link = ("https://play.google.com" + results[0].findNext(
-            "div", "Vpfmgd").findNext("div", "vU6FJ p63iDd").a["href"])
-        app_icon = (results[0].findNext("div", "Vpfmgd").findNext(
-            "div", "uzcko").img["data-src"])
+        app_name = (
+            results[0].findNext("div", "Vpfmgd").findNext("div", "WsMG1c nnK0zc").text
+        )
+        app_dev = results[0].findNext("div", "Vpfmgd").findNext("div", "KoLSrc").text
+        app_dev_link = (
+            "https://play.google.com"
+            + results[0].findNext("div", "Vpfmgd").findNext("a", "mnKHRc")["href"]
+        )
+        app_rating = (
+            results[0]
+            .findNext("div", "Vpfmgd")
+            .findNext("div", "pf5lIe")
+            .find("div")["aria-label"]
+        )
+        app_link = (
+            "https://play.google.com"
+            + results[0]
+            .findNext("div", "Vpfmgd")
+            .findNext("div", "vU6FJ p63iDd")
+            .a["href"]
+        )
+        app_icon = (
+            results[0]
+            .findNext("div", "Vpfmgd")
+            .findNext("div", "uzcko")
+            .img["data-src"]
+        )
         app_details = "<a href='" + app_icon + "'>📲&#8203;</a>"
         app_details += " <b>" + app_name + "</b>"
-        app_details += ("\n\n<code>Developer :</code> <a href='" +
-                        app_dev_link + "'>" + app_dev + "</a>")
+        app_details += (
+            "\n\n<code>Developer :</code> <a href='"
+            + app_dev_link
+            + "'>"
+            + app_dev
+            + "</a>"
+        )
         app_details += "\n<code>Rating :</code> " + app_rating.replace(
-            "Rated ", "⭐ ").replace(" out of ", "/").replace(
-                " stars", "", 1).replace(" stars", "⭐ ").replace("five", "5")
-        app_details += ("\n<code>Features :</code> <a href='" + app_link +
-                        "'>View in Play Store</a>")
+            "Rated ", "⭐ "
+        ).replace(" out of ", "/").replace(" stars", "", 1).replace(
+            " stars", "⭐ "
+        ).replace(
+            "five", "5"
+        )
+        app_details += (
+            "\n<code>Features :</code> <a href='"
+            + app_link
+            + "'>View in Play Store</a>"
+        )
         app_details += "\n\n===> @MissJuliaRobot <==="
         await e.reply(app_details, link_preview=True, parse_mode="HTML")
     except IndexError:
-        await e.reply(
-            "No result found in search. Please enter **Valid app name**")
+        await e.reply("No result found in search. Please enter **Valid app name**")
     except Exception as err:
         await e.reply("Exception Occured:- " + str(err))
+
 
 file_help = os.path.basename(__file__)
 file_help = file_help.replace(".py", "")
@@ -321,9 +340,4 @@ __help__ = """
  - /reverse: Does a reverse image search of the media which it was replied to.
 """
 
-CMD_HELP.update({
-    file_helpo: [
-        file_helpo,
-        __help__
-    ]
-})
+CMD_HELP.update({file_helpo: [file_helpo, __help__]})
