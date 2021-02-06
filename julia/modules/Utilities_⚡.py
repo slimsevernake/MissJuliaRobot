@@ -26,6 +26,7 @@ client = MongoClient()
 client = MongoClient(MONGO_DB_URI)
 db = client["missjuliarobot"]
 approved_users = db.approve
+gbanned = db.gban
 
 
 async def is_register_admin(chat, user):
@@ -48,6 +49,10 @@ async def is_register_admin(chat, user):
             (types.ChatParticipantAdmin, types.ChatParticipantCreator),
         )
     return None
+
+
+def get_reason(id):
+    return gbanned.find_one({"user": id})
 
 
 TMP_DOWNLOAD_DIRECTORY = "./"
@@ -187,6 +192,19 @@ async def fetch_info(replied_user, event):
     caption += f"Is Verified by Telegram: {verified} \n"
     caption += f"ID: <code>{user_id}</code> \n \n"
     caption += f"Bio: \n<code>{user_bio}</code> \n \n"
+
+    users = gbanned.find({})
+    if not user_id in SUDO_USERS and not user_id == OWNER_ID:
+       for c in users:
+           if user_id == c["user"]:
+              caption += "\n\n<b>Gbanned:</b> Yes\n"
+              to_check = get_reason(id=r_sender_id)
+              bannerid = str(to_check["bannerid"])
+              reason = str(to_check["reason"])
+              caption += f"<b>Gbanned by:</b><code>{bannerid}</code>\n"
+              caption += f"<b>Reason:</b>"+<code>{reason}</code>\n\n"
+           caption += "\n\n<b>Gbanned:</b> No\n\n"
+           
     # caption += f"Common Chats with this user: {common_chat} \n\n"
     caption += "Permanent Link To Profile: "
     caption += f'<a href="tg://user?id={user_id}">{first_name}</a>'
@@ -199,14 +217,14 @@ async def fetch_info(replied_user, event):
             "\n\n<b>This person is my owner.\nHe is the reason why I am alive.</b>"
         )
 
-    approved_userss = approved_users.find({})
+    approved_userss = approved_users.find({})                
     for ch in approved_userss:
         iid = ch["id"]
         userss = ch["user"]
 
     if event.chat_id == iid and event.sender_id == userss:
         caption += "\n\n<b>This person is approved in this chat.</b>"
-
+           
     return photo, caption
 
 
