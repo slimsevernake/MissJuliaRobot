@@ -203,7 +203,7 @@ async def fetch_info(replied_user, event):
               bannerid = str(to_check["bannerid"])
               reason = str(to_check["reason"])
               caption += f"<b>Gbanned by:</b><code>{bannerid}</code>\n"
-              caption += f"<b>Reason:</b>"+<code>{reason}</code>\n\n"
+              caption += f"<b>Reason:</b><code>{reason}</code>\n\n"
        else:
               caption += "\n\n<b>Gbanned:</b> No\n\n"
            
