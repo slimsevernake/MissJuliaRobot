@@ -110,7 +110,7 @@ async def approve(event):
         await event.reply("Why will I approve an admin ?")
         return
 
-    if iid == event.sender_id or iid == event.sender_id:
+    if iid == event.sender_id:
         await event.reply("Why are you trying to approve yourself ?")
         print("6")
         return
@@ -158,7 +158,7 @@ async def disapprove(event):
         await event.reply("Why will I disapprove an admin ?")
         return
 
-    if iid == event.sender_id or iid == event.sender_id:
+    if iid == event.sender_id:
         await event.reply("Why are you trying to disapprove yourself ?")
         print("6")
         return
