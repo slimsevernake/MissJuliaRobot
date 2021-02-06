@@ -197,15 +197,15 @@ async def fetch_info(replied_user, event):
     for fuckers in users:
         gid = fuckers["user"]
     if not user_id in SUDO_USERS and not user_id == OWNER_ID:     
-       if user_id == gid:
-              caption += "\n\n<b>Gbanned:</b> Yes\n"
+       if str(user_id) == str(gid):
+              caption += "<b>Gbanned:</b> Yes\n"
               to_check = get_reason(id=r_sender_id)
               bannerid = str(to_check["bannerid"])
               reason = str(to_check["reason"])
               caption += f"<b>Gbanned by:</b><code>{bannerid}</code>\n"
               caption += f"<b>Reason:</b><code>{reason}</code>\n\n"
        else:
-              caption += "\n\n<b>Gbanned:</b> No\n\n"
+              caption += "<b>Gbanned:</b> No\n\n"
            
     # caption += f"Common Chats with this user: {common_chat} \n\n"
     caption += "Permanent Link To Profile: "
@@ -224,7 +224,7 @@ async def fetch_info(replied_user, event):
         iid = ch["id"]
         userss = ch["user"]
 
-    if event.chat_id == iid and event.sender_id == userss:
+    if event.chat_id == iid and str(user_id) == str(userss):
         caption += "\n\n<b>This person is approved in this chat.</b>"
            
     return photo, caption
