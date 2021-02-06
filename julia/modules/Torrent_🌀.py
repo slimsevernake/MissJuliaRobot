@@ -103,7 +103,7 @@ async def paginate_news(event):
     try:
         results = requests.get(url).json()
     except Exception as e:
-    	await event.reply("Sorry, either the server is down or no results found for your query.")
+        await event.reply("Sorry, either the server is down or no results found for your query.")
         print(e)
         return
     # print(results)
@@ -172,7 +172,7 @@ async def paginate_prevtorrent(event):
     try:
         results = requests.get(url).json()
     except Exception as e:
-    	await event.reply("Sorry, either the server is down or no results found for your query.")
+        await event.reply("Sorry, either the server is down or no results found for your query.")
         print(e)
         return
     vector = len(results)
@@ -244,7 +244,7 @@ async def paginate_nexttorrent(event):
     try:
         results = requests.get(url).json()
     except Exception as e:
-    	await event.reply("Sorry, either the server is down or no results found for your query.")
+        await event.reply("Sorry, either the server is down or no results found for your query.")
         print(e)
         return
     vector = len(results)
@@ -348,7 +348,7 @@ async def paginate_nexttorrent(event):
     try:
         results = requests.get(url).json()
     except Exception as e:
-    	await event.reply("Sorry, either the server is down or no results found for your query.")
+        await event.reply("Sorry, either the server is down or no results found for your query.")
         print(e)
         return
     vector = len(results)
