@@ -256,7 +256,7 @@ async def _(event):
     await event.reply(text, parse_mode="html")
 
 
-@register(events.NewMessage(pattern="^/joinfed ?(.*)")
+@register(pattern="^/joinfed ?(.*)")
 async def _(event):
     chat = event.chat_id
     user = event.sender
@@ -991,7 +991,7 @@ async def _(event):
         pass
 
 
-@register(events.NewMessage(pattern="^/unfban (.*)")
+@register(pattern="^/unfban (.*)")
 async def _(event):
     try:
         chat = event.chat_id
@@ -1156,7 +1156,7 @@ async def _(event):
         pass
 
 
-@register(events.NewMessage(pattern="^/setfedlog (.*)")
+@register(pattern="^/setfedlog (.*)")
 async def _(event):
     try:
         chat = event.chat_id
@@ -1195,7 +1195,7 @@ async def _(event):
         pass
 
 
-@register(events.NewMessage(pattern="^/unsetfedlog (.*)")
+@register(pattern="^/unsetfedlog (.*)")
 async def _(event):
     try:
         chat = event.chat_id
@@ -1234,7 +1234,7 @@ async def _(event):
         pass
 
 
-@register(events.NewMessage(pattern="^/fedsubs$")
+@register(pattern="^/fedsubs$")
 async def _(event):
     try:
         chat = event.chat_id
@@ -1285,7 +1285,7 @@ async def _(event):
         pass
 
 
-@register(events.NewMessage(pattern="^/myfeds$")
+@register(pattern="^/myfeds$")
 async def _(event):
     try:
         user = event.sender
@@ -1308,7 +1308,7 @@ async def _(event):
         pass
 
 
-@register(events.NewMessage(pattern="^/fbanlist$")
+@register(pattern="^/fbanlist$")
 async def _(event):
     try:
         chat = event.chat_id
@@ -1398,7 +1398,7 @@ async def _(event):
         pass
 
 
-@register(events.NewMessage(pattern="^/exportfbans$")
+@register(pattern="^/exportfbans$")
 async def _(event):
     try:
         chat = event.chat_id
@@ -1480,7 +1480,7 @@ async def _(event):
         pass
 
 
-@register(events.NewMessage(pattern="^/subfed ?(.*)")
+@register(pattern="^/subfed ?(.*)")
 async def _(event):
     try:
         chat = event.chat_id
@@ -1550,7 +1550,7 @@ async def _(event):
         pass
 
 
-@register(events.NewMessage(pattern="^/unsubfed ?(.*)")
+@register(pattern="^/unsubfed ?(.*)")
 async def _(event):
     try:
         chat = event.chat_id
@@ -1620,7 +1620,7 @@ async def _(event):
         pass
 
 
-@register(events.NewMessage(pattern="^/fedbroadcast ?(.*)")
+@register(pattern="^/fedbroadcast ?(.*)")
 async def _(event):
     try:
         chat = event.chat_id
@@ -1710,7 +1710,7 @@ async def _(event):
         print(e)
 
 
-@register(events.NewMessage(pattern="^/fedchats$")
+@register(pattern="^/fedchats$")
 async def _(event):
     try:
         chat = event.chat_id
@@ -1766,7 +1766,7 @@ async def _(event):
         print(e)
 
 
-@register(events.NewMessage(pattern="^/importfbans$")
+@register(pattern="^/importfbans$")
 async def _(event):
     try:
         chat = event.chat_id
@@ -1931,7 +1931,7 @@ async def _(event):
         print(e)
 
 
-@register(events.NewMessage(pattern="^/fbanstat ?(.*)")
+@register(pattern="^/fbanstat ?(.*)")
 async def _(event):
     try:
         # chat = event.chat_id
