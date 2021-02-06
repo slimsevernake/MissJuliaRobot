@@ -194,16 +194,18 @@ async def fetch_info(replied_user, event):
     caption += f"Bio: \n<code>{user_bio}</code> \n \n"
 
     users = gbanned.find({})
-    if not user_id in SUDO_USERS and not user_id == OWNER_ID:
-       for c in users:
-           if user_id == c["user"]:
+    for fuckers in users:
+        gid = fuckers["user"]
+    if not user_id in SUDO_USERS and not user_id == OWNER_ID:     
+       if user_id == gid:
               caption += "\n\n<b>Gbanned:</b> Yes\n"
               to_check = get_reason(id=r_sender_id)
               bannerid = str(to_check["bannerid"])
               reason = str(to_check["reason"])
               caption += f"<b>Gbanned by:</b><code>{bannerid}</code>\n"
               caption += f"<b>Reason:</b>"+<code>{reason}</code>\n\n"
-           caption += "\n\n<b>Gbanned:</b> No\n\n"
+       else:
+              caption += "\n\n<b>Gbanned:</b> No\n\n"
            
     # caption += f"Common Chats with this user: {common_chat} \n\n"
     caption += "Permanent Link To Profile: "
