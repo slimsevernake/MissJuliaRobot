@@ -256,7 +256,7 @@ async def _(event):
     await event.reply(text, parse_mode="html")
 
 
-@tbot.on(events.NewMessage(pattern="^/joinfed ?(.*)"))
+@register(events.NewMessage(pattern="^/joinfed ?(.*)")
 async def _(event):
     chat = event.chat_id
     user = event.sender
@@ -991,7 +991,7 @@ async def _(event):
         pass
 
 
-@tbot.on(events.NewMessage(pattern="^/unfban (.*)"))
+@register(events.NewMessage(pattern="^/unfban (.*)")
 async def _(event):
     try:
         chat = event.chat_id
@@ -1156,7 +1156,7 @@ async def _(event):
         pass
 
 
-@tbot.on(events.NewMessage(pattern="^/setfedlog (.*)"))
+@register(events.NewMessage(pattern="^/setfedlog (.*)")
 async def _(event):
     try:
         chat = event.chat_id
@@ -1195,7 +1195,7 @@ async def _(event):
         pass
 
 
-@tbot.on(events.NewMessage(pattern="^/unsetfedlog (.*)"))
+@register(events.NewMessage(pattern="^/unsetfedlog (.*)")
 async def _(event):
     try:
         chat = event.chat_id
@@ -1234,7 +1234,7 @@ async def _(event):
         pass
 
 
-@tbot.on(events.NewMessage(pattern="^/fedsubs$"))
+@register(events.NewMessage(pattern="^/fedsubs$")
 async def _(event):
     try:
         chat = event.chat_id
@@ -1285,7 +1285,7 @@ async def _(event):
         pass
 
 
-@tbot.on(events.NewMessage(pattern="^/myfeds$"))
+@register(events.NewMessage(pattern="^/myfeds$")
 async def _(event):
     try:
         user = event.sender
@@ -1308,7 +1308,7 @@ async def _(event):
         pass
 
 
-@tbot.on(events.NewMessage(pattern="^/fbanlist$"))
+@register(events.NewMessage(pattern="^/fbanlist$")
 async def _(event):
     try:
         chat = event.chat_id
@@ -1398,7 +1398,7 @@ async def _(event):
         pass
 
 
-@tbot.on(events.NewMessage(pattern="^/exportfbans$"))
+@register(events.NewMessage(pattern="^/exportfbans$")
 async def _(event):
     try:
         chat = event.chat_id
@@ -1480,7 +1480,7 @@ async def _(event):
         pass
 
 
-@tbot.on(events.NewMessage(pattern="^/subfed ?(.*)"))
+@register(events.NewMessage(pattern="^/subfed ?(.*)")
 async def _(event):
     try:
         chat = event.chat_id
@@ -1550,7 +1550,7 @@ async def _(event):
         pass
 
 
-@tbot.on(events.NewMessage(pattern="^/unsubfed ?(.*)"))
+@register(events.NewMessage(pattern="^/unsubfed ?(.*)")
 async def _(event):
     try:
         chat = event.chat_id
@@ -1620,7 +1620,7 @@ async def _(event):
         pass
 
 
-@tbot.on(events.NewMessage(pattern="^/fedbroadcast ?(.*)"))
+@register(events.NewMessage(pattern="^/fedbroadcast ?(.*)")
 async def _(event):
     try:
         chat = event.chat_id
@@ -1710,7 +1710,7 @@ async def _(event):
         print(e)
 
 
-@tbot.on(events.NewMessage(pattern="^/fedchats$"))
+@register(events.NewMessage(pattern="^/fedchats$")
 async def _(event):
     try:
         chat = event.chat_id
@@ -1766,7 +1766,7 @@ async def _(event):
         print(e)
 
 
-@tbot.on(events.NewMessage(pattern="^/importfbans$"))
+@register(events.NewMessage(pattern="^/importfbans$")
 async def _(event):
     try:
         chat = event.chat_id
@@ -1931,7 +1931,7 @@ async def _(event):
         print(e)
 
 
-@tbot.on(events.NewMessage(pattern="^/fbanstat ?(.*)"))
+@register(events.NewMessage(pattern="^/fbanstat ?(.*)")
 async def _(event):
     try:
         # chat = event.chat_id
