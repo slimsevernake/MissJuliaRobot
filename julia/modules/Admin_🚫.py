@@ -106,7 +106,9 @@ async def is_register_admin(chat, user):
             next((p for p in ps if p.user_id == ui), None),
             (types.ChatParticipantAdmin, types.ChatParticipantCreator),
         )
-    return None
+    if isinstance(chat, types.InputPeerUser):          
+  
+        return True
 
 
 async def can_promote_users(message):
