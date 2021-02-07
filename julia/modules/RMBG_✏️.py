@@ -14,26 +14,16 @@ from julia import TEMP_DOWNLOAD_DIRECTORY
 from julia.events import register
 
 
-async def is_register_admin(chat, user):
-    if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
-
-        return isinstance(
-            (
-                await tbot(functions.channels.GetParticipantRequest(chat, user))
-            ).participant,
-            (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
+async def is_register_admin(message):
+    result = await tbot(
+        functions.channels.GetParticipantRequest(
+            channel=message.chat_id,
+            user_id=message.sender_id,
         )
-    if isinstance(chat, types.InputPeerChat):
-
-        ui = await tbot.get_peer_id(user)
-        ps = (
-            await tbot(functions.messages.GetFullChatRequest(chat.chat_id))
-        ).full_chat.participants.participants
-        return isinstance(
-            next((p for p in ps if p.user_id == ui), None),
-            (types.ChatParticipantAdmin, types.ChatParticipantCreator),
-        )
-    return None
+    )
+    p = result.participant
+    return isinstance(p, types.ChannelParticipantCreator) or (
+        isinstance(p, types.ChannelParticipantAdmin))
 
 
 client = MongoClient()
