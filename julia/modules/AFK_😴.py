@@ -18,28 +18,24 @@ approved_users = db.approve
 
 
 async def is_register_admin(chat, user):
-    try:
-        if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
-
-            return isinstance(
-                (
-                    await tbot(functions.channels.GetParticipantRequest(chat, user))
-                ).participant,
-                (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
-            )
-        if isinstance(chat, types.InputPeerChat):
-
-            ui = await tbot.get_peer_id(user)
-            ps = (
-                await tbot(functions.messages.GetFullChatRequest(chat.chat_id))
-            ).full_chat.participants.participants
-            return isinstance(
-                next((p for p in ps if p.user_id == ui), None),
-                (types.ChatParticipantAdmin, types.ChatParticipantCreator),
-            )
-        return False
-    except Exception:
-        return False
+    if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
+        return isinstance(
+            (
+                await tbot(functions.channels.GetParticipantRequest(chat, user))
+            ).participant,
+            (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
+        )
+    if isinstance(chat, types.InputPeerChat):
+        ui = await tbot.get_peer_id(user)
+        ps = (
+            await tbot(functions.messages.GetFullChatRequest(chat.chat_id))
+        ).full_chat.participants.participants
+        return isinstance(
+            next((p for p in ps if p.user_id == ui), None),
+            (types.ChatParticipantAdmin, types.ChatParticipantCreator),
+        )
+    if isinstance(chat, types.InputPeerUser):          
+        return True
 
 
 @register(pattern="^/afk ?(.*)")
