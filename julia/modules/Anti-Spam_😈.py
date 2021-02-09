@@ -421,7 +421,7 @@ async def del_profanity(event):
                 if "@" in u and c != []:
                    h = " ".join(filter(lambda x:x[0]!='@', u))   
                    rm = " ".join(filter(lambda x:x not in c, h))
-                elif k.startswith("@") for k in u:
+                elif [(k) for k in u if k.startswith("@")]:
                    rm = " ".join(filter(lambda x:x[0]!='@', u))            
                 elif c != []:
                    rm = " ".join(filter(lambda x:x not in c, u))
