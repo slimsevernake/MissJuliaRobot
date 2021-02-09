@@ -416,7 +416,9 @@ async def del_profanity(event):
                     c = txt
                 print (c)               
                 u = msg.split()
-                rm = " ".join(filter(lambda x:x[0]!='@', u))          
+                if "@" in u:
+                   rm = " ".join(filter(lambda x:x[0]!='@', u))      
+                rm = msg    
                 print (rm)            
                 a = TextBlob(rm)
                 b = a.detect_language()    
