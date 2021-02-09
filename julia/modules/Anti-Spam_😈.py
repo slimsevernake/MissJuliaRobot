@@ -405,7 +405,7 @@ async def del_profanity(event):
             return
         pass
     chats = globalchat.find({})
-    c = []
+    z = []
     for c in chats:
         if event.text:
             if event.chat_id == c["id"]:   
@@ -415,8 +415,8 @@ async def del_profanity(event):
                     break
                   if isinstance(ent, types.MessageEntityMentionName):                
                     p = txt
-                    c.append(p)
-                print (c)               
+                    c.append(z)
+                print (z)               
                 u = msg.split()
                 if "@" in u and c != []:
                    h = " ".join(filter(lambda x:x[0]!='@', u))   
