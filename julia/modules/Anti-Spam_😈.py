@@ -415,7 +415,7 @@ async def del_profanity(event):
                     break
                   if isinstance(ent, types.MessageEntityMentionName):                
                     p = txt
-                    c.append(z)
+                    z.append(p)
                 print (z)               
                 u = msg.split()
                 if "@" in u and c != []:
