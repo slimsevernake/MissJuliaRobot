@@ -409,9 +409,12 @@ async def del_profanity(event):
         if event.text:
             if event.chat_id == c["id"]:   
                 if event.message.entities != None:
-                 text = event.get_entities_text()
-                 if isinstance(text, types.MessageEntityMentionName):
-                    c = text
+                 for (ent, txt) in event.get_entities_text():
+                  if ent.offset != 0:
+                    break
+                  if isinstance(ent, types.MessageEntityMentionName):                
+                    p = txt
+                    c = p.split()
                 print (c)               
                 u = msg.split()
                 if "@" in u:
