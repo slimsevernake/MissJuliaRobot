@@ -397,7 +397,7 @@ async def del_profanity(event):
         return
     if MONGO_DB_URI is None:
         return
-    msg = str(event.message)
+    msg = str(event.text)
     sender = await event.get_sender()
     let = sender.username
     if event.is_group:
@@ -405,6 +405,7 @@ async def del_profanity(event):
             return
         pass
     chats = globalchat.find({})
+    c = []
     for c in chats:
         if event.text:
             if event.chat_id == c["id"]:   
@@ -414,13 +415,19 @@ async def del_profanity(event):
                     break
                   if isinstance(ent, types.MessageEntityMentionName):                
                     p = txt
-                    c = p.split()
+                    c.append(p)
                 print (c)               
                 u = msg.split()
-                if "@" in u:
-                   rm = " ".join(filter(lambda x:x[0]!='@', u))      
-                rm = msg    
-                # print (rm)            
+                if "@" in u and c != []:
+                   h = " ".join(filter(lambda x:x[0]!='@', u))   
+                   rm = " ".join(filter(lambda x:x not in c, h))
+                elif "@" in u:
+                   rm = " ".join(filter(lambda x:x[0]!='@', u))            
+                elif c != []:
+                   rm = " ".join(filter(lambda x:x not in c, u))
+                else:
+                   rm = msg
+                print (rm)            
                 a = TextBlob(rm)
                 b = a.detect_language()    
                 if not b == "en":
