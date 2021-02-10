@@ -1,7 +1,7 @@
 from julia import CMD_HELP, BOT_ID
 import nude
 import html
-import rr
+import re
 import asyncio
 from julia.modules.sql import cleaner_sql as sql
 from pymongo import MongoClient
