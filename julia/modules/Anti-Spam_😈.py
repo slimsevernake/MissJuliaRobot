@@ -1,6 +1,7 @@
 from julia import CMD_HELP, BOT_ID
 import nude
 import html
+import rr
 import asyncio
 from julia.modules.sql import cleaner_sql as sql
 from pymongo import MongoClient
@@ -408,23 +409,15 @@ async def del_profanity(event):
     z = []
     for c in chats:
         if event.text:
-            if event.chat_id == c["id"]:   
-                if event.message.entities != None:
-                 for (ent, txt) in event.get_entities_text():
-                  if ent.offset != 0:
-                    break
-                  if isinstance(ent, types.MessageEntityMentionName):                
-                    p = txt
-                    z.append(p)
-                print (z)               
+            if event.chat_id == c["id"]:                      
                 u = msg.split()
-                if "@" in u and c != []:
+                if "@" in u and re.match(r'\[([^]]+)]\(\s*([^)]+)\s*\)', msg) != None:
                    h = " ".join(filter(lambda x:x[0]!='@', u))   
-                   rm = " ".join(filter(lambda x:x not in c, h))
+                   rm = re.sub(r'\[([^]]+)]\(\s*([^)]+)\s*\)', r"", h)
                 elif [(k) for k in u if k.startswith("@")]:
                    rm = " ".join(filter(lambda x:x[0]!='@', u))            
-                elif c != []:
-                   rm = " ".join(filter(lambda x:x not in c, u))
+                elif re.match(r'\[([^]]+)]\(\s*([^)]+)\s*\)', msg) != None:
+                   rm = re.sub(r'\[([^]]+)]\(\s*([^)]+)\s*\)', r"", msg)
                 else:
                    rm = msg
                 print (rm)            
