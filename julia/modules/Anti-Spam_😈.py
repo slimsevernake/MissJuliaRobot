@@ -406,7 +406,6 @@ async def del_profanity(event):
             return
         pass
     chats = globalchat.find({})
-    z = []
     for c in chats:
         if event.text:
             if event.chat_id == c["id"]:                      
