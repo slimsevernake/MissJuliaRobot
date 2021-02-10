@@ -420,7 +420,7 @@ async def del_profanity(event):
                    rm = re.sub(r'\[([^]]+)]\(\s*([^)]+)\s*\)', r"", msg)
                 else:
                    rm = msg
-                print (rm)            
+                #print (rm)            
                 a = TextBlob(rm)
                 b = a.detect_language()    
                 if not b == "en":
