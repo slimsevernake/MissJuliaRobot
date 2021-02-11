@@ -72,3 +72,13 @@ async def _(event):
             await event.reply(
                 result, parse_mode="html", link_preview=False
             )
+
+file_help = os.path.basename(__file__)
+file_help = file_help.replace(".py", "")
+file_helpo = file_help.replace("_", " ")
+
+__help__ = """
+ - /wiki <search>: Find results for search in wikipedia and return it.
+"""
+
+CMD_HELP.update({file_helpo: [file_helpo, __help__]})
