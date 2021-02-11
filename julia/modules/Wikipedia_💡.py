@@ -41,7 +41,7 @@ async def _(event):
         await event.reply("Please provide some input.")
         return
     res = ""
-    search = msg.text
+    search = input_str
     try:
         res = wikipedia.summary(search)
     except DisambiguationError as e:
