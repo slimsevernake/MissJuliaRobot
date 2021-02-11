@@ -48,7 +48,7 @@ async def _(event):
         else:
             return
     quew = event.pattern_match.group(1)
-    if "|" in quew:
+    if " | " in quew:
         iid, zonee, reasonn = quew.split("|")
     time = iid.strip()
     reason = reasonn.strip()
