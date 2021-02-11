@@ -71,7 +71,7 @@ file_help = file_help.replace(".py", "")
 file_helpo = file_help.replace("_", " ")
 
 __help__ = """
- - /gps: <location> Get gps location.
+ - /gps <location>: Get gps location.
 """
 
 CMD_HELP.update({file_helpo: [file_helpo, __help__]})
