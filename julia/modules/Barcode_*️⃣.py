@@ -72,7 +72,7 @@ async def _(event):
         else:
             message = previous_message.message
     else:
-        message = "SYNTAX: `.barcode <long text to include>`"
+        message = "SYNTAX: `/barcode <long text to include>`"
     bar_code_type = "code128"
     try:
         bar_code_mode_f = barcode.get(bar_code_type, message, writer=ImageWriter())
