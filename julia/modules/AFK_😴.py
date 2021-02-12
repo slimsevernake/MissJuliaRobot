@@ -29,7 +29,7 @@ async def is_register_admin(chat, user):
         return True
 
 
-@register(pattern="?(.*)")
+@register(pattern=r"(.*?)")
 async def _(event):
     sender = await event.get_sender()    
     approved_userss = approved_users.find({})
