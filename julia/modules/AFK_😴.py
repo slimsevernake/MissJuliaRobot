@@ -62,9 +62,8 @@ async def _(event):
      except Exception:
         pass
 
-    print (event.text)
-    if event.text == None:
-     if sql.is_afk(sender.id):
+    # print (event.text)
+    if sql.is_afk(sender.id):
        res = sql.rm_afk(sender.id)
        if res:
           firstname = sender.first_name
