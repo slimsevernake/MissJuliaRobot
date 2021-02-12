@@ -50,13 +50,7 @@ async def _(event):
         reason = cmd
      else:
         reason = ""
-     fname = sender.first_name
-     notice = ""
-     if len(reason) > 100:
-        reason = reason[:100]
-        notice = "{fname} your afk reason was shortened to 100 characters."
-     else:
-        reason = cmd
+     fname = sender.first_name        
      # print(reason)
      start_time = time.time()
      sql.set_afk(sender.id, reason, start_time)
