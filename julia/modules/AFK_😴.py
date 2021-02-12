@@ -54,14 +54,11 @@ async def _(event):
      # print(reason)
      start_time = time.time()
      sql.set_afk(sender.id, reason, start_time)
-     try:
-        await event.reply(
-            "**{} is now AFK !**\n\n{}".format(fname, notice),
-            parse_mode="markdown",
-        )
-     except Exception:
-        pass
-
+     await event.reply(
+           "**{} is now AFK !**".format(fname),
+           parse_mode="markdown")
+    else:
+     return
     # print (event.text)
     if sql.is_afk(sender.id):
        res = sql.rm_afk(sender.id)
@@ -70,7 +67,6 @@ async def _(event):
           text = "**{} is no longer AFK !**".format(firstname)
           await event.reply(text, parse_mode="markdown")
         
-
 
 @tbot.on(events.NewMessage(pattern=None))
 async def _(event):
