@@ -410,11 +410,15 @@ async def del_profanity(event):
         if event.text:
             if event.chat_id == c["id"]:                      
                 u = msg.split()
-                if [(k) for k in u if k.startswith("@")] and re.match(r'\[([^]]+)]\(\s*([^)]+)\s*\)', msg) != None:
+                if [(k) for k in u if k.startswith("@")] and [(k) for k in u if k.startswith("#")] and [(k) for k in u if k.startswith("/")] and re.match(r'\[([^]]+)]\(\s*([^)]+)\s*\)', msg) != None:
                    h = " ".join(filter(lambda x:x[0]!='@', u))   
                    rm = re.sub(r'\[([^]]+)]\(\s*([^)]+)\s*\)', r"", h)
                 elif [(k) for k in u if k.startswith("@")]:
-                   rm = " ".join(filter(lambda x:x[0]!='@', u))            
+                   rm = " ".join(filter(lambda x:x[0]!='@', u))          
+                elif [(k) for k in u if k.startswith("#")]:  
+                   rm = " ".join(filter(lambda x:x[0]!='#', u))
+                elif [(k) for k in u if k.startswith("/")]:  
+                   rm = " ".join(filter(lambda x:x[0]!='/', u))
                 elif re.match(r'\[([^]]+)]\(\s*([^)]+)\s*\)', msg) != None:
                    rm = re.sub(r'\[([^]]+)]\(\s*([^)]+)\s*\)', r"", msg)
                 else:
