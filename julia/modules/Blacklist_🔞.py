@@ -47,7 +47,7 @@ async def on_new_message(event):
     snips = sql.get_chat_blacklist(event.chat_id)
     for snip in snips:
         pattern = r"( |^|[^\w])" + re.escape(snip) + r"( |$|[^\w])"
-        print(re.search(pattern, name, flags=re.IGNORECASE))
+        # print(re.search(pattern, name, flags=re.IGNORECASE))
         if re.search(pattern, name, flags=re.IGNORECASE):
             try:
                 await event.delete()
