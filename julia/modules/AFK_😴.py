@@ -45,7 +45,7 @@ async def _(event):
             return
 
     if event.text.startswith("/afk"):
-     cmd = event.pattern_match.group(1)
+     cmd = event.text[len("/afk ") :]
      if cmd is not None:
         reason = cmd
      else:
