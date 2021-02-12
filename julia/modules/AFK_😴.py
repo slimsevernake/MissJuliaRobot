@@ -31,8 +31,7 @@ async def is_register_admin(chat, user):
 
 @register(pattern="^/afk ?(.*)")
 async def _(event):
-    send = await event.get_sender()
-    sender = await tbot.get_entity(send)
+    sender = await event.get_sender()    
     approved_userss = approved_users.find({})
     for ch in approved_userss:
         iid = ch["id"]
@@ -76,16 +75,13 @@ async def _(event):
         pass
 
 
-@tbot.on(events.NewMessage(pattern="/noafk$"))
+@tbot.on(events.NewMessage(pattern=None))
 async def _(event):
-    send = await event.get_sender()
-    sender = await tbot.get_entity(send)
-
+    sender = await event.get_sender()   
     approved_userss = approved_users.find({})
     for ch in approved_userss:
         iid = ch["id"]
         userss = ch["user"]
-
     if event.is_group:
         if await is_register_admin(event.input_chat, event.message.sender_id):
             pass
@@ -95,18 +91,13 @@ async def _(event):
             return
     else:
         return
-
-    res = sql.rm_afk(sender.id)
-    if res:
-        firstname = sender.first_name
-        try:
-            text = "**{} is no longer AFK !**".format(firstname)
-            await event.reply(text, parse_mode="markdown")
-        except BaseException:
-            return
-    else:
-        await event.reply("Are you even AFK ?")
-
+    if sql.is_afk(sender.id):
+       res = sql.rm_afk(sender.id)
+       if res:
+          firstname = sender.first_name
+          text = "**{} is no longer AFK !**".format(firstname)
+          await event.reply(text, parse_mode="markdown")
+        
 
 @tbot.on(events.NewMessage(pattern=None))
 async def _(event):
