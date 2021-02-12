@@ -28,5 +28,21 @@ async def is_register_admin(chat, user):
         return True
 
 
-email = tm.get_email_address()
+    gmail = tmail.find({})
+    # print(secret)
+    for c in gmail:
+        if event.sender_id == c["user"]:
+            await event.reply(
+                "You have already registered your account for this service."
+            )
+            return
+    email = tm.get_email_address()
+    tmail.insert_one({"user": event.sender_id, "email": })
+
 #print(email)
+
+__help__ = """
+ - /registermail: Registers your account for the tempmail service (one time only)
+ - /sendmail <email>: Send the replied message to the email provided (must be a valid one)
+ - /checkinbox: Checks the inbox associated with the account for new emails
+"""
