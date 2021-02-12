@@ -57,9 +57,8 @@ async def _(event):
      await event.reply(
            "**{} is now AFK !**".format(fname),
            parse_mode="markdown")
-    else:
      return
-    # print (event.text)
+
     if sql.is_afk(sender.id):
        res = sql.rm_afk(sender.id)
        if res:
