@@ -29,7 +29,7 @@ async def is_register_admin(chat, user):
         return True
 
 
-@register(pattern="?(/afk) ?(.*)")
+@register(pattern="?(.*)")
 async def _(event):
     sender = await event.get_sender()    
     approved_userss = approved_users.find({})
@@ -44,33 +44,30 @@ async def _(event):
         else:
             return
 
-    cmd = event.pattern_match.group(1)
-
-    if cmd is not None:
+    if event.text.startswith("/afk"):
+     cmd = event.pattern_match.group(1)
+     if cmd is not None:
         reason = cmd
-    else:
+     else:
         reason = ""
-
-    fname = sender.first_name
-
-    notice = ""
-    if len(reason) > 100:
+     fname = sender.first_name
+     notice = ""
+     if len(reason) > 100:
         reason = reason[:100]
         notice = "{fname} your afk reason was shortened to 100 characters."
-    else:
+     else:
         reason = cmd
-
-    # print(reason)
-    start_time = time.time()
-    sql.set_afk(sender.id, reason, start_time)
-
-    try:
+     # print(reason)
+     start_time = time.time()
+     sql.set_afk(sender.id, reason, start_time)
+     try:
         await event.reply(
             "**{} is now AFK !**\n\n{}".format(fname, notice),
             parse_mode="markdown",
         )
-    except Exception:
+     except Exception:
         pass
+
     print (event.text)
     if event.text == None:
      if sql.is_afk(sender.id):
