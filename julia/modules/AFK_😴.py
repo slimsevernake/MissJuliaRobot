@@ -43,8 +43,6 @@ async def _(event):
             pass
         else:
             return
-    else:
-        return
 
     cmd = event.pattern_match.group(1)
 
