@@ -29,7 +29,7 @@ async def is_register_admin(chat, user):
         return True
 
 
-@register(pattern="^/afk ?(.*)")
+@register(pattern="?(/afk) ?(.*)")
 async def _(event):
     sender = await event.get_sender()    
     approved_userss = approved_users.find({})
@@ -74,30 +74,15 @@ async def _(event):
     except Exception:
         pass
 
-
-@tbot.on(events.NewMessage(pattern=None))
-async def _(event):
-    sender = await event.get_sender()   
-    approved_userss = approved_users.find({})
-    for ch in approved_userss:
-        iid = ch["id"]
-        userss = ch["user"]
-    if event.is_group:
-        if await is_register_admin(event.input_chat, event.message.sender_id):
-            pass
-        elif event.chat_id == iid and event.sender_id == userss:
-            pass
-        else:
-            return
-    else:
-        return
-    if sql.is_afk(sender.id):
+    if event.text == None:
+     if sql.is_afk(sender.id):
        res = sql.rm_afk(sender.id)
        if res:
           firstname = sender.first_name
           text = "**{} is no longer AFK !**".format(firstname)
           await event.reply(text, parse_mode="markdown")
         
+
 
 @tbot.on(events.NewMessage(pattern=None))
 async def _(event):
