@@ -123,14 +123,8 @@ async def _(event):
                     return
                 c = txt
                 a = c.split()[0]
-                # print (a)
-                # print (c)
-                if not "@" in a:
-                    userid = int(ent.user_id)
-                    break
-                else:
-                    let = await tbot.get_input_entity(a)
-                    userid = let.user_id
+                let = await tbot.get_input_entity(a)
+                userid = let.user_id
         except Exception:
             return
 
