@@ -135,7 +135,6 @@ file_helpo = file_help.replace("_", " ")
 
 __help__ = """
  - /afk <reason>: mark yourself as AFK(Away From Keyboard)
- - /noafk: unmark yourself as AFK(Away From Keyboard)
 """
 
 CMD_HELP.update({file_helpo: [file_helpo, __help__]})
