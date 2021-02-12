@@ -412,7 +412,11 @@ async def del_profanity(event):
                 u = msg.split()
                 if [(k) for k in u if k.startswith("@")] and [(k) for k in u if k.startswith("#")] and [(k) for k in u if k.startswith("/")] and re.match(r'\[([^]]+)]\(\s*([^)]+)\s*\)', msg) != None:
                    h = " ".join(filter(lambda x:x[0]!='@', u))   
-                   rm = re.sub(r'\[([^]]+)]\(\s*([^)]+)\s*\)', r"", h)
+                   km = re.sub(r'\[([^]]+)]\(\s*([^)]+)\s*\)', r"", h)
+                   tm = km.split()
+                   jm = " ".join(filter(lambda x:x[0]!='#', tm))
+                   hm = jm.split()
+                   rm = " ".join(filter(lambda x:x[0]!='/', hm))
                 elif [(k) for k in u if k.startswith("@")]:
                    rm = " ".join(filter(lambda x:x[0]!='@', u))          
                 elif [(k) for k in u if k.startswith("#")]:  
