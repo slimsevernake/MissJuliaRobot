@@ -38,10 +38,11 @@ async def _(event):
                 )
             else:
                 await event.reply(
-                    "Either say yes or no."
+                    "Wrong option!\nEither say on or off."
                 )                         
     else:
             await event.reply(
                 f"This group's current setting is: `{sql.chat_should_report(chat)}`",
                 parse_mode="markdown",
             )
+
