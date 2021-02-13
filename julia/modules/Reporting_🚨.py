@@ -22,6 +22,8 @@ async def is_register_admin(chat, user):
 
 @register(pattern="^/reports (.*)")
 async def _(event):
+    if event.is_private:
+       return
     chat = event.chat_id
     args = event.pattern_match.group(1)
     if args:
