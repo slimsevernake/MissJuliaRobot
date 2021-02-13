@@ -1976,6 +1976,21 @@ async def _(event):
         print(e)
 
 
+@tbot.on(events.NewMessage(pattern=None))
+async def _(event):
+    chat = event.chat_id
+    user = event.sender_id
+    fed_id = sql.get_fed_id(chat)
+    fban, fbanreason, fbantime = sql.get_fban_user(fed_id, user)
+    if fban:
+        await event.reply(
+            "This user is banned in the current federation!\nI will remove him."
+        )
+        await tbot.kick_participant(chat, user)
+    else:
+        return
+
+
 # Temporary data
 def put_chat(chat_id, value, chat_data):
     # print(chat_data)
