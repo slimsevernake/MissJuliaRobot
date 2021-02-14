@@ -1,1 +1,82 @@
+import html
+from typing import Optional, List
+import re
+from julia.modules.sql import antiflood_sql as sql
+from telethon.tl.functions.channels import EditBannedRequest
+from telethon import *
+from telethon.tl.types import *
 
+
+BANNED_RIGHTS = ChatBannedRights(
+    until_date=None,
+    view_messages=True,
+    send_messages=True,
+    send_media=True,
+    send_stickers=True,
+    send_gifs=True,
+    send_games=True,
+    send_inline=True,
+    embed_links=True,
+)
+
+MUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=True)
+
+
+async def is_register_admin(chat, user):
+    if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
+        return isinstance(
+            (
+                await tbot(functions.channels.GetParticipantRequest(chat, user))
+            ).participant,
+            (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
+        )
+    if isinstance(chat, types.InputPeerUser):
+        return True
+
+@tbot.on(events.NewMessage(pattern=None))
+async def _(event):
+    if event.is_private: 
+        return 
+    user = event.sender  # type: Optional[User]
+    chat = event.chat_id  # type: Optional[Chat]
+   
+    # ignore admins and owner
+    if is_register_admin(chat, user.id) or user.id == OWNER_ID:
+        sql.update_flood(chat, None)
+        return
+
+    should_ban = sql.update_flood(chat, user.id)
+    if not should_ban:
+        return
+
+    try:
+        getmode, getvalue = sql.get_flood_setting(chat)
+        if getmode == 1:
+            await tbot(EditBannedRequest(chat, user.id, BANNED_RIGHTS))    
+            execstrings = "Banned"
+            tag = "BANNED"
+        elif getmode == 2:
+            await tbot.kick_participant(chat, user.id)
+            execstrings = "Kicked"
+            tag = "KICKED"
+        elif getmode == 3:
+            await tbot(EditBannedRequest(chat, user.id, MUTE_RIGHTS))
+            execstrings = "Muted"
+            tag = "MUTED"
+        elif getmode == 4:
+            bantime = extract_time(msg, getvalue)
+            chat.kick_member(user.id, until_date=bantime)
+            execstrings = "Banned for {}".format(getvalue)
+            tag = "TBAN"
+        elif getmode == 5:
+            ###
+            execstrings = "Muted for {}".format(getvalue)
+            tag = "TMUTE"
+        await event.reply("Spammer Detected !\n{}!".format(execstrings)
+        )        
+
+    except Exception:
+        await event.reply(
+            "I can't restrict people here, give me permissions first! Until then, I'll disable anti-flood."
+        )
+        sql.set_flood(chat, 0)
