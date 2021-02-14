@@ -67,8 +67,8 @@ async def _(event):
         sql.reset_warns(reply_message.sender_id, event.chat_id)
         if sql.get_warn_strength(event.chat_id) == "kick":
             await tbot.kick_participant(event.chat_id, reply_message.sender_id)
-            reply = "{} warnings, <u><a href='tg://user?id={}'>user</a></u> has been kicked!".format(
-                limit, reply_message.sender.first_name, reply_message.sender_id
+            reply = "{} warnings, <u><a href='tg://user?id={}'>{}</a></u> has been kicked!".format(
+                limit, reply_message.sender_id, reply_message.sender.first_name
             )
             await event.reply(reply, parse_mode="html")
             return
@@ -88,7 +88,7 @@ async def _(event):
                 EditBannedRequest(event.chat_id, reply_message.sender_id, BANNED_RIGHTS)
             )
             reply = "{} warnings, <u><a href='tg://user?id={}'>{}</a></u> has been banned!".format(
-                limit, reply_message.sender.first_name, reply_message.sender_id
+                limit, reply_message.sender_id, reply_message.sender.first_name
             )
             await event.reply(reply, parse_mode="html")
             return
@@ -98,13 +98,13 @@ async def _(event):
                 EditBannedRequest(event.chat_id, reply_message.sender_id, MUTE_RIGHTS)
             )
             reply = "{} warnings, <u><a href='tg://user?id={}'>{}</a></u> has been muted!".format(
-                limit, reply_message.sender.first_name, reply_message.sender_id
+                limit, reply_message.sender_id, reply_message.sender.first_name
             )
             await event.reply(reply, parse_mode="html")
             return
     else:
         reply = "<u><a href='tg://user?id={}'>{}</a></u> has {}/{} warnings... watch out!".format(
-            reply_message.sender_id, num_warns, limit
+            reply_message.sender_id, reply_message.sender.first_name, num_warns, limit
         )
         if warn_reason:
             reply += "\nReason: {}".format(html.escape(warn_reason))
