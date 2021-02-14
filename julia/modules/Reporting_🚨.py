@@ -212,7 +212,7 @@ async def _(event):
             print (err)
     elif splitter[1] == "banned":
         try:
-            if not await can_ban_users(int(splitter[0]), splitter[4])):
+            if not await can_ban_users(int(splitter[0]), int(splitter[4])):
                  return
             await tbot(EditBannedRequest(int(splitter[0]), int(splitter[2]), BANNED_RIGHTS)) 
             await event.answer("✅  Succesfully Banned")
