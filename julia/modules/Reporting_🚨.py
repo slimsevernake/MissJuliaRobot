@@ -195,7 +195,8 @@ async def _(event):
 
 @tbot.on(events.CallbackQuery(pattern=r"report_(.*?)"))
 async def _(event):
-    query = event.pattern_match.group(1)
+    queryy = event.pattern_match.group(1)
+    query = queryy.decode()
     splitter = query.replace("report_", "").split("=")
     if splitter[1] == "kick":
         try:          
