@@ -105,7 +105,6 @@ async def _(event):
 
 @tbot.on(events.NewMessage(pattern="^/report ?(.*)"))
 async def _(event):
- try:
     if event.is_private:
        return
     if await is_register_admin(event.input_chat, event.message.sender_id):
@@ -183,14 +182,15 @@ async def _(event):
                   pass
               else:
                   await tbot.send_message(user.id, msg, buttons=buttons, parse_mode="html")
+                  await tbot.send_message(user.id, "In case if the original message was deleted by the accused, a copy is sent to you as below 👇")
+                  await c.forward_to(user.id)
 
         await event.delete()
         await tbot.send_message(event.chat_id, f"<p><a href='tg://user?id={user.id}'>{user.first_name}</a></p> reported <p><a href='tg://user?id={reported_user}'>{reported_user_first_name}</a></p> to the admins!", parse_mode="html")
 
     else:
         await event.reply("Reply to a message to report it to the admins.")
- except Exception as e:
-    print (e)
+ 
 
 @tbot.on(events.CallbackQuery(pattern=r"report_(.*)"))
 async def _(event):
