@@ -107,7 +107,9 @@ async def _(event):
 async def _(event):
     if event.is_private:
        return
-    
+    if await is_register_admin(event.input_chat, event.message.sender_id):
+       return            
+
     chat = event.chat_id
     user = event.sender
 
@@ -233,7 +235,7 @@ file_helpo = file_help.replace("_", " ")
 
 __help__ = """
  • /report <reason>: reply to a message to report it to admins.
-**NOTE:** Neither of these will get triggered if used by admins.
+**NOTE:** This will not get triggered if used by admins.
 
 **Admins only:**
  • /reports <on/off>: change report setting, or view current status.
