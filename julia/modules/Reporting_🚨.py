@@ -164,17 +164,17 @@ async def _(event):
                 [
                     Button.inline(
                         "⚠ Kick",
-                        data=f"report_{chat}=kick={reported_user}={c.id}={user.id}",
+                        data=f"report_{chat}=kick={reported_user}",
                     ),
                     Button.inline(
                         "⛔️ Ban",
-                        data=f"report_{chat}=banned={reported_user}={c.id}={user.id}",
+                        data=f"report_{chat}=banned={reported_user}",
                     ),
                 ],
                 [
                     Button.inline(
                         "❎ Delete Message",
-                        data=f"report_{chat}=delete={reported_user}={c.id}={user.id}",
+                        data=f"report_{chat}=delete={reported_user}={c.id}",
                     )
                 ],
         ]            
@@ -202,31 +202,34 @@ async def _(event):
     print (splitter)
     if splitter[1] == "kick":
         try:          
-            if not await can_ban_users(int(splitter[0]), int(splitter[4])):
+            if not await can_ban_users(int(splitter[0]), event.sender_id):
+                 await event.answer("You don't have sufficient permissions.")           
                  return
             await tbot.kick_participant(int(splitter[0]), int(splitter[2]))            
             await event.answer("✅ Succesfully kicked")
-            return
+            
         except Exception as err:
             await event.answer("🛑 Failed to kick")
             print (err)
     elif splitter[1] == "banned":
         try:
-            if not await can_ban_users(int(splitter[0]), int(splitter[4])):
+            if not await can_ban_users(int(splitter[0]), event.sender_id):
+                 await event.answer("You don't have sufficient permissions.")           
                  return
             await tbot(EditBannedRequest(int(splitter[0]), int(splitter[2]), BANNED_RIGHTS)) 
             await event.answer("✅  Succesfully Banned")
-            return
+            
         except Exception as err:
             print (err)
             await event.answer("🛑 Failed to Ban")
     elif splitter[1] == "delete":
         try:
-            if not await can_del(int(splitter[0]), int(splitter[4])):
+            if not await can_del(int(splitter[0]), event.sender_id):
+                 await event.answer("You don't have sufficient permissions.")           
                  return
             await tbot.delete_messages(int(splitter[0]), int(splitter[3]))
             await event.answer("✅ Message Deleted")
-            return
+            
         except Exception as err:
             print (err)
             await event.answer("🛑 Failed to delete message!")
