@@ -175,7 +175,7 @@ async def _(event):
                   await tbot.send_message(user.id, msg, buttons=buttons)
              
         await event.respond(
-            f"<p><a href='tg://user?id={user.id}'>{user.first_name}</a></p> reported <p><a href='tg://user?id={reported_user}'>{reported_user_first_name}</a></p> to the admins!"
+            f"<p><a href='tg://user?id={user.id}'>{user.first_name}</a></p> reported <p><a href='tg://user?id={reported_user}'>{reported_user_first_name}</a></p> to the admins!",
             parse_mode="html",
         )
 
