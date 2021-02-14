@@ -25,49 +25,47 @@ async def is_register_admin(chat, user):
             ).participant,
             (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
         )
-    if isinstance(chat, types.InputPeerUser):          
+    if isinstance(chat, types.InputPeerUser):
         return True
 
 
 @register(pattern=r"(.*?)")
 async def _(event):
     if event.is_private:
-       return
+        return
     sender = await event.get_sender()
     prefix = event.text.split()
     if prefix[0] == "/afk":
-     cmd = event.text[len("/afk ") :]
-     if cmd is not None:
-        reason = cmd
-     else:
-        reason = ""   
-     approved_userss = approved_users.find({})
-     for ch in approved_userss:
-        iid = ch["id"]
-        userss = ch["user"]
-     if event.is_group:
-        if await is_register_admin(event.input_chat, event.message.sender_id):
-            pass
-        elif event.chat_id == iid and event.sender_id == userss:
-            pass
+        cmd = event.text[len("/afk ") :]
+        if cmd is not None:
+            reason = cmd
         else:
-            return
-     fname = sender.first_name        
-     # print(reason)
-     start_time = time.time()
-     sql.set_afk(sender.id, reason, start_time)
-     await event.reply(
-           "**{} is now AFK !**".format(fname),
-           parse_mode="markdown")
-     return
+            reason = ""
+        approved_userss = approved_users.find({})
+        for ch in approved_userss:
+            iid = ch["id"]
+            userss = ch["user"]
+        if event.is_group:
+            if await is_register_admin(event.input_chat, event.message.sender_id):
+                pass
+            elif event.chat_id == iid and event.sender_id == userss:
+                pass
+            else:
+                return
+        fname = sender.first_name
+        # print(reason)
+        start_time = time.time()
+        sql.set_afk(sender.id, reason, start_time)
+        await event.reply("**{} is now AFK !**".format(fname), parse_mode="markdown")
+        return
 
     if sql.is_afk(sender.id):
-       res = sql.rm_afk(sender.id)
-       if res:
-          firstname = sender.first_name
-          text = "**{} is no longer AFK !**".format(firstname)
-          await event.reply(text, parse_mode="markdown")
-        
+        res = sql.rm_afk(sender.id)
+        if res:
+            firstname = sender.first_name
+            text = "**{} is no longer AFK !**".format(firstname)
+            await event.reply(text, parse_mode="markdown")
+
 
 @tbot.on(events.NewMessage(pattern=None))
 async def _(event):

@@ -60,12 +60,12 @@ def register(**args):
                 print("i don't work in channels")
                 return
             if check.is_group:
-               if check.chat.megagroup:
-                  pass
-               else:
-                  print("i don't work in small chats")
-                  return
-                          
+                if check.chat.megagroup:
+                    pass
+                else:
+                    print("i don't work in small chats")
+                    return
+
             users = gbanned.find({})
             for c in users:
                 if check.sender_id == c["user"]:

@@ -11,6 +11,7 @@ client = MongoClient(MONGO_DB_URI)
 db = client["missjuliarobot"]
 approved_users = db.approve
 
+
 async def is_register_admin(chat, user):
     if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
         return isinstance(
@@ -19,7 +20,7 @@ async def is_register_admin(chat, user):
             ).participant,
             (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
         )
-    if isinstance(chat, types.InputPeerUser):          
+    if isinstance(chat, types.InputPeerUser):
         return True
 
 
@@ -46,13 +47,13 @@ async def _(event):
         res = wikipedia.summary(search)
     except DisambiguationError as e:
         await event.reply(
-            "Disambiguated pages found! Adjust your query accordingly.\n<i>{}</i>".format(e),
+            "Disambiguated pages found! Adjust your query accordingly.\n<i>{}</i>".format(
+                e
+            ),
             parse_mode="html",
         )
     except PageError as e:
-        await event.reply(
-            "<code>{}</code>".format(e), parse_mode="html"
-        )
+        await event.reply("<code>{}</code>".format(e), parse_mode="html")
     if res:
         result = f"<b>{search}</b>\n\n"
         result += f"<i>{res}</i>\n"
@@ -65,13 +66,12 @@ async def _(event):
                     chat_id=event.chat_id,
                     file=f,
                     filename=f.name,
-                    reply_to=event,                    
+                    reply_to=event,
                     parse_mode="html",
                 )
         else:
-            await event.reply(
-                result, parse_mode="html", link_preview=False
-            )
+            await event.reply(result, parse_mode="html", link_preview=False)
+
 
 file_help = os.path.basename(__file__)
 file_help = file_help.replace(".py", "")

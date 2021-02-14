@@ -48,7 +48,7 @@ async def is_register_admin(chat, user):
             ).participant,
             (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
         )
-    if isinstance(chat, types.InputPeerUser):          
+    if isinstance(chat, types.InputPeerUser):
         return True
 
 
@@ -408,28 +408,33 @@ async def del_profanity(event):
     chats = globalchat.find({})
     for c in chats:
         if event.text:
-            if event.chat_id == c["id"]:                      
+            if event.chat_id == c["id"]:
                 u = msg.split()
-                if [(k) for k in u if k.startswith("@")] and [(k) for k in u if k.startswith("#")] and [(k) for k in u if k.startswith("/")] and re.findall(r'\[([^]]+)]\(\s*([^)]+)\s*\)', msg) != []:
-                   h = " ".join(filter(lambda x:x[0]!='@', u))   
-                   km = re.sub(r'\[([^]]+)]\(\s*([^)]+)\s*\)', r"", h)
-                   tm = km.split()
-                   jm = " ".join(filter(lambda x:x[0]!='#', tm))
-                   hm = jm.split()
-                   rm = " ".join(filter(lambda x:x[0]!='/', hm))
+                if (
+                    [(k) for k in u if k.startswith("@")]
+                    and [(k) for k in u if k.startswith("#")]
+                    and [(k) for k in u if k.startswith("/")]
+                    and re.findall(r"\[([^]]+)]\(\s*([^)]+)\s*\)", msg) != []
+                ):
+                    h = " ".join(filter(lambda x: x[0] != "@", u))
+                    km = re.sub(r"\[([^]]+)]\(\s*([^)]+)\s*\)", r"", h)
+                    tm = km.split()
+                    jm = " ".join(filter(lambda x: x[0] != "#", tm))
+                    hm = jm.split()
+                    rm = " ".join(filter(lambda x: x[0] != "/", hm))
                 elif [(k) for k in u if k.startswith("@")]:
-                   rm = " ".join(filter(lambda x:x[0]!='@', u))          
-                elif [(k) for k in u if k.startswith("#")]:  
-                   rm = " ".join(filter(lambda x:x[0]!='#', u))
-                elif [(k) for k in u if k.startswith("/")]:  
-                   rm = " ".join(filter(lambda x:x[0]!='/', u))
-                elif re.findall(r'\[([^]]+)]\(\s*([^)]+)\s*\)', msg) != []:
-                   rm = re.sub(r'\[([^]]+)]\(\s*([^)]+)\s*\)', r"", msg)
+                    rm = " ".join(filter(lambda x: x[0] != "@", u))
+                elif [(k) for k in u if k.startswith("#")]:
+                    rm = " ".join(filter(lambda x: x[0] != "#", u))
+                elif [(k) for k in u if k.startswith("/")]:
+                    rm = " ".join(filter(lambda x: x[0] != "/", u))
+                elif re.findall(r"\[([^]]+)]\(\s*([^)]+)\s*\)", msg) != []:
+                    rm = re.sub(r"\[([^]]+)]\(\s*([^)]+)\s*\)", r"", msg)
                 else:
-                   rm = msg
-                #print (rm)            
+                    rm = msg
+                # print (rm)
                 a = TextBlob(rm)
-                b = a.detect_language()    
+                b = a.detect_language()
                 if not b == "en":
                     await event.delete()
                     st = sender.first_name

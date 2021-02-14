@@ -34,7 +34,7 @@ async def is_register_admin(chat, user):
             ).participant,
             (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
         )
-    if isinstance(chat, types.InputPeerUser):          
+    if isinstance(chat, types.InputPeerUser):
         return True
 
 
@@ -1982,7 +1982,7 @@ async def _(event):
     if chat == int(-1001158277850):
         return
     if chat == int(-1001342790946):
-        return   
+        return
     user = event.sender_id
     fed_id = sql.get_fed_id(chat)
     fban, fbanreason, fbantime = sql.get_fban_user(fed_id, user)
@@ -2001,7 +2001,7 @@ async def join_ban(event):
     if chat == int(-1001158277850):
         return
     if chat == int(-1001342790946):
-        return    
+        return
     user = event.user_id
     fed_id = sql.get_fed_id(chat)
     fban, fbanreason, fbantime = sql.get_fban_user(fed_id, user)
@@ -2012,7 +2012,7 @@ async def join_ban(event):
         await tbot.kick_participant(chat, user)
     else:
         return
-    
+
 
 # Temporary data
 def put_chat(chat_id, value, chat_data):

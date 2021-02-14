@@ -14,6 +14,7 @@ approved_users = db.approve
 dbb = client["missjuliarobot"]
 poll_id = dbb.pollid
 
+
 async def is_register_admin(chat, user):
     if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
         return isinstance(
@@ -22,8 +23,9 @@ async def is_register_admin(chat, user):
             ).participant,
             (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
         )
-    if isinstance(chat, types.InputPeerUser):          
+    if isinstance(chat, types.InputPeerUser):
         return True
+
 
 @register(pattern="^/poll (.*)")
 async def _(event):
