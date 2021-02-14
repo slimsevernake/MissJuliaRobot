@@ -184,10 +184,10 @@ async def _(event):
               if user.bot:
                   pass
               else:
-                  await tbot.send_message(user.id, msg, buttons=buttons)
+                  await tbot.send_message(user.id, msg, buttons=buttons, parse_mode="html")
 
         await event.delete()
-        await event.respond(
+        await tbot.send_message(event.chat_id, 
             f"<p><a href='tg://user?id={user.id}'>{user.first_name}</a></p> reported <p><a href='tg://user?id={reported_user}'>{reported_user_first_name}</a></p> to the admins!",
             parse_mode="html",
         )
