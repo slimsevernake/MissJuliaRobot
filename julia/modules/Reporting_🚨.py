@@ -103,8 +103,9 @@ async def _(event):
                 parse_mode="markdown",
             )
 
-@register(pattern="^/report ?(.*)")
+@tbot.on(events.NewMessage(pattern="^/report ?(.*)"))
 async def _(event):
+ try:
     if event.is_private:
        return
     if await is_register_admin(event.input_chat, event.message.sender_id):
@@ -125,7 +126,7 @@ async def _(event):
         c = await event.get_reply_message()
         reported_user = c.sender_id
         reported_user_first_name = c.sender.first_name  
-
+        
         if await is_register_admin(event.input_chat, reported_user):
            await event.reply("Why are you reporting an admin ?")
            return 
@@ -193,7 +194,8 @@ async def _(event):
 
     else:
         await event.reply("Reply to a message to report it to the admins.")
-        
+ except Exception as e:
+    print (e)
 
 @tbot.on(events.CallbackQuery(pattern=r"report_(.*?)"))
 async def _(event):
