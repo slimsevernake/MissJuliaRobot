@@ -124,7 +124,11 @@ async def _(event):
         c = await event.get_reply_message()
         reported_user = c.sender_id
         reported_user_first_name = c.sender.first_name  
-        
+
+        if await is_register_admin(event.input_chat, reported_user):
+           await event.reply("Why are you reporting an admin ?")
+           return 
+           
         if not args:
             await event.reply("Add a reason for reporting first.")
             return 
@@ -179,7 +183,8 @@ async def _(event):
                   pass
               else:
                   await tbot.send_message(user.id, msg, buttons=buttons)
-             
+
+        await event.delete()
         await event.respond(
             f"<p><a href='tg://user?id={user.id}'>{user.first_name}</a></p> reported <p><a href='tg://user?id={reported_user}'>{reported_user_first_name}</a></p> to the admins!",
             parse_mode="html",
