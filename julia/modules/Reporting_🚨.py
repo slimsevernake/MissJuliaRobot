@@ -150,8 +150,7 @@ async def _(event):
         msg = (
                 f"<b>⚠️ Report: </b>{html.escape(event.chat.title)}\n"
                 f"<b> • Report by:</b> <p><a href='tg://user?id={user.id}'>{user.first_name}</a></p> (<code>{user.id}</code>)\n"
-                f"<b> • Reported user:</b> <p><a href='tg://user?id={reported_user}'>{reported_user_first_name}</a></p> (<code>{reported_user}</code>)\n"
-                f"<b> • Reported message:</b> <a href='https://t.me/{event.chat.username}/{c.id}'>click here</a>\n"
+                f"<b> • Reported user:</b> <p><a href='tg://user?id={reported_user}'>{reported_user_first_name}</a></p> (<code>{reported_user}</code>)\n"                
                 f"<b> • Reason:</b> {args}"
             )
         buttons = [
