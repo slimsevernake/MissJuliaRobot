@@ -103,7 +103,7 @@ async def _(event):
                 parse_mode="markdown",
             )
 
-@register(pattern=r"^/report (.*)")
+@register(pattern=r"^/report ?(.*)")
 async def _(event):
     if event.is_private:
        return
