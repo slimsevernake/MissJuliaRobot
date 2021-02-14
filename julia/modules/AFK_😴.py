@@ -31,6 +31,8 @@ async def is_register_admin(chat, user):
 
 @register(pattern=r"(.*?)")
 async def _(event):
+    if event.is_private:
+       return
     prefix = event.text.split()
     if prefix[0] == "/afk":
      cmd = event.text[len("/afk ") :]
