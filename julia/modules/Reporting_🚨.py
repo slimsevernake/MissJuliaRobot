@@ -103,18 +103,11 @@ async def _(event):
                 parse_mode="markdown",
             )
 
-@register(pattern=r"(.*?)")
+@register(pattern=r"^/report (.*)")
 async def _(event):
     if event.is_private:
        return
-    prefix = event.text.split()
-    if not prefix[0] == "/report" or prefix[0] == "@admins":
-       if prefix[0] == "/report":
-          args = event.text[len("/report ") :]
-       if prefix[0] == "@admins":
-          args = event.text[len("@admins ") :]
-    else:
-       return
+    
     chat = event.chat_id
     user = event.sender
 
@@ -124,6 +117,7 @@ async def _(event):
     if not event.chat.username:
        await event.reply("Damn, this chat has no username so I can't markup the reported message.")
        return
+
     if event.reply_to_msg_id:
         c = await event.get_reply_message()
         reported_user = c.sender_id
@@ -239,7 +233,6 @@ file_helpo = file_help.replace("_", " ")
 
 __help__ = """
  • /report <reason>: reply to a message to report it to admins.
- • @admins <reason>: reply to a message to report it to admins.
 **NOTE:** Neither of these will get triggered if used by admins.
 
 **Admins only:**
