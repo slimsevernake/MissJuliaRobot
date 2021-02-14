@@ -1978,6 +1978,8 @@ async def _(event):
 
 @tbot.on(events.NewMessage(pattern=None))
 async def _(event):
+    if event.is_private: 
+        return 
     chat = event.chat_id
     if chat == int(-1001158277850):
         return
@@ -1997,6 +1999,8 @@ async def _(event):
 
 @tbot.on(events.ChatAction())
 async def join_ban(event):
+    if event.is_private: 
+        return 
     chat = event.chat_id
     if chat == int(-1001158277850):
         return
