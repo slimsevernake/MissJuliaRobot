@@ -86,6 +86,83 @@ async def _(event):
                 parse_mode="markdown",
             )
 
+@register(pattern=r"(/reports|@admins) (.*)")
+async def _(event):
+    if event.is_private:
+       return
+    if not event.chat.username:
+       return
+    chat = event.chat_id
+    user = event.sender
+    args = event.pattern_match.group(1)
+
+    if event.reply_to_msg_id and sql.chat_should_report(chat):
+        c = await event.get_reply_message()
+        reported_user = c.sender_id
+        reported_user_first_name = c.sender.first_name
+        chat_name = chat.title or chat.username
+        admin_list = await tbot.get_participants(event.chat_id, filter=ChannelParticipantsAdmins)
+
+        if not args:
+            await event.reply("Add a reason for reporting first.")
+            return 
+
+        if user.id == reported_user:
+            await event.reply("Why are you reporting yourself ?")
+            return 
+
+        if user.id == BOT_ID:
+            await event.reply("Why are you reporting me ?")
+            return 
+
+        if reported_user in OWNER_ID:
+            await event.reply("Hey, don't dare reporting my master !")
+            return         
+        
+        msg = (
+                f"<b>⚠️ Report: </b>{html.escape(chat.title)}\n"
+                f"<b> • Report by:</b> <p><a href='tg://user?id={user.id}'>{user.first_name}</a></p> (<code>{user.id}</code>)\n"
+                f"<b> • Reported user:</b> <p><a href='tg://user?id={reported_user}'>{reported_user_first_name}</a></p> (<code>{reported_user}</code>)\n"
+            )
+        msg += f'<b> • Reported message:</b> <a href="https://t.me/{chat.username}/{c.id}">click here</a>'
+        msg += f'<b> • Reason:</b> {args}'
+            
+        buttons = [
+                [
+                    Button.url(
+                        "➡ Message",
+                        url=f"https://t.me/{chat.username}/{c.id}",
+                    )
+                ],
+                [
+                    Button.inline(
+                        "⚠ Kick",
+                        data=f"report_{chat}=kick={reported_user}={reported_user_first_name}={user.id}",
+                    ),
+                    Button.inline(
+                        "⛔️ Ban",
+                        data=f"report_{chat}=banned={reported_user}={reported_user_first_name}={user.id}",
+                    ),
+                ],
+                [
+                    Button.inline(
+                        "❎ Delete Message",
+                        data=f"report_{chat}=delete={reported_user}={c.id}={user.id}",
+                    )
+                ],
+            ]            
+            
+        for user in admin_list:
+              if user.bot:
+                  pass
+              else:
+                  await tbot.send_message(user.id, msg, buttons=buttons)
+             
+        await event.respond(
+            f"<p><a href='tg://user?id={user.id}'>{user.first_name}</a></p> reported <p><a href='tg://user?id={reported_user}'>{reported_user_first_name}</a></p> to the admins!"
+            parse_mode="html",
+        )
+
 @tbot.on(events.CallbackQuery(pattern=r"report_(.*?)"))
 async def _(event):
     query = event.pattern_match.group(1)
