@@ -197,9 +197,9 @@ async def _(event):
 async def _(event):
     queryy = event.pattern_match.group(1)
     query = queryy.decode()
-    print (query)
+    # print (query)
     splitter = query.replace("report_", "").split("=")
-    print (splitter)
+    # print (splitter)
     if splitter[1] == "kick":
         try:          
             if not await can_ban_users(int(splitter[0]), event.sender_id):
