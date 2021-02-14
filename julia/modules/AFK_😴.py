@@ -44,7 +44,8 @@ async def _(event):
         else:
             return
 
-    if event.text.startswith("/afk"):
+    prefix = event.text.split()
+    if prefix[0] == "/afk":
      cmd = event.text[len("/afk ") :]
      if cmd is not None:
         reason = cmd
