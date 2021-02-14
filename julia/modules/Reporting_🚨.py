@@ -58,10 +58,25 @@ async def can_del(chat, user):
         isinstance(p, types.ChannelParticipantAdmin) and p.admin_rights.delete_messages
     )
 
+async def can_change_info(message):
+    result = await tbot(
+        functions.channels.GetParticipantRequest(
+            channel=message.chat_id,
+            user_id=message.sender_id,
+        )
+    )
+    p = result.participant
+    return isinstance(p, types.ChannelParticipantCreator) or (
+        isinstance(p, types.ChannelParticipantAdmin) and p.admin_rights.change_info
+    )
+
 @register(pattern="^/reports ?(.*)")
 async def _(event):
     if event.is_private:
        return
+    if event.is_group:
+        if not await can_change_info(message=event):
+            return
     chat = event.chat_id
     args = event.pattern_match.group(1)
     if args:
@@ -86,7 +101,7 @@ async def _(event):
                 parse_mode="markdown",
             )
 
-@register(pattern=r"(/reports|@admins) ?(.*)")
+@register(pattern=r"(?:/report|@admins) ?(.*)")
 async def _(event):
     if event.is_private:
        return
