@@ -166,7 +166,7 @@ async def _(event):
                         data=f"report_{chat}=delete={reported_user}={c.id}={user.id}",
                     )
                 ],
-                ]            
+        ]            
             
         async for user in tbot.iter_participants(event.chat_id, filter=ChannelParticipantsAdmins):
               if user.bot:
