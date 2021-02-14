@@ -131,14 +131,11 @@ async def _(event):
     if event.reply_to_msg_id:
         c = await event.get_reply_message()
         reported_user = c.sender_id
-        reported_user_first_name = c.sender.first_name
-        try:
-         if await is_register_admin(event.input_chat, reported_user):
+        reported_user_first_name = c.sender.first_name        
+        if await is_register_admin(event.input_chat, reported_user):
             await event.reply("Why are you reporting an admin ?")
             return
-        except UserNotParticipantError:
-            await event.reply("Is that user even in the chat ?")
-            return
+        
         if not args:
             await event.reply("Add a reason for reporting first.")
             return
