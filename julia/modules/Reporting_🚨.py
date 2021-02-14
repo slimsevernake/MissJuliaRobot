@@ -101,19 +101,25 @@ async def _(event):
                 parse_mode="markdown",
             )
 
-@register(pattern=r"(?:/report|@admins) ?(.*)")
+@register(pattern=r"(.*?)")
 async def _(event):
     if event.is_private:
        return
     if not event.chat.username:
-       await event.reply("Damn, this chat has no username so I can't catch the reported message.")
+       await event.reply("Damn, this chat has no username so I can't markup the reported message.")
        return
     if not sql.chat_should_report(chat):
        return
     chat = event.chat_id
-    user = event.sender
-    args = event.pattern_match.group(1)
-
+    user = event.sender    
+    prefix = event.text.split()
+    if not prefix[0] == "/report" or prefix[0] == "@admins":
+       if prefix[0] == "/report":
+          args = event.text[len("/report ") :]
+       if prefix[0] == "@admins":
+          args = event.text[len("@admins ") :]
+    else:
+       return
     if event.reply_to_msg_id:
         c = await event.get_reply_message()
         reported_user = c.sender_id
