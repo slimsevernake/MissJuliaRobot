@@ -165,11 +165,11 @@ async def _(event):
                 [
                     Button.inline(
                         "⚠ Kick",
-                        data=f"report_{chat}=kick={reported_user}={reported_user_first_name}={user.id}",
+                        data=f"report_{chat}=kick={reported_user}={c.id}={user.id}",
                     ),
                     Button.inline(
                         "⛔️ Ban",
-                        data=f"report_{chat}=banned={reported_user}={reported_user_first_name}={user.id}",
+                        data=f"report_{chat}=banned={reported_user}={c.id}={user.id}",
                     ),
                 ],
                 [
