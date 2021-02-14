@@ -2,7 +2,7 @@ import html
 import os
 from julia import tbot
 from julia import *
-from telethon import events
+from telethon import events, Button
 from telethon.tl import functions
 from telethon.tl import types
 from telethon.tl.functions.channels import EditBannedRequest
