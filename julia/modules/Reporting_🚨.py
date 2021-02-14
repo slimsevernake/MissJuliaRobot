@@ -34,11 +34,11 @@ async def is_register_admin(chat, user):
     if isinstance(chat, types.InputPeerUser):          
         return True
 
-async def can_ban_users(message):
+async def can_ban_users(chat, user):
     result = await tbot(
         functions.channels.GetParticipantRequest(
-            channel=message.chat_id,
-            user_id=message.sender_id,
+            chat,
+            user,
         )
     )
     p = result.participant
@@ -46,11 +46,11 @@ async def can_ban_users(message):
         isinstance(p, types.ChannelParticipantAdmin) and p.admin_rights.ban_users
     )
 
-async def can_del(message):
+async def can_del(chat, user):
     result = await tbot(
         functions.channels.GetParticipantRequest(
-            channel=message.chat_id,
-            user_id=message.sender_id,
+            chat,
+            user,
         )
     )
     p = result.participant
@@ -91,7 +91,9 @@ async def _(event):
     query = event.pattern_match.group(1)
     splitter = query.replace("report_", "").split("=")
     if splitter[1] == "kick":
-        try:
+        try:          
+            if not await can_ban_users(splitter[0], ):
+                 return
             await tbot.kick_participant(splitter[0], splitter[2])            
             await event.answer("✅ Succesfully kicked")
             return
@@ -100,6 +102,8 @@ async def _(event):
             print (err)
     elif splitter[1] == "banned":
         try:
+            if not await can_ban_users(splitter[0], ):
+                 return
             await tbot(EditBannedRequest(splitter[0], splitter[2], BANNED_RIGHTS)) 
             await event.answer("✅  Succesfully Banned")
             return
@@ -108,6 +112,8 @@ async def _(event):
             await event.answer("🛑 Failed to Ban")
     elif splitter[1] == "delete":
         try:
+            if not await can_del(splitter[0], ):
+                 return
             await tbot.delete_messages(splitter[0], splitter[3])
             await event.answer("✅ Message Deleted")
             return
