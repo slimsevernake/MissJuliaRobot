@@ -114,10 +114,12 @@ async def _(event):
           args = event.text[len("@admins ") :]
     else:
        return
+    chat = event.chat_id
+    user = event.sender
+
     if not sql.chat_should_report(chat):
        return
-    chat = event.chat_id
-    user = event.sender    
+        
     if not event.chat.username:
        await event.reply("Damn, this chat has no username so I can't markup the reported message.")
        return
