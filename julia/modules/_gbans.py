@@ -154,6 +154,8 @@ async def _(event):
 
 @tbot.on(events.ChatAction())
 async def join_ban(event):
+    if event.is_private: 
+        return 
     if event.chat_id == int(-1001158277850):
         return
     if event.chat_id == int(-1001342790946):
@@ -181,6 +183,8 @@ async def join_ban(event):
 
 @tbot.on(events.NewMessage(pattern=None))
 async def type_ban(event):
+    if event.is_private: 
+        return 
     if event.chat_id == int(-1001158277850):
         return
     if event.chat_id == int(-1001342790946):
