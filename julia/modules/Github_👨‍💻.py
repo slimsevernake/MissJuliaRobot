@@ -79,7 +79,7 @@ async def _(event):
     await event.reply(reply_text)
 
 
-@register(pattern="^/repo")
+@register(pattern="^/repo (.*)")
 async def _(event):
     if event.fwd_from:
         return
@@ -94,7 +94,7 @@ async def _(event):
             pass
         else:
             return
-    text = event.text[len("/repo ") :]
+    text = event.pattern_match.group(1)
     usr = get(f"https://api.github.com/users/{text}/repos?per_page=300").json()
     reply_text = "**Repo**\n"
     for i in range(len(usr)):
