@@ -224,3 +224,17 @@ async def _(event):
             print (err)
             await event.answer("🛑 Failed to delete message!")
 
+file_help = os.path.basename(__file__)
+file_help = file_help.replace(".py", "")
+file_helpo = file_help.replace("_", " ")
+
+__help__ = """
+ • /report <reason>: reply to a message to report it to admins.
+ • @admins <reason>: reply to a message to report it to admins.
+**NOTE:** Neither of these will get triggered if used by admins.
+
+**Admins only:**
+ • /reports <on/off>: change report setting, or view current status.
+"""
+
+CMD_HELP.update({file_helpo: [file_helpo, __help__]})
