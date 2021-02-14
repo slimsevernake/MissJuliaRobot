@@ -31,19 +31,6 @@ async def is_register_admin(chat, user):
 
 @register(pattern=r"(.*?)")
 async def _(event):
-    sender = await event.get_sender()    
-    approved_userss = approved_users.find({})
-    for ch in approved_userss:
-        iid = ch["id"]
-        userss = ch["user"]
-    if event.is_group:
-        if await is_register_admin(event.input_chat, event.message.sender_id):
-            pass
-        elif event.chat_id == iid and event.sender_id == userss:
-            pass
-        else:
-            return
-
     prefix = event.text.split()
     if prefix[0] == "/afk":
      cmd = event.text[len("/afk ") :]
@@ -51,6 +38,18 @@ async def _(event):
         reason = cmd
      else:
         reason = ""
+     sender = await event.get_sender()   
+     approved_userss = approved_users.find({})
+     for ch in approved_userss:
+        iid = ch["id"]
+        userss = ch["user"]
+     if event.is_group:
+        if await is_register_admin(event.input_chat, event.message.sender_id):
+            pass
+        elif event.chat_id == iid and event.sender_id == userss:
+            pass
+        else:
+            return
      fname = sender.first_name        
      # print(reason)
      start_time = time.time()
