@@ -6,7 +6,7 @@ from telethon import events, Button
 from telethon.tl import functions
 from telethon.tl import types
 from telethon.tl.functions.channels import EditBannedRequest
-from telethon.tl.types import ChatBannedRights
+from telethon.tl.types import *
 from pymongo import MongoClient
 from julia import MONGO_DB_URI
 from julia.events import register
