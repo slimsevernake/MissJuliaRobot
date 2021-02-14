@@ -1978,11 +1978,11 @@ async def _(event):
 
 @tbot.on(events.NewMessage(pattern=None))
 async def _(event):
+    chat = event.chat_id
     if chat == int(-1001158277850):
         return
     if chat == int(-1001342790946):
-        return
-    chat = event.chat_id
+        return   
     user = event.sender_id
     fed_id = sql.get_fed_id(chat)
     fban, fbanreason, fbantime = sql.get_fban_user(fed_id, user)
@@ -1997,11 +1997,11 @@ async def _(event):
 
 @tbot.on(events.ChatAction())
 async def join_ban(event):
-    if event.chat_id == int(-1001158277850):
-        return
-    if event.chat_id == int(-1001342790946):
-        return
     chat = event.chat_id
+    if chat == int(-1001158277850):
+        return
+    if chat == int(-1001342790946):
+        return    
     user = event.user_id
     fed_id = sql.get_fed_id(chat)
     fban, fbanreason, fbantime = sql.get_fban_user(fed_id, user)
