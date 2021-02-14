@@ -92,11 +92,13 @@ async def _(event):
        return
     if not event.chat.username:
        return
+    if not sql.chat_should_report(chat):
+       return
     chat = event.chat_id
     user = event.sender
     args = event.pattern_match.group(1)
 
-    if event.reply_to_msg_id and sql.chat_should_report(chat):
+    if event.reply_to_msg_id:
         c = await event.get_reply_message()
         reported_user = c.sender_id
         reported_user_first_name = c.sender.first_name
@@ -163,6 +165,9 @@ async def _(event):
             parse_mode="html",
         )
 
+    else:
+        await event.reply("Reply to a message to report it to the admins.")
+        
 @tbot.on(events.CallbackQuery(pattern=r"report_(.*?)"))
 async def _(event):
     query = event.pattern_match.group(1)
