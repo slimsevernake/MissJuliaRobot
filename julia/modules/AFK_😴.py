@@ -33,14 +33,14 @@ async def is_register_admin(chat, user):
 async def _(event):
     if event.is_private:
        return
+    sender = await event.get_sender()
     prefix = event.text.split()
     if prefix[0] == "/afk":
      cmd = event.text[len("/afk ") :]
      if cmd is not None:
         reason = cmd
      else:
-        reason = ""
-     sender = await event.get_sender()   
+        reason = ""   
      approved_userss = approved_users.find({})
      for ch in approved_userss:
         iid = ch["id"]
