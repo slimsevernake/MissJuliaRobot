@@ -7,6 +7,7 @@ from telethon.tl import functions
 from telethon.tl import types
 from telethon.tl.functions.channels import EditBannedRequest
 from telethon.tl.types import *
+from telethon.errors import UserNotParticipantError
 from pymongo import MongoClient
 from julia import MONGO_DB_URI
 from julia.events import register
@@ -110,7 +111,7 @@ async def _(event):
 @tbot.on(events.NewMessage(pattern="^/report ?(.*)"))
 async def _(event):
     if event.is_private:
-        return
+        return  
     if await is_register_admin(event.input_chat, event.message.sender_id):
         return
 
@@ -131,11 +132,13 @@ async def _(event):
         c = await event.get_reply_message()
         reported_user = c.sender_id
         reported_user_first_name = c.sender.first_name
-
-        if await is_register_admin(event.input_chat, reported_user):
+        try:
+         if await is_register_admin(event.input_chat, reported_user):
             await event.reply("Why are you reporting an admin ?")
             return
-
+        except UserNotParticipantError:
+            await event.reply("Is that user even in the chat ?")
+            return
         if not args:
             await event.reply("Add a reason for reporting first.")
             return
