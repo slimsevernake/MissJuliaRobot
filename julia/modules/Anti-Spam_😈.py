@@ -177,6 +177,8 @@ async def _(event):
 
 @tbot.on(events.NewMessage(pattern=None))
 async def _(event):
+    if event.is_private: 
+        return 
     approved_userss = approved_users.find({})
     for ch in approved_userss:
         iid = ch["id"]
@@ -447,6 +449,8 @@ async def del_profanity(event):
 
 @tbot.on(events.ChatAction())
 async def del_cleanservice(event):
+    if event.is_private: 
+        return 
     chats = cleanservices.find({})
     for c in chats:
         if event.chat_id == c["id"]:
