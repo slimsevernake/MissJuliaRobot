@@ -84,18 +84,19 @@ async def _(event):
             if args == "on":
                 sql.set_chat_setting(chat, True)
                 await event.reply(
-                    "Turned on reporting!\nAdmins who have turned on reports will be notified when /report or @admin is called."
+                    "Turned on reporting!\nAdmins who have turned on reports will be notified when /report or @admins is called."
                 )
 
             elif args == "off":
                 sql.set_chat_setting(chat, False)
                 await event.reply(
-                    "Turned off reporting!\nNo admins will be notified on /report or @admin."
+                    "Turned off reporting!\nNo admins will be notified on /report or @admins"
                 )
             else:
                 await event.reply(
                     "Wrong option!\nEither say on or off."
-                )                         
+                )               
+                return          
     else:
             await event.reply(
                 f"This group's current setting is: `{sql.chat_should_report(chat)}`",
