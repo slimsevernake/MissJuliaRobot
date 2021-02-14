@@ -92,7 +92,7 @@ async def _(event):
     splitter = query.replace("report_", "").split("=")
     if splitter[1] == "kick":
         try:          
-            if not await can_ban_users(splitter[0], ):
+            if not await can_ban_users(splitter[0], splitter[4]):
                  return
             await tbot.kick_participant(splitter[0], splitter[2])            
             await event.answer("✅ Succesfully kicked")
@@ -102,7 +102,7 @@ async def _(event):
             print (err)
     elif splitter[1] == "banned":
         try:
-            if not await can_ban_users(splitter[0], ):
+            if not await can_ban_users(splitter[0], splitter[4]):
                  return
             await tbot(EditBannedRequest(splitter[0], splitter[2], BANNED_RIGHTS)) 
             await event.answer("✅  Succesfully Banned")
@@ -112,7 +112,7 @@ async def _(event):
             await event.answer("🛑 Failed to Ban")
     elif splitter[1] == "delete":
         try:
-            if not await can_del(splitter[0], ):
+            if not await can_del(splitter[0], splitter[4]):
                  return
             await tbot.delete_messages(splitter[0], splitter[3])
             await event.answer("✅ Message Deleted")
