@@ -69,6 +69,8 @@ async def _(event):
 
 @tbot.on(events.NewMessage(pattern=None))
 async def _(event):
+    if event.is_private:
+       return
     sender = event.sender_id
     msg = str(event.text)
     global let
