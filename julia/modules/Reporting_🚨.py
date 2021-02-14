@@ -152,7 +152,7 @@ async def _(event):
                         data=f"report_{chat}=delete={reported_user}={c.id}={user.id}",
                     )
                 ],
-            ]            
+                ]            
             
         for user in admin_list:
               if user.bot:
