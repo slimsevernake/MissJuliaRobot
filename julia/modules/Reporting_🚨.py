@@ -151,7 +151,7 @@ async def _(event):
                 f"<b>⚠️ Report: </b>{html.escape(event.chat.title)}\n"
                 f"<b> • Report by:</b> <p><a href='tg://user?id={user.id}'>{user.first_name}</a></p> (<code>{user.id}</code>)\n"
                 f"<b> • Reported user:</b> <p><a href='tg://user?id={reported_user}'>{reported_user_first_name}</a></p> (<code>{reported_user}</code>)\n"
-                f"<b> • Reported message:</b> <a href="https://t.me/{event.chat.username}/{c.id}">click here</a>\n"
+                f"<b> • Reported message:</b> <a href='https://t.me/{event.chat.username}/{c.id}'>click here</a>\n"
                 f"<b> • Reason:</b> {args}"
             )
         buttons = [
@@ -186,10 +186,7 @@ async def _(event):
                   await tbot.send_message(user.id, msg, buttons=buttons, parse_mode="html")
 
         await event.delete()
-        await tbot.send_message(event.chat_id, 
-            f"<p><a href='tg://user?id={user.id}'>{user.first_name}</a></p> reported <p><a href='tg://user?id={reported_user}'>{reported_user_first_name}</a></p> to the admins!",
-            parse_mode="html",
-        )
+        await tbot.send_message(event.chat_id, f"<p><a href='tg://user?id={user.id}'>{user.first_name}</a></p> reported <p><a href='tg://user?id={reported_user}'>{reported_user_first_name}</a></p> to the admins!", parse_mode="html")
 
     else:
         await event.reply("Reply to a message to report it to the admins.")
