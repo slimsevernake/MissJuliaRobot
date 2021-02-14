@@ -1,7 +1,7 @@
 import html
 import os
 from julia import tbot
-from julia import CMD_HELP
+from julia import CMD_HELP, BOT_ID
 from telethon import events
 from telethon.tl import functions
 from telethon.tl import types
