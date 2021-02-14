@@ -183,21 +183,21 @@ async def _(event):
             ],
         ]
 
-        async for user in tbot.iter_participants(
+        async for userr in tbot.iter_participants(
             event.chat_id, filter=ChannelParticipantsAdmins
         ):
           try:
-            if user.bot:
+            if userr.bot:
                 pass
             else:
                 await tbot.send_message(
-                    user.id, msg, buttons=buttons, parse_mode="html"
+                    userr.id, msg, buttons=buttons, parse_mode="html"
                 )
                 await tbot.send_message(
-                    user.id,
+                    userr.id,
                     "**In case if the original message was deleted by the accused, a copy is sent to you as below 👇**",
                 )
-                await c.forward_to(user.id)
+                await c.forward_to(userr.id)
           except Exception:
                 pass
 
@@ -207,8 +207,8 @@ async def _(event):
                 f"<p><a href='tg://user?id={user.id}'>{user.first_name}</a></p> reported <p><a href='tg://user?id={reported_user}'>{reported_user_first_name}</a></p> to the admins!",
                 parse_mode="html",
             )
-        except Exception as e:
-            print(e)
+        except Exception:
+            pass
 
         await event.delete()
 
