@@ -58,7 +58,7 @@ async def can_del(chat, user):
         isinstance(p, types.ChannelParticipantAdmin) and p.admin_rights.delete_messages
     )
 
-@register(pattern="^/reports (.*)")
+@register(pattern="^/reports ?(.*)")
 async def _(event):
     if event.is_private:
        return
@@ -86,11 +86,12 @@ async def _(event):
                 parse_mode="markdown",
             )
 
-@register(pattern=r"(/reports|@admins) (.*)")
+@register(pattern=r"(/reports|@admins) ?(.*)")
 async def _(event):
     if event.is_private:
        return
     if not event.chat.username:
+       await event.reply("Damn, this chat has no username so I can't catch the reported message.")
        return
     if not sql.chat_should_report(chat):
        return
@@ -101,10 +102,8 @@ async def _(event):
     if event.reply_to_msg_id:
         c = await event.get_reply_message()
         reported_user = c.sender_id
-        reported_user_first_name = c.sender.first_name
-        chat_name = chat.title or chat.username
-        admin_list = await tbot.get_participants(event.chat_id, filter=ChannelParticipantsAdmins)
-
+        reported_user_first_name = c.sender.first_name  
+        
         if not args:
             await event.reply("Add a reason for reporting first.")
             return 
@@ -117,7 +116,7 @@ async def _(event):
             await event.reply("Why are you reporting me ?")
             return 
 
-        if reported_user in OWNER_ID:
+        if reported_user == OWNER_ID:
             await event.reply("Hey, don't dare reporting my master !")
             return         
         
@@ -154,7 +153,7 @@ async def _(event):
                 ],
                 ]            
             
-        for user in admin_list:
+        async for user in tbot.iter_participants(event.chat_id, filter=ChannelParticipantsAdmins):
               if user.bot:
                   pass
               else:
@@ -168,6 +167,7 @@ async def _(event):
     else:
         await event.reply("Reply to a message to report it to the admins.")
         
+
 @tbot.on(events.CallbackQuery(pattern=r"report_(.*?)"))
 async def _(event):
     query = event.pattern_match.group(1)
