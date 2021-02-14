@@ -193,11 +193,13 @@ async def _(event):
  except Exception as e:
     print (e)
 
-@tbot.on(events.CallbackQuery(pattern=r"report_(.*?)"))
+@tbot.on(events.CallbackQuery(pattern=r"report_(.*)"))
 async def _(event):
     queryy = event.pattern_match.group(1)
     query = queryy.decode()
+    print (query)
     splitter = query.replace("report_", "").split("=")
+    print (splitter)
     if splitter[1] == "kick":
         try:          
             if not await can_ban_users(splitter[0], splitter[4]):
