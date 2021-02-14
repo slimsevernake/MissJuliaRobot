@@ -240,11 +240,11 @@ file_help = file_help.replace(".py", "")
 file_helpo = file_help.replace("_", " ")
 
 __help__ = """
- • /report <reason>: reply to a message to report it to admins.
+ - /report <reason>: reply to a message to report it to admins.
 **NOTE:** This will not get triggered if used by admins.
 
 **Admins only:**
- • /reports <on/off>: change report setting, or view current status.
+ - /reports <on/off>: change report setting, or view current status.
 """
 
 CMD_HELP.update({file_helpo: [file_helpo, __help__]})
