@@ -118,7 +118,7 @@ async def _(event):
     if not sql.chat_should_report(chat):
        return
         
-    if not event.event.chat.username:
+    if not event.chat.username:
        await event.reply("Damn, this chat has no username so I can't markup the reported message.")
        return
 
