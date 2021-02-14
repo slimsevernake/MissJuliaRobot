@@ -113,8 +113,9 @@ async def _(event):
 
 
 @tbot.on(events.NewMessage(pattern=None))
-# @tbot.on(events.ChatAction())
 async def tikclock(event):
+    if event.is_private: 
+        return 
     chats = alarms.find({})
     for c in chats:
         # print(c)
@@ -127,10 +128,6 @@ async def tikclock(event):
             f"now", settings={"TIMEZONE": f"{zone}", "DATE_ORDER": "YMD"}
         )
         ttime = dateparser.parse(f"{time}", settings={"TIMEZONE": f"{zone}"})
-        # print(ttime)
-        # print(present)
-        # print (zone)
-        # print(present>=ttime)
         if present > ttime:
             await tbot.send_message(
                 chat,
