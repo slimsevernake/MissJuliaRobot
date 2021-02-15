@@ -21,7 +21,6 @@ BANNED_RIGHTS = ChatBannedRights(
 
 MUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=True)
 
-
 async def is_register_admin(chat, user):
     if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
         return isinstance(
@@ -32,6 +31,31 @@ async def is_register_admin(chat, user):
         )
     if isinstance(chat, types.InputPeerUser):
         return True
+
+async def extract_time(message, time_val):
+    if any(time_val.endswith(unit) for unit in ("m", "h", "d")):
+        unit = time_val[-1]
+        time_num = time_val[:-1]  # type: str
+        if not time_num.isdigit():
+            await message.reply("Invalid time amount specified.")
+            return ""
+
+        if unit == "m":
+            bantime = int(time.time() + int(time_num) * 60)
+        elif unit == "h":
+            bantime = int(time.time() + int(time_num) * 60 * 60)
+        elif unit == "d":
+            bantime = int(time.time() + int(time_num) * 24 * 60 * 60)
+        else:
+            return 
+        return bantime
+    else:
+        await message.reply(
+            "Invalid time type specified. Expected m,h, or d, got: {}".format(
+                time_val[-1]
+            )
+        )
+        return 
 
 @tbot.on(events.NewMessage(pattern=None))
 async def _(event):
@@ -59,17 +83,29 @@ async def _(event):
             await tbot.kick_participant(chat, user.id)
             execstrings = "Kicked"
             tag = "KICKED"
-        elif getmode == 3:
+        elif getmode == 3:           
             await tbot(EditBannedRequest(chat, user.id, MUTE_RIGHTS))
             execstrings = "Muted"
             tag = "MUTED"
         elif getmode == 4:
-            bantime = extract_time(msg, getvalue)
-            chat.kick_member(user.id, until_date=bantime)
+            bantime = await extract_time(event, getvalue)
+            NEW_RIGHTS = ChatBannedRights(
+                         until_date=bantime,
+                         view_messages=True,
+                         send_messages=True,
+                         send_media=True,
+                         send_stickers=True,
+                         send_gifs=True,
+                         send_games=True,
+                         send_inline=True,
+                         embed_links=True)
+            await tbot(EditBannedRequest(chat, user.id, NEW_RIGHTS))
             execstrings = "Banned for {}".format(getvalue)
             tag = "TBAN"
         elif getmode == 5:
-            ###
+            mutetime = extract_time(event, getvalue)
+            NEW_RIGHTS = ChatBannedRights(until_date=mutetime, send_messages=True)
+            await tbot(EditBannedRequest(chat, user.id, NEW_RIGHTS))
             execstrings = "Muted for {}".format(getvalue)
             tag = "TMUTE"
         await event.reply("Spammer Detected !\n{}!".format(execstrings)
