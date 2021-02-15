@@ -120,10 +120,8 @@ async def _(event):
 @register(pattern="^/setflood ?(.*)")
 async def _(event):
     if event.is_private:
-       return
-    chat = event.chat_id  # type: Optional[Chat]
-    user = event.sender  # type: Optional[User]
-    chat_name = event.chat.title
+       return   
+    chat_id = event.chat_id
     args = event.pattern_match.group(1)
     if not args:
         await event.reply(
