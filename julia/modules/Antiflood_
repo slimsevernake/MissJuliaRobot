@@ -117,6 +117,47 @@ async def _(event):
         )
         sql.set_flood(chat, 0)
 
+@register(pattern="^/setflood ?(.*)")
+async def _(event):
+    if event.is_private:
+       return
+    chat = event.chat_id  # type: Optional[Chat]
+    user = event.sender  # type: Optional[User]
+    chat_name = event.chat.title
+    args = event.pattern_match.group(1)
+    if not args:
+        await event.reply(
+            (
+                "Use `/setflood number` to enable anti-flood.\nOr use `/setflood off` to disable antiflood!."
+            ),
+            parse_mode="markdown",
+        )               
+        return
+        
+    if args == "off":
+            sql.set_flood(chat_id, 0)            
+            await event.reply("Antiflood has been disabled.")
+
+    elif args.isdigit():
+            amount = int(args)
+            if amount <= 0:
+                sql.set_flood(chat_id, 0)
+                await event.reply("Antiflood has been disabled.")    
+
+            elif amount <= 3:
+                await event.reply(
+                    "Antiflood must be either 0 (disabled) or number greater than 3!",
+                )
+                return
+            else:
+                sql.set_flood(chat_id, amount)                
+                await event.reply(
+                        "Successfully updated anti-flood limit to {}!".format(amount)
+                )               
+    else:
+            await event.reply("Invalid argument please use a number, 'off'")
+
+
 
 __help__ = """
 Antiflood allows you to take action on users that send more than x messages in a row.
@@ -126,7 +167,7 @@ This will mute users if they send more than 10 messages in a row, bots are ignor
  - /flood: Get the current flood control setting
 
 **Admins only:**
- - /setflood <int/'no'/'off'>: enables or disables flood control
+ - /setflood <int/'off'>: enables or disables flood control
 Example: /setflood 10
  - /setfloodmode <ban/kick/mute/tban/tmute> <value>: Action to perform when user have exceeded flood limit. ban/kick/mute/tmute/tban
 
