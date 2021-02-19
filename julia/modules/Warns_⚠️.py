@@ -1,4 +1,4 @@
-from julia import CMD_HELP, tbot
+from julia import CMD_HELP, tbot, BOT_ID
 import html
 import os
 from telethon import *
