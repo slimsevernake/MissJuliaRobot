@@ -190,6 +190,7 @@ async def _(event):
 
 @register(pattern="^/setfloodmode ?(.*)")
 async def _(event):
+ try:
     if event.is_private: 
         return 
     if event.is_group:
@@ -255,6 +256,8 @@ Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks.
         await event.reply(
                 "Sending more message than flood limit will result in {}.".format(
                     settypeflood))
+ except Exception as e:
+        print (e)
               
 __help__ = """
 Antiflood allows you to take action on users that send more than x messages in a row.
