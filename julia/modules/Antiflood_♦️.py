@@ -1,11 +1,11 @@
 import html
 from typing import Optional, List
-import re
+import re, time
 from julia.modules.sql import antiflood_sql as sql
 from telethon.tl.functions.channels import EditBannedRequest
 from telethon import *
 from telethon.tl.types import *
-
+from julia import *
 
 BANNED_RIGHTS = ChatBannedRights(
     until_date=None,
