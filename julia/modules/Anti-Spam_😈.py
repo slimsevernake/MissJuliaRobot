@@ -436,7 +436,7 @@ async def del_profanity(event):
                 else:
                     rm = msg
                 # print (rm)                                
-                b = translator.detect(text)               
+                b = translator.detect(rm)               
                 if not b == "en":
                     await event.delete()
                     st = sender.first_name
