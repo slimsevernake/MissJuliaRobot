@@ -188,7 +188,7 @@ async def _(event):
                 )
             )
 
-@register(pattern="^/setfloodmode ?(.*)")
+@register(pattern="^/setfloodmode ?(.*) ?(.*)")
 async def _(event):
  try:
     if event.is_private: 
@@ -198,7 +198,7 @@ async def _(event):
             return  
     chat_id = event.chat_id   
     args = event.pattern_match.group(1)
-    time = args.split()   
+    time = event.pattern_match.group(2)
     if args:
         if args == "ban":
             settypeflood = "ban"
@@ -221,7 +221,7 @@ Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks.
             settypeflood = "tban for {}".format(time)
             sql.set_flood_strength(chat_id, 4, str(time))
         elif args == "tmute":
-            if not time[1]:
+            if not time:
                 await event.reply("Please provide the tmute time interval.")
                 return
             if len(time) == 1:             
