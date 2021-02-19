@@ -32,6 +32,18 @@ async def is_register_admin(chat, user):
     if isinstance(chat, types.InputPeerUser):
         return True
 
+async def can_change_info(message):
+    result = await tbot(
+        functions.channels.GetParticipantRequest(
+            channel=message.chat_id,
+            user_id=message.sender_id,
+        )
+    )
+    p = result.participant
+    return isinstance(p, types.ChannelParticipantCreator) or (
+        isinstance(p, types.ChannelParticipantAdmin) and p.admin_rights.change_info
+    )
+
 async def extract_time(message, time_val):
     if any(time_val.endswith(unit) for unit in ("m", "h", "d")):
         unit = time_val[-1]
@@ -121,6 +133,9 @@ async def _(event):
 async def _(event):
     if event.is_private:
        return   
+    if event.is_group:
+        if not await can_change_info(message=event):
+            return  
     chat_id = event.chat_id
     args = event.pattern_match.group(1)
     if not args:
@@ -159,6 +174,9 @@ async def _(event):
 async def _(event):
     if event.is_private:
        return
+    if event.is_group:
+        if not await can_change_info(message=event):
+            return  
     chat_id = event.chat_id
     limit = sql.get_flood_limit(chat_id)
     if limit == 0:
@@ -174,6 +192,9 @@ async def _(event):
 async def _(event):
     if event.is_private: 
         return 
+    if event.is_group:
+        if not await can_change_info(message=event):
+            return  
     chat_id = event.chat_id
     chat_name = event.chat.title
     args = event.pattern_match.group(1)
