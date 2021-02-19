@@ -63,6 +63,9 @@ async def _(event):
     else:
         await event.reply("I am not gonna warn an admin")
         return
+    if reply_message.sender_id == BOT_ID:
+       await event.reply("Why are you trying to warn me ?")
+       return
     limit, soft_warn = sql.get_warn_setting(event.chat_id)
     num_warns, reasons = sql.warn_user(
         reply_message.sender_id, event.chat_id, warn_reason
@@ -158,11 +161,15 @@ async def _(event):
      if not reason:
         await event.reply("Please provide a reason for warning.")
         return
+     reason = warn_reason
      if not await is_register_admin(event.input_chat, r_sender_id):
         pass
      else:
         await event.reply("I am not gonna warn an admin")
         return
+     if r_sender_id == BOT_ID:
+       await event.reply("Why are you trying to warn me ?")
+       return
      limit, soft_warn = sql.get_warn_setting(event.chat_id)
      num_warns, reasons = sql.warn_user(
         r_sender_id, event.chat_id, warn_reason
