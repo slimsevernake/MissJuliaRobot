@@ -129,6 +129,7 @@ async def get_user(event):
 
 
 async def fetch_info(replied_user, event):
+ try:
     replied_user_profile_photos = await event.client(
         GetUserPhotosRequest(
             user_id=replied_user.user.id, offset=42, max_id=0, limit=80
@@ -218,7 +219,8 @@ async def fetch_info(replied_user, event):
         caption += "\n\n<b>This person is approved in this chat.</b>"
 
     return photo, caption
-
+ except Exception as e:
+        print (e)
 
 @register(pattern="^/userid$")
 async def useridgetter(target):
