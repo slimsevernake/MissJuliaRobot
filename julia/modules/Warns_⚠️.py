@@ -144,10 +144,7 @@ async def _(event):
      if "|" in quew:
         iid, reasonn = quew.split("|")
      cid = iid.strip()
-     reason = reasonn.strip()
-     if not reason:
-        await event.reply("Please provide a reason for warning.")
-        return
+     reason = reasonn.strip()   
      if cid.isnumeric():
         cid = int(cid)
      entity = await tbot.get_entity(cid)
@@ -156,6 +153,9 @@ async def _(event):
         r_sender_fname = entity.first_name
      except Exception:
         await event.reply("Couldn't fetch that user.")
+        return
+     if not reason:
+        await event.reply("Please provide a reason for warning.")
         return
      if not await is_register_admin(event.input_chat, r_sender_id):
         pass
