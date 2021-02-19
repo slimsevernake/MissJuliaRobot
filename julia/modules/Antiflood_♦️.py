@@ -65,7 +65,7 @@ async def _(event):
     chat = event.chat_id  # type: Optional[Chat]
    
     # ignore admins and owner
-    if is_register_admin(chat, user.id) or user.id == OWNER_ID:
+    if await is_register_admin(chat, user.id) or user.id == OWNER_ID:
         sql.update_flood(chat, None)
         return
 
