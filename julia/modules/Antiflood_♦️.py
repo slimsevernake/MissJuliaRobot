@@ -142,9 +142,9 @@ async def _(event):
                 sql.set_flood(chat_id, 0)
                 await event.reply("Antiflood has been disabled.")    
 
-            elif amount <= 3:
+            elif amount < 3:
                 await event.reply(
-                    "Antiflood must be either 0 (disabled) or number greater than 3!",
+                    "Antiflood must be either 0 (disabled) or number greater than 2!",
                 )
                 return
             else:
