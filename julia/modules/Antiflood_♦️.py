@@ -170,8 +170,71 @@ async def _(event):
                 )
             )
 
+@register(pattern="^/setfloodmode ?(.*) ?(.*)")
+async def _(event):
+    if event.is_private: 
+        return 
+    chat_id = event.chat_id
+    chat_name = event.chat.title
+    args = event.pattern_match.group(1)
+    time = event.pattern_match.group(2)
+    if args:
+        if args == "ban":
+            settypeflood = "ban"
+            sql.set_flood_strength(chat_id, 1, "0")
+        elif args == "kick":
+            settypeflood = "kick"
+            sql.set_flood_strength(chat_id, 2, "0")
+        elif args == "mute":
+            settypeflood = "mute"
+            sql.set_flood_strength(chat_id, 3, "0")
+        elif args == "tban":
+            if not time:
+                await event.reply("Please provide the tban time interval.")
+                return
+            if len(time) == 1:
+                teks = """It looks like you tried to set time value for antiflood but you didn't specified time; Try, `/setfloodmode tban <timevalue>`.
+Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."""
+                await event.reply(teks, parse_mode="markdown")
+                return
+            settypeflood = "tban for {}".format(time)
+            sql.set_flood_strength(chat_id, 4, str(time))
+        elif args == "tmute":
+            if not time:
+                await event.reply("Please provide the tmute time interval.")
+                return
+            if len(time) == 1:             
+                teks = """It looks like you tried to set time value for antiflood but you didn't specified time; Try, `/setfloodmode tmute <timevalue>`.
+Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."""           
+                await event.reply(teks, parse_mode="markdown")
+                return
+            settypeflood = "tmute for {}".format(time)
+            sql.set_flood_strength(chat_id, 5, str(time))
+        else:
+            await event.reply("I only understand ban/kick/mute/tban/tmute!"
+            )
+            return
 
-
+        await event.reply(
+                "Exceeding consecutive flood limit will result in {}!".format(
+                    settypeflood))        
+    else:
+        getmode, getvalue = sql.get_flood_setting(chat)
+        if getmode == 1:
+            settypeflood = "ban"
+        elif getmode == 2:
+            settypeflood = "kick"
+        elif getmode == 3:
+            settypeflood = "mute"
+        elif getmode == 4:
+            settypeflood = "tban for {}".format(getvalue)
+        elif getmode == 5:
+            settypeflood = "tmute for {}".format(getvalue)
+        
+        await event.reply(
+                "Sending more message than flood limit will result in {}.".format(
+                    settypeflood))
+              
 __help__ = """
 Antiflood allows you to take action on users that send more than x messages in a row.
 Exceeding the set flood will result in restricting that user.
