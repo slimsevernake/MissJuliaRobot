@@ -190,7 +190,7 @@ async def fetch_info(replied_user, event):
     if not user_id in SUDO_USERS and not user_id == OWNER_ID:
         if str(user_id) == str(gid):
             caption += "<b>Gbanned:</b> Yes\n"
-            to_check = get_reason(id=r_sender_id)
+            to_check = get_reason(id=user_id)
             bannerid = str(to_check["bannerid"])
             reason = str(to_check["reason"])
             caption += f"<b>Gbanned by:</b><code>{bannerid}</code>\n"
