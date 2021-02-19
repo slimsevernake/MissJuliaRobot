@@ -161,7 +161,7 @@ async def _(event):
      if not reason:
         await event.reply("Please provide a reason for warning.")
         return
-     reason = warn_reason
+     warn_reason = reason
      if not await is_register_admin(event.input_chat, r_sender_id):
         pass
      else:
