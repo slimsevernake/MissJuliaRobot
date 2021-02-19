@@ -129,7 +129,7 @@ async def _(event):
         )
         sql.set_flood(chat, 0)
 
-@register(pattern="^/setflood ?(.*)")
+@register(pattern="^/setfloodlimit ?(.*)")
 async def _(event):
     if event.is_private:
        return   
@@ -168,7 +168,7 @@ async def _(event):
                         "Successfully updated anti-flood limit to {}!".format(amount)
                 )               
     else:
-            await event.reply("Invalid argument please use a number, 'off'")
+            await event.reply("Invalid argument please use a number or 'off'")
 
 @register(pattern="^/flood$")
 async def _(event):
@@ -264,7 +264,7 @@ This will mute users if they send more than 10 messages in a row, bots are ignor
  - /flood: Get the current flood control setting
 
 **Admins only:**
- - /setflood <int/'off'>: enables or disables flood control
+ - /setfloodlimit <int/'off'>: enables or disables flood control
 Example: /setflood 10
  - /setfloodmode <ban/kick/mute/tban/tmute> <value>: Action to perform when user have exceeded flood limit. ban/kick/mute/tmute/tban
 
