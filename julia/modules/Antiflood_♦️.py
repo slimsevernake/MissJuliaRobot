@@ -196,8 +196,7 @@ async def _(event):
     if event.is_group:
         if not await can_change_info(message=event):
             return  
-    chat_id = event.chat_id
-    chat_name = event.chat.title
+    chat_id = event.chat_id   
     args = event.pattern_match.group(1)
     time = args.split()   
     if args:
@@ -241,7 +240,7 @@ Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks.
                 "Exceeding consecutive flood limit will result in {}!".format(
                     settypeflood))        
     else:
-        getmode, getvalue = sql.get_flood_setting(chat)
+        getmode, getvalue = sql.get_flood_setting(chat_id)
         if getmode == 1:
             settypeflood = "ban"
         elif getmode == 2:
