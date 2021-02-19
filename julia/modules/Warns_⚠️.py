@@ -40,6 +40,7 @@ async def can_change_info(message):
 
 @register(pattern="^/warn(?: |$)(.*)")
 async def _(event):
+ try:
    if event.fwd_from:
         return
    if event.is_private:
@@ -240,6 +241,8 @@ async def _(event):
             ],
             parse_mode="html",            
          )
+ except Exception as e:
+        print (e)
 
 
 @tbot.on(events.CallbackQuery(pattern=r"start-ruleswarn-(\d+)"))
