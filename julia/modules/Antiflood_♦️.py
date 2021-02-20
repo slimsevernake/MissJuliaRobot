@@ -188,7 +188,7 @@ async def _(event):
                 )
             )
 
-@register(pattern="^/setfloodmode ?(.*) ?(.*)")
+@register(pattern="^/setfloodmode ?(.*)")
 async def _(event):
  try:
     if event.is_private: 
@@ -198,7 +198,7 @@ async def _(event):
             return  
     chat_id = event.chat_id   
     args = event.pattern_match.group(1)
-    time = event.pattern_match.group(2)
+    time = args.split()
     if args:
         if args == "ban":
             settypeflood = "ban"
@@ -210,27 +210,31 @@ async def _(event):
             settypeflood = "mute"
             sql.set_flood_strength(chat_id, 3, "0")
         elif args == "tban":
-            if not time:
-                await event.reply("Please provide the tban time interval.")
-                return
-            if len(time) == 1:
+            try:
+             ttime = time[1]
+            except:
+             await event.reply("Please provide the tban time interval.")
+             return               
+            if len(ttime) == 1:
                 teks = """It looks like you tried to set time value for antiflood but you didn't specified time; Try, `/setfloodmode tban <timevalue>`.
 Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."""
                 await event.reply(teks, parse_mode="markdown")
                 return
-            settypeflood = "tban for {}".format(time)
-            sql.set_flood_strength(chat_id, 4, str(time))
+            settypeflood = "tban for {}".format(ttime)
+            sql.set_flood_strength(chat_id, 4, str(ttime))
         elif args == "tmute":
-            if not time:
-                await event.reply("Please provide the tmute time interval.")
-                return
-            if len(time) == 1:             
+            try:
+             ttime = time[1]
+            except:
+             await event.reply("Please provide the tban time interval.")
+             return
+            if len(ttime) == 1:             
                 teks = """It looks like you tried to set time value for antiflood but you didn't specified time; Try, `/setfloodmode tmute <timevalue>`.
 Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."""           
                 await event.reply(teks, parse_mode="markdown")
                 return
-            settypeflood = "tmute for {}".format(time)
-            sql.set_flood_strength(chat_id, 5, str(time))
+            settypeflood = "tmute for {}".format(ttime)
+            sql.set_flood_strength(chat_id, 5, str(ttime))
         else:
             await event.reply("I only understand ban/kick/mute/tban/tmute!"
             )
