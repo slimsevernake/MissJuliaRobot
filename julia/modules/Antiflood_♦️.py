@@ -199,17 +199,17 @@ async def _(event):
     chat_id = event.chat_id   
     args = event.pattern_match.group(1)
     time = args.split()
-    if args:
-        if args == "ban":
+    if time[0]:
+        if time[0] == "ban":
             settypeflood = "ban"
             sql.set_flood_strength(chat_id, 1, "0")
-        elif args == "kick":
+        elif time[0] == "kick":
             settypeflood = "kick"
             sql.set_flood_strength(chat_id, 2, "0")
-        elif args == "mute":
+        elif time[0] == "mute":
             settypeflood = "mute"
             sql.set_flood_strength(chat_id, 3, "0")
-        elif args == "tban":
+        elif time[0] == "tban":
             try:
              ttime = time[1]
             except:
@@ -222,7 +222,7 @@ Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks.
                 return
             settypeflood = "tban for {}".format(ttime)
             sql.set_flood_strength(chat_id, 4, str(ttime))
-        elif args == "tmute":
+        elif time[0] == "tmute":
             try:
              ttime = time[1]
             except:
