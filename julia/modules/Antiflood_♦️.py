@@ -115,7 +115,7 @@ async def _(event):
             execstrings = "Banned for {}".format(getvalue)
             tag = "TBAN"
         elif getmode == 5:
-            mutetime = extract_time(event, getvalue)
+            mutetime = await extract_time(event, getvalue)
             NEW_RIGHTS = ChatBannedRights(until_date=mutetime, send_messages=True)
             await tbot(EditBannedRequest(chat, user.id, NEW_RIGHTS))
             execstrings = "Muted for {}".format(getvalue)
