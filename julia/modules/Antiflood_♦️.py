@@ -90,17 +90,17 @@ async def _(event):
         if getmode == 1:
             await tbot(EditBannedRequest(chat, user.id, BANNED_RIGHTS))    
             execstrings = "Banned"
-            tag = "BANNED"
+            
         elif getmode == 2:
             await tbot.kick_participant(chat, user.id)
             execstrings = "Kicked"
-            tag = "KICKED"
+            
         elif getmode == 3:           
             await tbot(EditBannedRequest(chat, user.id, MUTE_RIGHTS))
             execstrings = "Muted"
-            tag = "MUTED"
+            
         elif getmode == 4:
-            bantime = await extract_time(event, getvalue)
+            bantime = await extract_time(event, getvalue)            
             NEW_RIGHTS = ChatBannedRights(
                          until_date=bantime,
                          view_messages=True,
@@ -113,13 +113,14 @@ async def _(event):
                          embed_links=True)
             await tbot(EditBannedRequest(chat, user.id, NEW_RIGHTS))
             execstrings = "Banned for {}".format(getvalue)
-            tag = "TBAN"
+            
         elif getmode == 5:
             mutetime = await extract_time(event, getvalue)
+            print (mutetime)
             NEW_RIGHTS = ChatBannedRights(until_date=mutetime, send_messages=True)
             await tbot(EditBannedRequest(chat, user.id, NEW_RIGHTS))
             execstrings = "Muted for {}".format(getvalue)
-            tag = "TMUTE"
+            
         await event.reply("Spammer Detected !\n{}!".format(execstrings)
         )        
 
