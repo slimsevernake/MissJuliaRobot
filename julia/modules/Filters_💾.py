@@ -262,7 +262,7 @@ file_helpo = file_help.replace("_", " ")
 
 __help__ = """
 **Admin Only**
- - /savefilter <word> <message>: Every time someone says "word", the bot will reply with "message"
+ - /savefilter <word>: Every time someone says "word", the bot will reply with that message
 
 You can also include buttons in filters, example send `/savefilter google` in reply to "`Click Here To Open Google | [button('Google', 'google.com')]`"
 If you want more buttons, seperate each with "`•`", example send `/savefilter searchengine` in reply to "`Search Engines | [button('Google', 'google.com')] • [button('Yahoo', 'yahoo.com')] • [button('Bing', 'bing.com')]`"
