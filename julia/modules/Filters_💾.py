@@ -100,7 +100,7 @@ async def on_snip(event):
                 try:
                     filter = filter.strip()
                     button = options.strip()
-                    params = re.findall(r"\'(.*?)\'", button)
+                    params = re.findall(r"\'(.*?)\'", button) or re.findall(r'\"(.*?)\"', button)
                     butto = [Button.url(*params)]
                 except BaseException:
                     filter = filter.strip()
@@ -249,7 +249,7 @@ file_helpo = file_help.replace("_", " ")
 __help__ = """
 **Admin Only**
  - /savefilter <word> <message>: Every time someone says "word", the bot will reply with "message"
-You can also include buttons in filters, example send `/savefilter google` in reply to `Click Here To Open Google | [Button.url('Google', 'google.com')]`
+You can also include buttons in filters, example send `/savefilter google` in reply to `Click Here To Open Google | [button('Google', 'google.com')]`
  - /stopfilter <word>: Stop that filter.
  - /stopallfilters: Delete all filters in the current chat.
 **Admin+Non-Admin**
