@@ -115,9 +115,11 @@ async def on_snip(event):
                            butto = [Button.url(*params)]                        
                 except BaseException:
                     filter = filter.strip()
-                    button = None
-
-                await event.reply(filter, buttons=butto, file=media)
+                    butto = None
+                try:
+                    await event.reply(filter, buttons=longbutton, file=media)
+                except:
+                    await event.reply(filter, buttons=butto, file=media)
 
                 if event.chat_id not in last_triggered_filters:
 
