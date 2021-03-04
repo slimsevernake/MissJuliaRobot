@@ -227,7 +227,7 @@ Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks.
             try:
              ttime = time[1]
             except:
-             await event.reply("Please provide the tban time interval.")
+             await event.reply("Please provide the tmute time interval.")
              return
             if len(ttime) == 1:             
                 teks = """It looks like you tried to set time value for antiflood but you didn't specified time; Try, `/setfloodmode tmute <timevalue>`.
