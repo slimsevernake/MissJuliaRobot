@@ -100,8 +100,19 @@ async def on_snip(event):
                 try:
                     filter = filter.strip()
                     button = options.strip()
-                    params = re.findall(r"\'(.*?)\'", button) or re.findall(r'\"(.*?)\"', button)
-                    butto = [Button.url(*params)]
+                    if "•" in button:
+                       mbutton = button.split("•")
+                       lbutton = []   
+                       for i in mbutton:
+                           params = re.findall(r"\'(.*?)\'", i) or re.findall(r'\"(.*?)\"', i)
+                           lbutton.append(params)
+                       longbutton = []
+                       for c in lbutton:
+                           butto = [Button.url(*c)]
+                           longbutton.append(butto)    
+                    else:
+                           params = re.findall(r"\'(.*?)\'", button) or re.findall(r'\"(.*?)\"', button)
+                           butto = [Button.url(*params)]                        
                 except BaseException:
                     filter = filter.strip()
                     button = None
