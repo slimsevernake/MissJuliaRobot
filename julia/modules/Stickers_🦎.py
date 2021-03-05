@@ -458,28 +458,17 @@ async def _(event):
             pass
         else:
             return
+
     if not event.is_reply:
         await event.reply("Reply to a sticker to remove it from your personal sticker pack.")
         return
-    reply_message = await event.get_reply_message()
-    
+    reply_message = await event.get_reply_message()   
     kanga = await event.reply("`Deleting .`")
-    
-    file_ext_ns_ion = "@MissJuliaRobot.png"
-    file = await event.client.download_file(reply_message.media)    
-    uploaded_sticker = None
-    
+      
     if not is_message_image(reply_message):
         await kanga.edit("Please reply to a sticker.")
         return
-        
-    with BytesIO(file) as mem_file, BytesIO() as sticker:
-            resize_image(mem_file, sticker)
-            sticker.seek(0)
-            uploaded_sticker = await ubot.upload_file(
-                sticker, file_name=file_ext_ns_ion
-            )
-           
+                      
     stickerset_attr_s = reply_message.document.attributes
     stickerset_attr = find_instance(stickerset_attr_s, DocumentAttributeSticker)
     if not stickerset_attr.stickerset:
@@ -514,9 +503,8 @@ async def _(event):
                     kanga, f"**FAILED**! @Stickers replied: {response.text}"
                 )
                 return
-            w = await bot_conv.send_file(
-                file=uploaded_sticker, allow_cache=False, force_document=True
-            )
+
+            await ubot.forward_messages("@Stickers", reply_message)
             
             if response.text.startswith("This pack has only"):
                await silently_send_message(bot_conv, "Delete anyway")
@@ -530,10 +518,7 @@ async def _(event):
                 return
                 
             await kanga.edit("Successfully deleted that sticker from your personal pack.")         
-            
-    os.system("rm -rf  @MissJuliaRobot.png")
-    os.system("rm -rf *.webp")
-
+           
 
 file_help = os.path.basename(__file__)
 file_help = file_help.replace(".py", "")
