@@ -463,7 +463,7 @@ async def _(event):
     reply_message = await event.get_reply_message()   
     kanga = await event.reply("`Deleting .`")
       
-    file = await ubot.download_file(reply_message, "sticker.webp")
+    await ubot.download_file(reply_message, "sticker.webp")
 
     if not is_message_image(reply_message):
         await kanga.edit("Please reply to a sticker.")
@@ -504,7 +504,7 @@ async def _(event):
                 )
                 return
             try:
-             await ubot.send_file("@Stickers", "sticker.webp")
+             await ubot.send_file("@Stickers", file="sticker.webp")
             except Exception as e:
              print(e)
             if response.text.startswith("This pack has only"):
