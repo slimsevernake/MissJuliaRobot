@@ -293,11 +293,13 @@ async def _(event):
                 await silently_send_message(bot_conv, sticker_emoji)
                 await silently_send_message(bot_conv, "/done")
     await kanga.edit("`Kanging ...`")
+    await w.delete()
     await kanga.edit(
         f"Sticker added! Your pack can be found [here](t.me/addstickers/{packshortname})"
     )
+    os.system("rm -rf  @MissJuliaRobot.png")
+    os.system("rm -rf  AnimatedSticker.tgs")
     os.system("rm -rf *.webp")
-
 
 @register(pattern="^/getsticker$")
 async def _(event):
@@ -316,7 +318,7 @@ async def _(event):
         await event.reply("Reply to a sticker to extract image from it.")
         return
     reply_message = await event.get_reply_message()
-    file_ext_ns_ion = "@MissJuliaRobot.png"
+    file_ext_ns_ion = "sticker.png"
     file = await tbot.download_file(reply_message.media)
     is_a_s = is_it_animated_sticker(reply_message)
     if is_a_s:
@@ -338,7 +340,7 @@ async def _(event):
             force_document=True,
             reply_to=event.sender_id,
         )
-
+    os.remove("sticker.png")
 
 def is_it_animated_sticker(message):
     try:
@@ -364,7 +366,8 @@ def is_message_image(message):
 
 
 async def silently_send_message(conv, text):
-    await conv.send_message(text)
+    del = await conv.send_message(text)
+    await del.delete()
     response = await conv.get_response()
     await conv.mark_read(message=response)
     return response
@@ -382,6 +385,11 @@ async def stickerset_exists(conv, setname):
     except StickersetInvalidError:
         return False
 
+async def ispack_valid(conv, setname):
+    try:
+        await tbot(GetStickerSetRequest(InputStickerSetShortName(setname)))
+    except StickersetInvalidError:
+        return False
 
 def resize_image(image, save_locaton):
     """Copyright Rhyse Simpson:
@@ -461,46 +469,45 @@ async def _(event):
         await event.reply("Reply to a sticker to remove it from your personal sticker pack.")
         return
     reply_message = await event.get_reply_message()
-    sticker_emoji = "🔥"
-    input_str = event.pattern_match.group(1)
-    if input_str:
-        sticker_emoji = input_str
-
-    user = await event.get_sender()
-    if not user.first_name:
-        user.first_name = user.id
-    pack = 1
-    userid = event.sender_id
-    first_name = user.first_name
-    packname = f"{first_name}'s Sticker Vol.{pack}"
-    packshortname = f"MissJuliaRobot_sticker_{userid}"
+    
     kanga = await event.reply("`Deleting .`")
-    is_a_s = is_it_animated_sticker(reply_message)
+    
     file_ext_ns_ion = "@MissJuliaRobot.png"
-    file = await event.client.download_file(reply_message.media)
+    file = await event.client.download_file(reply_message.media, file_name=file_ext_ns_ion)    
     uploaded_sticker = None
-    if is_a_s:
-        file_ext_ns_ion = "AnimatedSticker.tgs"
-        uploaded_sticker = await ubot.upload_file(file, file_name=file_ext_ns_ion)
-        packname = f"{first_name}'s Animated Sticker Vol.{pack}"
-        packshortname = f"MissJuliaRobot_animate_{userid}"
-    elif not is_message_image(reply_message):
-        await kanga.edit("Invalid message type")
+    
+    if not is_message_image(reply_message):
+        await kanga.edit("Please reply to a sticker.")
         return
-    else:
-        with BytesIO(file) as mem_file, BytesIO() as sticker:
+        
+    with BytesIO(file) as mem_file, BytesIO() as sticker:
             resize_image(mem_file, sticker)
             sticker.seek(0)
             uploaded_sticker = await ubot.upload_file(
                 sticker, file_name=file_ext_ns_ion
             )
-
+           
+    stickerset_attr_s = reply_message.document.attributes
+    stickerset_attr = find_instance(stickerset_attr_s, DocumentAttributeSticker)
+    if not stickerset_attr.stickerset:
+        await event.reply("Sticker does not belong to a pack.")
+        return
+        
+    get_stickerset = await tbot(
+        GetStickerSetRequest(
+            InputStickerSetID(
+                id=stickerset_attr.stickerset.id,
+                access_hash=stickerset_attr.stickerset.access_hash,
+            )
+        )
+    )
+    
+    packname = get_stickerset.set.short_name
+    
     await kanga.edit("`Deleting ..`")
 
     async with ubot.conversation("@Stickers") as bot_conv:
-        
-        if not await stickerset_exists(bot_conv, packshortname):
-
+       
             await silently_send_message(bot_conv, "/cancel")
             if is_a_s:
                 response = await silently_send_message(bot_conv, "/delsticker")
@@ -533,7 +540,9 @@ async def _(event):
                 return
                 
             await kanga.edit("Successfully deleted that sticker from your personal pack.")
+            await w.delete()
             
+    os.system("rm -rf  @MissJuliaRobot.png")
     os.system("rm -rf *.webp")
 
 
@@ -546,7 +555,7 @@ __help__ = """
  - /packinfo: Reply to a sticker to get it's pack info
  - /getsticker: Uploads the .png of the sticker you've replied to
  - /kang <emoji for sticker>: Reply to a sticker to add it to your pack or makes a new one if it doesn't exist
- - /rmkang: remove a sticker from your personal sticker pack
+ - /rmkang: remove a sticker from your current personal sticker pack
  - /searchsticker <text>: Find stickers for given term on combot sticker catalogue
 """
 
