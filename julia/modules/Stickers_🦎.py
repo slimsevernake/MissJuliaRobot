@@ -503,9 +503,10 @@ async def _(event):
                     kanga, f"**FAILED**! @Stickers replied: {response.text}"
                 )
                 return
-
-            await ubot.forward_messages("@Stickers", reply_message)
-            
+            try:
+             await ubot.forward_messages("@Stickers", reply_message)
+            except Exception as e:
+             print(e)
             if response.text.startswith("This pack has only"):
                await silently_send_message(bot_conv, "Delete anyway")
                
