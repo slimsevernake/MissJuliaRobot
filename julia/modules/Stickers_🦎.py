@@ -366,8 +366,8 @@ def is_message_image(message):
 
 
 async def silently_send_message(conv, text):
-    del = await conv.send_message(text)
-    await del.delete()
+    tmsg = await conv.send_message(text)
+    await tmsg.delete()
     response = await conv.get_response()
     await conv.mark_read(message=response)
     return response
