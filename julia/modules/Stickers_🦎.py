@@ -385,12 +385,6 @@ async def stickerset_exists(conv, setname):
     except StickersetInvalidError:
         return False
 
-async def ispack_valid(conv, setname):
-    try:
-        await tbot(GetStickerSetRequest(InputStickerSetShortName(setname)))
-    except StickersetInvalidError:
-        return False
-
 def resize_image(image, save_locaton):
     """Copyright Rhyse Simpson:
     https://github.com/skittles9823/SkittBot/blob/master/tg_bot/modules/stickers.py
@@ -473,7 +467,7 @@ async def _(event):
     kanga = await event.reply("`Deleting .`")
     
     file_ext_ns_ion = "@MissJuliaRobot.png"
-    file = await event.client.download_file(reply_message.media, file_name=file_ext_ns_ion)    
+    file = await event.client.download_file(reply_message.media)    
     uploaded_sticker = None
     
     if not is_message_image(reply_message):
