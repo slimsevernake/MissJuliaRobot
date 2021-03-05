@@ -19,7 +19,7 @@ from telethon.tl.types import (
     MessageMediaPhoto,
 )
 
-from julia.events import register, juliabot
+from julia.events import register
 from telethon import *
 from telethon import events
 from telethon.tl import functions
@@ -443,7 +443,7 @@ async def _(event):
         reply += f"\nâ€¢ [{title.get_text()}]({link})"
     await event.reply(reply)
 
-@juliabot(pattern="^/rmkang$")
+@register(pattern="^/rmkang$")
 async def _(event):
     approved_userss = approved_users.find({})
     for ch in approved_userss:
@@ -461,8 +461,10 @@ async def _(event):
         await event.reply("Reply to a sticker to remove it from your personal sticker pack.")
         return
     reply_message = await event.get_reply_message()   
-    kanga = await tbot.send_message(event.chat_id, "`Deleting .`")
+    kanga = await event.reply("`Deleting .`")
       
+    file = await ubot.download_file(reply_message, "sticker.webp")
+
     if not is_message_image(reply_message):
         await kanga.edit("Please reply to a sticker.")
         return
@@ -502,7 +504,7 @@ async def _(event):
                 )
                 return
             try:
-             await ubot.forward_messages(bot_conv, reply_message)
+             await ubot.send_file("@Stickers", "sticker.webp")
             except Exception as e:
              print(e)
             if response.text.startswith("This pack has only"):
