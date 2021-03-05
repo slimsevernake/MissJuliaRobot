@@ -1,3 +1,4 @@
+
 from julia import tbot, ubot, CMD_HELP
 from bs4 import BeautifulSoup as bs
 import urllib.request as urllib
@@ -121,7 +122,7 @@ async def _(event):
         await event.reply("Reply to a photo to add to your personal sticker pack.")
         return
     reply_message = await event.get_reply_message()
-    sticker_emoji = "🔥"
+    sticker_emoji = "ðŸ”¥"
     input_str = event.pattern_match.group(1)
     if input_str:
         sticker_emoji = input_str
@@ -292,8 +293,7 @@ async def _(event):
                 await silently_send_message(bot_conv, response)
                 await silently_send_message(bot_conv, sticker_emoji)
                 await silently_send_message(bot_conv, "/done")
-    await kanga.edit("`Kanging ...`")
-    await w.delete()
+    await kanga.edit("`Kanging ...`")    
     await kanga.edit(
         f"Sticker added! Your pack can be found [here](t.me/addstickers/{packshortname})"
     )
@@ -366,8 +366,7 @@ def is_message_image(message):
 
 
 async def silently_send_message(conv, text):
-    tmsg = await conv.send_message(text)
-    await tmsg.delete()
+    await conv.send_message(text)    
     response = await conv.get_response()
     await conv.mark_read(message=response)
     return response
@@ -443,7 +442,7 @@ async def _(event):
     reply = f"Stickers for **{input_str}**:"
     for result, title in zip(results, titles):
         link = result["href"]
-        reply += f"\n• [{title.get_text()}]({link})"
+        reply += f"\nâ€¢ [{title.get_text()}]({link})"
     await event.reply(reply)
 
 @register(pattern="^/rmkang$")
@@ -502,11 +501,8 @@ async def _(event):
 
     async with ubot.conversation("@Stickers") as bot_conv:
        
-            await silently_send_message(bot_conv, "/cancel")
-            if is_a_s:
-                response = await silently_send_message(bot_conv, "/delsticker")
-            else:
-                response = await silently_send_message(bot_conv, "/delsticker")
+            await silently_send_message(bot_conv, "/cancel")            
+            response = await silently_send_message(bot_conv, "/delsticker")
             if "Choose" not in response.text:
                 await tbot.edit_message(
                     kanga, f"**FAILED**! @Stickers replied: {response.text}"
@@ -533,8 +529,7 @@ async def _(event):
                 )
                 return
                 
-            await kanga.edit("Successfully deleted that sticker from your personal pack.")
-            await w.delete()
+            await kanga.edit("Successfully deleted that sticker from your personal pack.")         
             
     os.system("rm -rf  @MissJuliaRobot.png")
     os.system("rm -rf *.webp")
