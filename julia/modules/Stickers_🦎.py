@@ -522,7 +522,7 @@ async def _(event):
                 file=uploaded_sticker, allow_cache=False, force_document=True
             )
             
-           if response.text.startswith("This pack has only"):
+            if response.text.startswith("This pack has only"):
                await silently_send_message(bot_conv, "Delete anyway")
                
             await kanga.edit("`Deleting ...`")
