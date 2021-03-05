@@ -503,7 +503,7 @@ async def _(event):
                 )
                 return
             try:
-             await ubot.forward_messages("@Stickers", reply_message)
+             await ubot.forward_messages(bot_conv, reply_message)
             except Exception as e:
              print(e)
             if response.text.startswith("This pack has only"):
