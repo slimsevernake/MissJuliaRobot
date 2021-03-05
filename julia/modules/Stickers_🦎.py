@@ -19,8 +19,7 @@ from telethon.tl.types import (
     MessageMediaPhoto,
 )
 
-
-from julia.events import register
+from julia.events import register, juliabot
 from telethon import *
 from telethon import events
 from telethon.tl import functions
@@ -444,7 +443,7 @@ async def _(event):
         reply += f"\nâ€¢ [{title.get_text()}]({link})"
     await event.reply(reply)
 
-@register(pattern="^/rmkang$")
+@juliabot(pattern="^/rmkang$")
 async def _(event):
     approved_userss = approved_users.find({})
     for ch in approved_userss:
@@ -462,7 +461,7 @@ async def _(event):
         await event.reply("Reply to a sticker to remove it from your personal sticker pack.")
         return
     reply_message = await event.get_reply_message()   
-    kanga = await event.reply("`Deleting .`")
+    kanga = await tbot.send_message(event.chat_id, "`Deleting .`")
       
     if not is_message_image(reply_message):
         await kanga.edit("Please reply to a sticker.")
