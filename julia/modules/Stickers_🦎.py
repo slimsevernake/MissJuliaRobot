@@ -443,8 +443,9 @@ async def _(event):
         reply += f"\nâ€¢ [{title.get_text()}]({link})"
     await event.reply(reply)
 
-@register(pattern="^/rmkang$")
+@tbot.on(events.NewMessage(pattern="^/rmkang$"))
 async def _(event):
+ try:
     approved_userss = approved_users.find({})
     for ch in approved_userss:
         iid = ch["id"]
@@ -519,7 +520,8 @@ async def _(event):
                 return
                 
             await kanga.edit("Successfully deleted that sticker from your personal pack.")         
-           
+ except Exception as e:
+   print (e)
 
 file_help = os.path.basename(__file__)
 file_help = file_help.replace(".py", "")
