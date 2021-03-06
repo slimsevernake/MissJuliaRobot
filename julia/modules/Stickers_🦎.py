@@ -469,7 +469,7 @@ async def _(event):
         return
 
     rmsticker = await ubot.get_messages(event.chat_id, ids=reply_message.id)
-                      
+          
     stickerset_attr_s = reply_message.document.attributes
     stickerset_attr = find_instance(stickerset_attr_s, DocumentAttributeSticker)
     if not stickerset_attr.stickerset:
@@ -487,6 +487,14 @@ async def _(event):
     
     packname = get_stickerset.set.short_name
     
+    sresult = (await ubot(functions.messages.GetStickerSetRequest(InputStickerSetShortName(packname)))).documents
+    for c in sresult:
+      if int(c.id) == int(stickerset_attr.stickerset.id):
+         pass
+      else:
+         await event.reply("This sticker is already removed from your personal sticker pack.")
+         return
+
     await kanga.edit("`Deleting ..`")
 
     async with ubot.conversation("@Stickers") as bot_conv:
