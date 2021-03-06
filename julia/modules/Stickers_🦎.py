@@ -468,7 +468,7 @@ async def _(event):
         await kanga.edit("Please reply to a sticker.")
         return
 
-    rmsticker = await ubot.get_messages(event.chat_id, reply_message.id)
+    rmsticker = await ubot.get_messages(event.chat_id, ids=reply_message.id)
                       
     stickerset_attr_s = reply_message.document.attributes
     stickerset_attr = find_instance(stickerset_attr_s, DocumentAttributeSticker)
