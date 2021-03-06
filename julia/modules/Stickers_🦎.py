@@ -464,11 +464,11 @@ async def _(event):
     reply_message = await event.get_reply_message()   
     kanga = await event.reply("`Deleting .`")
       
-    await ubot.download_file(reply_message, "sticker.webp")
-
     if not is_message_image(reply_message):
         await kanga.edit("Please reply to a sticker.")
         return
+
+    await ubot.download_file(reply_message, "sticker.webp")
                       
     stickerset_attr_s = reply_message.document.attributes
     stickerset_attr = find_instance(stickerset_attr_s, DocumentAttributeSticker)
@@ -505,7 +505,7 @@ async def _(event):
                 )
                 return
             try:
-             await ubot.send_file("@Stickers", file="sticker.webp")
+             await ubot.send_file("@Stickers", "sticker.webp")
             except Exception as e:
              print(e)
             if response.text.startswith("This pack has only"):
@@ -519,8 +519,9 @@ async def _(event):
                 )
                 return
                 
-            await kanga.edit("Successfully deleted that sticker from your personal pack.")         
+            await kanga.edit("Successfully deleted that sticker from your personal pack.")                    
  except Exception as e:
+   os.remove("sticker.webp")
    print (e)
 
 file_help = os.path.basename(__file__)
