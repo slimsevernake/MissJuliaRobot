@@ -120,7 +120,7 @@ async def _(event):
         await event.reply("Reply to a photo to add to your personal sticker pack.")
         return
     reply_message = await event.get_reply_message()
-    sticker_emoji = "ðŸ”¥"
+    sticker_emoji = "🔥"
     input_str = event.pattern_match.group(1)
     if input_str:
         sticker_emoji = input_str
@@ -468,7 +468,7 @@ async def _(event):
         await kanga.edit("Please reply to a sticker.")
         return
 
-    await ubot.download_file(reply_message, "sticker.webp")
+    rmsticker = await ubot.get_messages(event.chat_id, reply_message.id)
                       
     stickerset_attr_s = reply_message.document.attributes
     stickerset_attr = find_instance(stickerset_attr_s, DocumentAttributeSticker)
@@ -505,7 +505,7 @@ async def _(event):
                 )
                 return
             try:
-             await ubot.send_file("@Stickers", "sticker.webp")
+             await rmsticker.forward_to("@Stickers")
             except Exception as e:
              print(e)
             if response.text.startswith("This pack has only"):
