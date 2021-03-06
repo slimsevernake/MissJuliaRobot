@@ -492,7 +492,7 @@ async def _(event):
       if int(c.id) == int(stickerset_attr.stickerset.id):
          pass
       else:
-         await event.reply("This sticker is already removed from your personal sticker pack.")
+         await kanga.edit("This sticker is already removed from your personal sticker pack.")
          return
 
     await kanga.edit("`Deleting ..`")
