@@ -49,7 +49,7 @@
       "required": false
     },
     "OCR_SPACE_API_KEY": {
-      "description": "Get an API Key from http://OCR.Space",
+      "description": "Get an API Key from http://ocr.Space",
       "required": false
     },
     "GBAN_LOGS": {
@@ -58,7 +58,7 @@
       "required": true
     },
     "REM_BG_API_KEY": {
-      "description": "Get your own API key from https://www.remove.bg/ or feel free to use http://telegram.dog/Remove_BGBot",
+      "description": "Get your own API key from https://www.remove.bg/",
       "required": false
     },
     "SUDO_USERS": {
