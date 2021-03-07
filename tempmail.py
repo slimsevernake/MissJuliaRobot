@@ -1,3 +1,5 @@
+# https://github.com/Temp-Mail-API/Python/blob/master/tempmail.py
+
 import string
 import random
 from hashlib import md5
