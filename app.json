@@ -48,8 +48,8 @@
       "value": "",
       "required": false
     },
-    "OCR_SPACE_API_KEY": {
-      "description": "Get an API Key from http://ocr.Space",
+    "OCR_API_KEY": {
+      "description": "Get an API Key from https://cloudmersive.com/ocr-api",
       "required": false
     },
     "GBAN_LOGS": {
@@ -67,7 +67,7 @@
       "required": false
     },
     "YOUTUBE_API_KEY": {
-      "description": "Place your YouTube API Key here",
+      "description": "Place your YouTube API Key here, check out https://developers.google.com/youtube/v3/getting-started)",
       "value": "",
       "required": false
     },
