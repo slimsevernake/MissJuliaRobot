@@ -115,8 +115,8 @@ async def _(event):
                         )
                     os.remove("results.mp3")
                     os.remove(required_file_name)
-                elif (
-                    transcript_response == "Wolfram Alpha did not understand your input"
+                if (
+                    answer == "Wolfram Alpha did not understand your input"
                 ):
                     try:
                         answer = "Sorry I can't understand"
