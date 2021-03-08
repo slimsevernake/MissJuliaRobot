@@ -32,10 +32,7 @@ def get_reason(id, time, user):
 @register(pattern="^/setalarm (.*)")
 async def _(event):
     if event.fwd_from:
-        return
-    if not event.is_private:
-        await event.reply("Alarms can only be set in my pm.")
-        return
+        return    
     approved_userss = approved_users.find({})
     for ch in approved_userss:
         iid = ch["id"]
@@ -156,7 +153,8 @@ __help__ = """
 
 **Syntax:** `/setalarm 01/01/2000 10:00:00 AM | America/New_York | breakfast`
 
-**NOTE:** Please turn on notifications for @MissJuliaRobot otherwise you will not get notification for the alarm !
+**NOTE:** 
+Please turn on notifications(PM/Group Chat) otherwise you will not get notification for the alarm !
 """
 
 CMD_HELP.update({file_helpo: [file_helpo, __help__]})
