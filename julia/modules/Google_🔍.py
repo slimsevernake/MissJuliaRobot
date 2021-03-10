@@ -59,9 +59,18 @@ async def _(event):
     # SHOW_DESCRIPTION = False
     # + " -inurl:(htm|html|php|pls|txt) intitle:index.of \"last modified\" (mkv|mp4|avi|epub|pdf|mp3)"
     input_str = event.pattern_match.group(1)
-    input_url = "https://bots.shrimadhavuk.me/search/?q={}".format(input_str)
-    headers = {"USER-AGENT": "UniBorg"}
-    response = requests.get(input_url, headers=headers).json()
+    input_url = "https://bots.shrimadhavuk.me/search/?"
+    headers = {"USER-AGENT": "UniBorgV3"}
+    async with aiohttp.ClientSession() as requests:
+        data = {
+            "q": input_str,
+            GOOGLE_SRCH_KEY: GOOGLE_SRCH_VALUE
+        }
+        reponse = await requests.get(
+            input_url + urlencode(data),
+            headers=headers
+        )
+        response = await reponse.json()
     output_str = " "
     for result in response["results"]:
         text = result.get("title")
