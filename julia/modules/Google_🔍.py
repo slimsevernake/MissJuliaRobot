@@ -6,7 +6,9 @@ import glob
 import io
 import os
 import re
+import aiohttp
 import urllib.request
+from urllib.parse import urlencode
 
 import bs4
 import html2text
