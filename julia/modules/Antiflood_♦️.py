@@ -1,4 +1,4 @@
-import html, datetime
+import html
 from typing import Optional, List
 import re, time
 from julia.modules.sql import antiflood_sql as sql
@@ -51,11 +51,7 @@ async def extract_time(message, time_val):
         if not time_num.isdigit():
             await message.reply("Invalid time amount specified.")
             return ""
-
-        if unit == "s":
-            x= datetime.datetime.now()
-            y = x + datetime.timedelta(0,int(time_num))
-            bantime = y
+     
         if unit == "m":
             bantime = int(time.time() + int(time_num) * 60)
         elif unit == "h":
@@ -225,7 +221,7 @@ async def _(event):
 Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."""
                 await event.reply(teks, parse_mode="markdown")
                 return
-            if not any(ttime.endswith(unit) for unit in ("m", "h", "d", "s")):
+            if not any(ttime.endswith(unit) for unit in ("m", "h", "d")):
                await event.reply(
                     "Invalid time type specified. Expected m,h, or d, got: {}".format(
                     ttime)                    
@@ -244,7 +240,7 @@ Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks.
 Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."""           
                 await event.reply(teks, parse_mode="markdown")
                 return
-            if not any(ttime.endswith(unit) for unit in ("m", "h", "d", "s")):
+            if not any(ttime.endswith(unit) for unit in ("m", "h", "d")):
                await event.reply(
                     "Invalid time type specified. Expected m,h, or d, got: {}".format(
                     ttime)                    
@@ -295,7 +291,6 @@ Example: /setflood 10
 Value must be filled for tban and tmute
 
 It can be:
-10s = 10 seconds
 5m = 5 minutes
 6h = 6 hours
 3d = 3 days
