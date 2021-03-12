@@ -1302,7 +1302,7 @@ async def ban(bon):
 Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."""
        await bon.reply(teks, parse_mode="markdown")
        return
-    bantime = await extract_time(message, time)   
+    bantime = await extract_time(bon, time)   
     if bantime == None:
        await bon.reply(
             "Invalid time type specified. Expected m,h, or d, got: {}".format(
@@ -1369,7 +1369,7 @@ async def ban(bon):
 Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."""
        await bon.reply(teks, parse_mode="markdown")
        return
-    bantime = await extract_time(message, time)  
+    bantime = await extract_time(bon, time)  
     if bantime == None:
        await bon.reply(
             "Invalid time type specified. Expected m,h, or d, got: {}".format(
