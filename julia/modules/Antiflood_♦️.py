@@ -221,6 +221,12 @@ async def _(event):
 Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."""
                 await event.reply(teks, parse_mode="markdown")
                 return
+            if not any(ttime.endswith(unit) for unit in ("m", "h", "d")):
+               await event.reply(
+                    "Invalid time type specified. Expected m,h, or d, got: {}".format(
+                    time_val[-1])                    
+               )
+               return
             settypeflood = "tban for {}".format(ttime)
             sql.set_flood_strength(chat_id, 4, str(ttime))
         elif time[0] == "tmute":
@@ -234,6 +240,12 @@ Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks.
 Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."""           
                 await event.reply(teks, parse_mode="markdown")
                 return
+            if not any(ttime.endswith(unit) for unit in ("m", "h", "d")):
+               await event.reply(
+                    "Invalid time type specified. Expected m,h, or d, got: {}".format(
+                    time_val[-1])                    
+               )
+               return
             settypeflood = "tmute for {}".format(ttime)
             sql.set_flood_strength(chat_id, 5, str(ttime))
         else:
