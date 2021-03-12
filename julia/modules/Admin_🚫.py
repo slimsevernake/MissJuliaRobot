@@ -1238,6 +1238,141 @@ async def set_group_sticker(gpic):
         print(e)
         await gpic.reply("Failed to set group sticker pack.")
 
+async def extract_time(message, time_val):
+    if any(time_val.endswith(unit) for unit in ("m", "h", "d")):
+        unit = time_val[-1]
+        time_num = time_val[:-1]  # type: str
+        if not time_num.isdigit():
+            await message.reply("Invalid time amount specified.")
+            return ""
+
+        if unit == "m":
+            bantime = int(time.time() + int(time_num) * 60)
+        elif unit == "h":
+            bantime = int(time.time() + int(time_num) * 60 * 60)
+        elif unit == "d":
+            bantime = int(time.time() + int(time_num) * 24 * 60 * 60)
+        else:
+            return 
+        return bantime
+    else:
+        await message.reply(
+            "Invalid time type specified. Expected m,h, or d, got: {}".format(
+                time_val[-1]
+            )
+        )
+        return 
+
+@register(pattern="^/tban (.*)")
+async def ban(bon):
+    if not bon.is_group:
+        # print("1")
+        return
+    if bon.is_group:
+        if not await can_ban_users(message=bon):
+            # print("2")
+            return
+    
+    quew = bon.pattern_match.group(1)
+
+    if "|" in quew:
+        iid, ttime = quew.split("|")
+    cid = iid.strip()
+    time = ttime.strip()
+    if cid.isnumeric():
+        cid = int(cid)
+    entity = await tbot.get_input_entity(cid)
+    try:
+        r_sender_id = entity.user_id
+    except Exception:
+        await bon.reply("Couldn't fetch that user.")
+        return
+    if not time:
+        await bon.reply("Need a time interval for tban.")
+        return
+
+    if bon.is_group:
+        if await is_register_admin(bon.input_chat, r_sender_id):
+            await bon.reply("Why will i ban an admin ?")
+            return
+        pass
+    else:        
+        return
+    
+    if len(time) == 1:
+       teks = """It looks like you tried to set time value for tban but you didn't specified time; Try, `/tmute <entity> | <timevalue>`.
+Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."""
+       await bon.reply(teks, parse_mode="markdown")
+       return
+    bantime = await extract_time(event, time)            
+    NEW_RIGHTS = ChatBannedRights(
+                 until_date=bantime,
+                 view_messages=True,
+                 send_messages=True,
+                 send_media=True,
+                 send_stickers=True,
+                 send_gifs=True,
+                 send_games=True,
+                 send_inline=True,
+                 embed_links=True)
+    try:
+     await tbot(EditBannedRequest(event.chat_id, r_sender_id, NEW_RIGHTS))
+     await bon.reply(f"Banned for {time}.")
+    except:
+     await bon.reply("Failed to ban.")
+          
+
+@register(pattern="^/tmute (.*)")
+async def ban(bon):
+    if not bon.is_group:
+        # print("1")
+        return
+    if bon.is_group:
+        if not await can_ban_users(message=bon):
+            # print("2")
+            return
+    
+    quew = bon.pattern_match.group(1)
+
+    if "|" in quew:
+        iid, ttime = quew.split("|")
+    cid = iid.strip()
+    time = ttime.strip()
+    if cid.isnumeric():
+        cid = int(cid)
+    entity = await tbot.get_input_entity(cid)
+    try:
+        r_sender_id = entity.user_id
+    except Exception:
+        await bon.reply("Couldn't fetch that user.")
+        return
+    if not time:
+        await bon.reply("Need a time interval for tban.")
+        return
+
+    if bon.is_group:
+        if await is_register_admin(bon.input_chat, r_sender_id):
+            await bon.reply("Why will i ban an admin ?")
+            return
+        pass
+    else:        
+        return
+    
+    if len(time) == 1:
+       teks = """It looks like you tried to set time value for tmute but you didn't specified time; Try, `/tmute <entity> | <timevalue>`.
+Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."""
+       await bon.reply(teks, parse_mode="markdown")
+       return
+    bantime = await extract_time(event, time)            
+    NEW_RIGHTS = ChatBannedRights(
+                 until_date=bantime,
+                 send_messages=True)                 
+    try:
+     await tbot(EditBannedRequest(event.chat_id, r_sender_id, NEW_RIGHTS))
+     await bon.reply(f"Muted for {time}.")
+    except:
+     await bon.reply("Failed to mute.")
+
 
 __help__ = """
  - /adminlist : list of admins in the chat
@@ -1248,6 +1383,8 @@ __help__ = """
  - /unban: unbans a user
  - /mute: mute a user
  - /unmute: unmutes a user
+ - /tban <entity> | <time interval>: temporarily bans a user for the time interval.
+ - /tmute <entity> | <time interval>: temporarily mutes a user for the time interval.
  - /kick: kicks a user
  - /kickme: kicks yourself (non-admins)
  - /banme: bans yourself (non-admins)
