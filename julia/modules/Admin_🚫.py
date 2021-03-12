@@ -1238,13 +1238,13 @@ async def set_group_sticker(gpic):
         print(e)
         await gpic.reply("Failed to set group sticker pack.")
 
-async def extract_time(time_val):
+async def extract_time(message, time_val):
     if any(time_val.endswith(unit) for unit in ("m", "h", "d", "s")):
         unit = time_val[-1]
         time_num = time_val[:-1]  # type: str
         if not time_num.isdigit():
             await message.reply("Invalid time amount specified.")
-            return ""
+            return None
 
         if unit == "s":
             bantime = int(time.time() + int(time_num) * 1)
@@ -1302,7 +1302,7 @@ async def ban(bon):
 Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."""
        await bon.reply(teks, parse_mode="markdown")
        return
-    bantime = await extract_time(time)   
+    bantime = await extract_time(message, time)   
     if bantime == None:
        await bon.reply(
             "Invalid time type specified. Expected m,h, or d, got: {}".format(
@@ -1369,7 +1369,7 @@ async def ban(bon):
 Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."""
        await bon.reply(teks, parse_mode="markdown")
        return
-    bantime = await extract_time(time)  
+    bantime = await extract_time(message, time)  
     if bantime == None:
        await bon.reply(
             "Invalid time type specified. Expected m,h, or d, got: {}".format(
