@@ -395,6 +395,10 @@ async def del_profanity(event):
                     os.remove("nudes.jpg")
 
 
+def extract_emojis(s):
+  return ''.join(c for c in s if c in emoji.UNICODE_EMOJI)
+
+
 @tbot.on(events.NewMessage(pattern=None))
 async def del_profanity(event):
     if event.is_private:
@@ -412,7 +416,9 @@ async def del_profanity(event):
     for c in chats:
         if event.text:
             if event.chat_id == c["id"]:
-                u = msg.split()
+                u = msg.split()      
+                emj = extract_emojis(msg)
+                msg = msg.replace(emj, "")
                 if (
                     [(k) for k in u if k.startswith("@")]
                     and [(k) for k in u if k.startswith("#")]
