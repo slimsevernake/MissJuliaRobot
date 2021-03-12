@@ -1263,8 +1263,9 @@ async def extract_time(message, time_val):
         )
         return 
 
-@register(pattern="^/tban (.*)")
+@tbot.on(events.NewMessage(pattern="^/tban (.*)"))
 async def ban(bon):
+ try:
     if not bon.is_group:
         # print("1")
         return
@@ -1320,7 +1321,8 @@ Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks.
      await bon.reply(f"Banned for {time}.")
     except:
      await bon.reply("Failed to ban.")
-          
+ except Exception as e:       
+     print (e)
 
 @register(pattern="^/tmute (.*)")
 async def ban(bon):
