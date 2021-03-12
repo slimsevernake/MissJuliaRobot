@@ -1305,7 +1305,7 @@ async def ban(bon):
 Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."""
        await bon.reply(teks, parse_mode="markdown")
        return
-    bantime = await extract_time(event, time)            
+    bantime = await extract_time(bon, time)            
     NEW_RIGHTS = ChatBannedRights(
                  until_date=bantime,
                  view_messages=True,
@@ -1317,7 +1317,7 @@ Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks.
                  send_inline=True,
                  embed_links=True)
     try:
-     await tbot(EditBannedRequest(event.chat_id, r_sender_id, NEW_RIGHTS))
+     await tbot(EditBannedRequest(bon.chat_id, r_sender_id, NEW_RIGHTS))
      await bon.reply(f"Banned for {time}.")
     except:
      await bon.reply("Failed to ban.")
@@ -1365,12 +1365,12 @@ async def ban(bon):
 Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."""
        await bon.reply(teks, parse_mode="markdown")
        return
-    bantime = await extract_time(event, time)            
+    bantime = await extract_time(bon, time)            
     NEW_RIGHTS = ChatBannedRights(
                  until_date=bantime,
                  send_messages=True)                 
     try:
-     await tbot(EditBannedRequest(event.chat_id, r_sender_id, NEW_RIGHTS))
+     await tbot(EditBannedRequest(bon.chat_id, r_sender_id, NEW_RIGHTS))
      await bon.reply(f"Muted for {time}.")
     except:
      await bon.reply("Failed to mute.")
