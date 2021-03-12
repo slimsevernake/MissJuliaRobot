@@ -42,6 +42,10 @@ async def is_register_admin(chat, user):
     if isinstance(chat, types.InputPeerUser):
         return True
 
+def google_search(search_term, api_key, cse_id, kwargs):
+      service = build("customsearch", "v1", developerKey=api_key)
+      res = service.cse().list(q=search_term, cx=cse_id, kwargs).execute()
+      return res['items']
 
 @register(pattern="^/google (.*)")
 async def _(event):
@@ -58,28 +62,21 @@ async def _(event):
             pass
         else:
             return
-    # SHOW_DESCRIPTION = False
-    # + " -inurl:(htm|html|php|pls|txt) intitle:index.of \"last modified\" (mkv|mp4|avi|epub|pdf|mp3)"
     input_str = event.pattern_match.group(1)
-    input_url = "https://bots.shrimadhavuk.me/search/?"
-    headers = {"USER-AGENT": "UniBorgV3"}
-    async with aiohttp.ClientSession() as requests:
-        data = {
-            "q": input_str,
-            GOOGLE_SRCH_KEY: GOOGLE_SRCH_VALUE
-        }
-        reponse = await requests.get(
-            input_url + urlencode(data),
-            headers=headers
-        )
-        response = await reponse.json()
+
+    my_api_key = GOOGLE_SRCH_VALUE
+    my_cse_id = GOOGLE_SRCH_KEY
+  
+    results= google_search(input_str,my_api_key,my_cse_id,num=10) 
+
     output_str = " "
-    for result in response["results"]:
-        text = result.get("title")
-        url = result.get("url")
-        description = result.get("description")
+    for result in results:       
+        text = str(result["title"])
+        url = str(result["link"])
+        description = str(result["description"])
         last = html2text.html2text(description)
         output_str += "[{}]({})\n{}\n".format(text, url, last)
+
     await event.reply(
         "{}".format(output_str), link_preview=False, parse_mode="Markdown"
     )
