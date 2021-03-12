@@ -34,7 +34,7 @@ async def is_register_admin(chat, user):
 async def _(event):
     if event.fwd_from:
         return
-    """this method of approve system is made by @AyushChatterjee, god will curse your family if you kang it motherfucker"""
+    
     approved_userss = approved_users.find({})
     for ch in approved_userss:
         iid = ch["id"]
