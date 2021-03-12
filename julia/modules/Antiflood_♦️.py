@@ -293,6 +293,7 @@ Example: /setflood 10
 Value must be filled for tban and tmute
 
 It can be:
+10s = 10 seconds
 5m = 5 minutes
 6h = 6 hours
 3d = 3 days
