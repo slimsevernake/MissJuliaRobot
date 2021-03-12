@@ -74,7 +74,7 @@ async def _(event):
     for result in results:       
         text = str(result["title"])
         url = str(result["link"])
-        description = str(result["description"])
+        description = str(result["htmlSnippet"])
         last = html2text.html2text(description)
         output_str += "[{}]({})\n{}\n".format(text, url, last)
 
