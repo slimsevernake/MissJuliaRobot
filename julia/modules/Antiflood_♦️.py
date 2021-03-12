@@ -1,4 +1,4 @@
-import html
+import html, datetime
 from typing import Optional, List
 import re, time
 from julia.modules.sql import antiflood_sql as sql
@@ -53,7 +53,9 @@ async def extract_time(message, time_val):
             return ""
 
         if unit == "s":
-            bantime = int(time.time() + int(time_num) * 1)
+            x= datetime.datetime.now()
+            y = x + datetime.timedelta(0,int(time_num))
+            bantime = y
         if unit == "m":
             bantime = int(time.time() + int(time_num) * 60)
         elif unit == "h":
