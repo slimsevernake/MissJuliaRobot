@@ -1239,13 +1239,15 @@ async def set_group_sticker(gpic):
         await gpic.reply("Failed to set group sticker pack.")
 
 async def extract_time(message, time_val):
-    if any(time_val.endswith(unit) for unit in ("m", "h", "d")):
+    if any(time_val.endswith(unit) for unit in ("m", "h", "d", "s")):
         unit = time_val[-1]
         time_num = time_val[:-1]  # type: str
         if not time_num.isdigit():
             await message.reply("Invalid time amount specified.")
             return ""
 
+        if unit == "s":
+            bantime = int(time.time() + int(time_num) * 1)
         if unit == "m":
             bantime = int(time.time() + int(time_num) * 60)
         elif unit == "h":
@@ -1261,7 +1263,7 @@ async def extract_time(message, time_val):
                 time_val[-1]
             )
         )
-        return 
+        return None
 
 @tbot.on(events.NewMessage(pattern="^/tban (.*)"))
 async def ban(bon):
@@ -1305,7 +1307,9 @@ async def ban(bon):
 Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."""
        await bon.reply(teks, parse_mode="markdown")
        return
-    bantime = await extract_time(bon, time)            
+    bantime = await extract_time(bon, time)   
+    if bantime == None:
+       return
     NEW_RIGHTS = ChatBannedRights(
                  until_date=bantime,
                  view_messages=True,
@@ -1365,7 +1369,9 @@ async def ban(bon):
 Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."""
        await bon.reply(teks, parse_mode="markdown")
        return
-    bantime = await extract_time(bon, time)            
+    bantime = await extract_time(bon, time)  
+    if bantime == None:
+       return          
     NEW_RIGHTS = ChatBannedRights(
                  until_date=bantime,
                  send_messages=True)                 
