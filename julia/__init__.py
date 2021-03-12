@@ -54,6 +54,9 @@ if ENV:
     UPSTREAM_REPO_URL = os.environ.get("UPSTREAM_REPO_URL", None)
     CONSOLE_LOGGER_VERBOSE = os.environ.get("CONSOLE_LOGGER_VERBOSE", "False")
     BOT_ID = int(os.environ.get("BOT_ID", None))
+    GOOGLE_SRCH_KEY = os.environ.get("GOOGLE_SRCH_KEY", None)
+    GOOGLE_SRCH_VALUE = os.environ.get("GOOGLE_SRCH_VALUE", None)
+
     if CONSOLE_LOGGER_VERBOSE:
         basicConfig(
             format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=DEBUG
