@@ -52,6 +52,8 @@ async def extract_time(message, time_val):
             await message.reply("Invalid time amount specified.")
             return ""
 
+        if unit == "s":
+            bantime = int(time.time() + int(time_num) * 1)
         if unit == "m":
             bantime = int(time.time() + int(time_num) * 60)
         elif unit == "h":
@@ -221,7 +223,7 @@ async def _(event):
 Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."""
                 await event.reply(teks, parse_mode="markdown")
                 return
-            if not any(ttime.endswith(unit) for unit in ("m", "h", "d")):
+            if not any(ttime.endswith(unit) for unit in ("m", "h", "d", "s")):
                await event.reply(
                     "Invalid time type specified. Expected m,h, or d, got: {}".format(
                     ttime)                    
@@ -240,7 +242,7 @@ Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks.
 Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."""           
                 await event.reply(teks, parse_mode="markdown")
                 return
-            if not any(ttime.endswith(unit) for unit in ("m", "h", "d")):
+            if not any(ttime.endswith(unit) for unit in ("m", "h", "d", "s")):
                await event.reply(
                     "Invalid time type specified. Expected m,h, or d, got: {}".format(
                     ttime)                    
