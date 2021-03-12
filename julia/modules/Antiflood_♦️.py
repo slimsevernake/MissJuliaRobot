@@ -224,7 +224,7 @@ Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks.
             if not any(ttime.endswith(unit) for unit in ("m", "h", "d")):
                await event.reply(
                     "Invalid time type specified. Expected m,h, or d, got: {}".format(
-                    time_val[-1])                    
+                    ttime)                    
                )
                return
             settypeflood = "tban for {}".format(ttime)
@@ -243,7 +243,7 @@ Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks.
             if not any(ttime.endswith(unit) for unit in ("m", "h", "d")):
                await event.reply(
                     "Invalid time type specified. Expected m,h, or d, got: {}".format(
-                    time_val[-1])                    
+                    ttime)                    
                )
                return
             settypeflood = "tmute for {}".format(ttime)
