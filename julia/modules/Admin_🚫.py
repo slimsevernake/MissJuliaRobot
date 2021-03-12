@@ -20,7 +20,7 @@ from telethon import *
 from telethon.tl import *
 from telethon.errors import *
 
-import os, datetime
+import os
 from time import sleep
 from telethon import events
 from telethon.errors import FloodWaitError, ChatNotModifiedError
@@ -1245,11 +1245,7 @@ async def extract_time(message, time_val):
         if not time_num.isdigit():
             await message.reply("Invalid time amount specified.")
             return None
-
-        if unit == "s":
-            x= datetime.datetime.now()
-            y = x + datetime.timedelta(0,int(time_num))
-            bantime = y
+      
         if unit == "m":
             bantime = int(time.time() + int(time_num) * 60)
         elif unit == "h":
@@ -1307,7 +1303,7 @@ Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks.
     bantime = await extract_time(bon, time)   
     if bantime == None:
        await bon.reply(
-            "Invalid time type specified. Expected m,h,s, or d, got: {}".format(
+            "Invalid time type specified. Expected m,h, or d, got: {}".format(
                 time
             )
        )
@@ -1374,7 +1370,7 @@ Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks.
     bantime = await extract_time(bon, time)  
     if bantime == None:
        await bon.reply(
-            "Invalid time type specified. Expected m,h,s or d, got: {}".format(
+            "Invalid time type specified. Expected m,h, or d, got: {}".format(
                 time
             )
        )
