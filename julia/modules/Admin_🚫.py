@@ -1240,7 +1240,7 @@ async def set_group_sticker(gpic):
 
 
 async def extract_time(message, time_val):
-    if any(time_val.endswith(unit) for unit in ("m", "h", "d", "s")):
+    if any(time_val.endswith(unit) for unit in ("m", "h", "d")):
         unit = time_val[-1]
         time_num = time_val[:-1]  # type: str
         if not time_num.isdigit():
@@ -1260,7 +1260,7 @@ async def extract_time(message, time_val):
         return None
 
 
-@tbot.on(events.NewMessage(pattern="^/tban (.*)"))
+@register(pattern="^/tban (.*)")
 async def ban(bon):
     try:
         if not bon.is_group:
