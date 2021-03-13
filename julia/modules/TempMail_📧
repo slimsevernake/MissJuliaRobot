@@ -65,7 +65,11 @@ async def _(event):
     email = addr["email"]
     hash = addr["hash"]
     mails = get_mailbox(email=email, email_hash=hash)
-    print (mails)
+    for key, value in mails.items():
+        if value == "There are no emails yet":
+           await event.reply('There are no emails yet')
+           return
+
 
 __help__ = """
  - /neemail: Registers your account for a new email address
