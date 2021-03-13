@@ -95,29 +95,9 @@ async def _(event):
                     server = f"https://api.wolframalpha.com/v1/spoken?appid={appid}&i={string_to_show}"
                     res = get(server)
                     answer = res.text
+                    if answer == "Wolfram Alpha did not understand your input" or answer == "No spoken result available":                 
+                       answer = "Sorry I can't understand"                    
                     try:
-                        tts = gTTS(answer, tld="com", lang="en")
-                        tts.save("results.mp3")
-                    except AssertionError:
-                        return
-                    except ValueError:
-                        return
-                    except RuntimeError:
-                        return
-                    except gTTSError:
-                        return
-                    with open("results.mp3", "r"):
-                        await tbot.send_file(
-                            event.chat_id,
-                            "results.mp3",
-                            voice_note=True,
-                            reply_to=event.id,
-                        )
-                    os.remove("results.mp3")
-                    os.remove(required_file_name)
-                if answer == "Wolfram Alpha did not understand your input" or answer == "No spoken result available":
-                    try:
-                        answer = "Sorry I can't understand"
                         tts = gTTS(answer, tld="com", lang="en")
                         tts.save("results.mp3")
                     except AssertionError:
