@@ -67,7 +67,7 @@ async def _(event):
     addr = get_email(event.sender_id)
     email = addr["email"]
     hash = addr["hash"]
-    mails = get_mailbox(email=email, email_hash=hash)
+    mails = tm.get_mailbox(email=email, email_hash=hash)
     for key, value in mails.items():
         if value == "There are no emails yet":
            await event.reply('There are no emails yet')
