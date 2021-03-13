@@ -6,6 +6,7 @@ from pymongo import MongoClient
 from telethon import types, events
 from telethon.tl import *
 from telethon.tl.types import *
+from telegraph import Telegraph
 
 client = MongoClient(MONGO_DB_URI)
 db = client["missjuliarobot"]
@@ -69,6 +70,16 @@ async def _(event):
         if value == "There are no emails yet":
            await event.reply('There are no emails yet')
            return
+    for i in mails:
+        from = i['mail_from']
+        subject =i['mail_subject']
+
+    
+    telegraph = Telegraph()
+    telegraph.create_account(short_name='MissJuliaRobot')
+    response = telegraph.create_page(
+                 ,
+               html_content=)
 
 
 __help__ = """
