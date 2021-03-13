@@ -125,6 +125,16 @@
       "description": "Required for chromedriver",
       "value": "/app/.chromedriver/bin/chromedriver",
       "required": false
+    },
+    "GOOGLE_SRCH_KEY": {
+      "description": "Required for google search, get it from from https://developers.google.com/custom-search/v1/overview",
+      "value": "",
+      "required": false
+    },
+    "GOOGLE_SRCH_VALUE": {
+      "description": "Required for google search, get it from get your api key from https://developers.google.com/custom-search/v1/overview",
+      "value": "",
+      "required": false
     }
   },
   "addons": [
