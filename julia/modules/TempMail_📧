@@ -100,7 +100,7 @@ async def _(event):
            
 
 __help__ = """
- - /neemail: Registers your account for a new email address
+ - /newemail: Registers your account for a new email address
  - /myaddress: Gives your current email address
  - /checkinbox: Checks the inbox associated with the account for new emails
 """
