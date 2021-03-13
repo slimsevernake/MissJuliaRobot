@@ -13,7 +13,7 @@ db = client["missjuliarobot"]
 tmail = db.tempmail
 
 tm = TempMail()
-api_host = 'privatix-temp-mail-v1.p.rapidapi.com'
+api_host = TEMP_MAIL_HOST
 api_key=TEMP_MAIL_KEY
 tm.set_header(api_host,api_key)
 
@@ -87,6 +87,15 @@ async def _(event):
                html_content=final)
     print('https://telegra.ph/{}'.format(response['path']))
 
+@tbot.on(events.NewMessage(pattern=None))
+async def _(event):   
+    gmail = tmail.find({})
+    for c in gmail:
+        if event.sender_id == c["user"]:
+           addr = get_email(event.sender_id)
+           email = addr["email"]
+           hash = addr["hash"]
+           
 
 __help__ = """
  - /neemail: Registers your account for a new email address
