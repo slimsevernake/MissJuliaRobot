@@ -73,13 +73,19 @@ async def _(event):
     for i in mails:
         from = i['mail_from']
         subject =i['mail_subject']
-
+        time = i[]
     
     telegraph = Telegraph()
     telegraph.create_account(short_name='MissJuliaRobot')
+    if subject == "":
+       subject = "No Subject"
+
+    headers = "**FROM**: {from}\n**TO**: {email}\n**DATE"**: {time}\n\n"
+    
     response = telegraph.create_page(
-                 ,
-               html_content=)
+               subject, 
+               html_content=final)
+    print('https://telegra.ph/{}'.format(response['path']))
 
 
 __help__ = """
