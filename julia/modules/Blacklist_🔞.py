@@ -40,7 +40,7 @@ async def is_register_admin(chat, user):
 @tbot.on(events.NewMessage(incoming=True))
 async def on_new_message(event):
     # TODO: exempt admins from locks
-    if event.is_private: 
+    if event.is_private:
         return
     if await is_register_admin(event.input_chat, event.message.sender_id):
         return
@@ -230,8 +230,8 @@ async def _(event):
 
 @tbot.on(events.NewMessage(incoming=True))
 async def on_url_message(event):
-    if event.is_private: 
-        return 
+    if event.is_private:
+        return
     chat = event.chat
     extracted_domains = []
     for (ent, txt) in event.get_entities_text():

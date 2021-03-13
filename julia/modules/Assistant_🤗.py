@@ -55,7 +55,10 @@ async def _(event):
         appid = WOLFRAM_ID
         server = f"https://api.wolframalpha.com/v1/spoken?appid={appid}&i={i}"
         res = get(server)
-        if res.text == "Wolfram Alpha did not understand your input" or res.text == "No spoken result available":
+        if (
+            res.text == "Wolfram Alpha did not understand your input"
+            or res.text == "No spoken result available"
+        ):
             await event.reply("Sorry I can't understand")
             return
         await event.reply(f"**{i}**\n\n" + res.text, parse_mode="markdown")
@@ -95,8 +98,11 @@ async def _(event):
                     server = f"https://api.wolframalpha.com/v1/spoken?appid={appid}&i={string_to_show}"
                     res = get(server)
                     answer = res.text
-                    if answer == "Wolfram Alpha did not understand your input" or answer == "No spoken result available":                 
-                       answer = "Sorry I can't understand"                    
+                    if (
+                        answer == "Wolfram Alpha did not understand your input"
+                        or answer == "No spoken result available"
+                    ):
+                        answer = "Sorry I can't understand"
                     try:
                         tts = gTTS(answer, tld="com", lang="en")
                         tts.save("results.mp3")

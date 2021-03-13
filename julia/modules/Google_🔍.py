@@ -43,10 +43,12 @@ async def is_register_admin(chat, user):
     if isinstance(chat, types.InputPeerUser):
         return True
 
+
 def google_search(search_term, api_key, cse_id, **kwargs):
- service = build("customsearch", "v1", developerKey=api_key)
- res = service.cse().list(q=search_term, cx=cse_id, **kwargs).execute()
- return res['items']
+    service = build("customsearch", "v1", developerKey=api_key)
+    res = service.cse().list(q=search_term, cx=cse_id, **kwargs).execute()
+    return res["items"]
+
 
 @register(pattern="^/google (.*)")
 async def _(event):
@@ -67,11 +69,11 @@ async def _(event):
 
     my_api_key = GOOGLE_SRCH_VALUE
     my_cse_id = GOOGLE_SRCH_KEY
-  
-    results= google_search(input_str,my_api_key,my_cse_id,num=10) 
+
+    results = google_search(input_str, my_api_key, my_cse_id, num=10)
 
     output_str = " "
-    for result in results:       
+    for result in results:
         text = str(result["title"])
         url = str(result["link"])
         description = str(result["htmlSnippet"])

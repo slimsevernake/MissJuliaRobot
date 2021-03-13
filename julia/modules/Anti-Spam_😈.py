@@ -29,6 +29,7 @@ profanity.load_censor_words_from_file("./profanity_wordlist.txt")
 
 translator = google_translator()
 
+
 async def can_change_info(message):
     result = await tbot(
         functions.channels.GetParticipantRequest(
@@ -179,8 +180,8 @@ async def _(event):
 
 @tbot.on(events.NewMessage(pattern=None))
 async def _(event):
-    if event.is_private: 
-        return 
+    if event.is_private:
+        return
     approved_userss = approved_users.find({})
     for ch in approved_userss:
         iid = ch["id"]
@@ -397,7 +398,7 @@ async def del_profanity(event):
 
 
 def extract_emojis(s):
-  return ''.join(c for c in s if c in emoji.UNICODE_EMOJI)
+    return "".join(c for c in s if c in emoji.UNICODE_EMOJI)
 
 
 @tbot.on(events.NewMessage(pattern=None))
@@ -417,7 +418,7 @@ async def del_profanity(event):
     for c in chats:
         if event.text:
             if event.chat_id == c["id"]:
-                u = msg.split()      
+                u = msg.split()
                 emj = extract_emojis(msg)
                 msg = msg.replace(emj, "")
                 if (
@@ -442,9 +443,9 @@ async def del_profanity(event):
                     rm = re.sub(r"\[([^]]+)]\(\s*([^)]+)\s*\)", r"", msg)
                 else:
                     rm = msg
-                # print (rm)                                
-                b = translator.detect(rm)                               
-                if not "en" in b and not b=="":
+                # print (rm)
+                b = translator.detect(rm)
+                if not "en" in b and not b == "":
                     await event.delete()
                     st = sender.first_name
                     hh = sender.id
@@ -456,8 +457,8 @@ async def del_profanity(event):
 
 @tbot.on(events.ChatAction())
 async def del_cleanservice(event):
-    if event.is_private: 
-        return 
+    if event.is_private:
+        return
     chats = cleanservices.find({})
     for c in chats:
         if event.chat_id == c["id"]:

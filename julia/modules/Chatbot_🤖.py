@@ -118,9 +118,9 @@ async def _(event):
                 sesh, exp = sql.get_ses(chat.id)
         except ValueError:
             pass
-        try:          
-                rep = api_client.think_thought(sesh, query)
-                await event.reply(rep)
+        try:
+            rep = api_client.think_thought(sesh, query)
+            await event.reply(rep)
         except CFError as e:
             print(e)
 

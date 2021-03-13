@@ -1238,6 +1238,7 @@ async def set_group_sticker(gpic):
         print(e)
         await gpic.reply("Failed to set group sticker pack.")
 
+
 async def extract_time(message, time_val):
     if any(time_val.endswith(unit) for unit in ("m", "h", "d", "s")):
         unit = time_val[-1]
@@ -1245,7 +1246,7 @@ async def extract_time(message, time_val):
         if not time_num.isdigit():
             await message.reply("Invalid time amount specified.")
             return None
-      
+
         if unit == "m":
             bantime = int(time.time() + int(time_num) * 60)
         elif unit == "h":
@@ -1253,78 +1254,79 @@ async def extract_time(message, time_val):
         elif unit == "d":
             bantime = int(time.time() + int(time_num) * 24 * 60 * 60)
         else:
-            return 
+            return
         return bantime
-    else:        
+    else:
         return None
+
 
 @tbot.on(events.NewMessage(pattern="^/tban (.*)"))
 async def ban(bon):
- try:
-    if not bon.is_group:
-        # print("1")
-        return
-    if bon.is_group:
-        if not await can_ban_users(message=bon):
-            # print("2")
-            return
-    
-    quew = bon.pattern_match.group(1)
-
-    if "|" in quew:
-        iid, ttime = quew.split("|")
-    cid = iid.strip()
-    time = ttime.strip()
-    if cid.isnumeric():
-        cid = int(cid)
-    entity = await tbot.get_input_entity(cid)
     try:
-        r_sender_id = entity.user_id
-    except Exception:
-        await bon.reply("Couldn't fetch that user.")
-        return
-    if not time:
-        await bon.reply("Need a time interval for tban.")
-        return
-
-    if bon.is_group:
-        if await is_register_admin(bon.input_chat, r_sender_id):
-            await bon.reply("Why will i ban an admin ?")
+        if not bon.is_group:
+            # print("1")
             return
-        pass
-    else:        
-        return
-    
-    if len(time) == 1:
-       teks = """It looks like you tried to set time value for tban but you didn't specified time; Try, `/tmute <entity> | <timevalue>`.
+        if bon.is_group:
+            if not await can_ban_users(message=bon):
+                # print("2")
+                return
+
+        quew = bon.pattern_match.group(1)
+
+        if "|" in quew:
+            iid, ttime = quew.split("|")
+        cid = iid.strip()
+        time = ttime.strip()
+        if cid.isnumeric():
+            cid = int(cid)
+        entity = await tbot.get_input_entity(cid)
+        try:
+            r_sender_id = entity.user_id
+        except Exception:
+            await bon.reply("Couldn't fetch that user.")
+            return
+        if not time:
+            await bon.reply("Need a time interval for tban.")
+            return
+
+        if bon.is_group:
+            if await is_register_admin(bon.input_chat, r_sender_id):
+                await bon.reply("Why will i ban an admin ?")
+                return
+            pass
+        else:
+            return
+
+        if len(time) == 1:
+            teks = """It looks like you tried to set time value for tban but you didn't specified time; Try, `/tmute <entity> | <timevalue>`.
 Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."""
-       await bon.reply(teks, parse_mode="markdown")
-       return
-    bantime = await extract_time(bon, time)   
-    if bantime == None:
-       await bon.reply(
-            "Invalid time type specified. Expected m,h, or d, got: {}".format(
-                time
+            await bon.reply(teks, parse_mode="markdown")
+            return
+        bantime = await extract_time(bon, time)
+        if bantime == None:
+            await bon.reply(
+                "Invalid time type specified. Expected m,h, or d, got: {}".format(time)
             )
-       )
-       return
-    NEW_RIGHTS = ChatBannedRights(
-                 until_date=bantime,
-                 view_messages=True,
-                 send_messages=True,
-                 send_media=True,
-                 send_stickers=True,
-                 send_gifs=True,
-                 send_games=True,
-                 send_inline=True,
-                 embed_links=True)
-    try:
-     await tbot(EditBannedRequest(bon.chat_id, r_sender_id, NEW_RIGHTS))
-     await bon.reply(f"Banned for {time}.")
-    except:
-     await bon.reply("Failed to ban.")
- except Exception as e:       
-     print (e)
+            return
+        NEW_RIGHTS = ChatBannedRights(
+            until_date=bantime,
+            view_messages=True,
+            send_messages=True,
+            send_media=True,
+            send_stickers=True,
+            send_gifs=True,
+            send_games=True,
+            send_inline=True,
+            embed_links=True,
+        )
+        try:
+            await tbot(EditBannedRequest(bon.chat_id, r_sender_id, NEW_RIGHTS))
+            await bon.reply(f"Banned for {time}.")
+        except:
+            await bon.reply("Failed to ban.")
+    except Exception as e:
+        print(e)
+
 
 @register(pattern="^/tmute (.*)")
 async def ban(bon):
@@ -1335,7 +1337,7 @@ async def ban(bon):
         if not await can_ban_users(message=bon):
             # print("2")
             return
-    
+
     quew = bon.pattern_match.group(1)
 
     if "|" in quew:
@@ -1359,30 +1361,26 @@ async def ban(bon):
             await bon.reply("Why will i ban an admin ?")
             return
         pass
-    else:        
+    else:
         return
-    
+
     if len(time) == 1:
-       teks = """It looks like you tried to set time value for tmute but you didn't specified time; Try, `/tmute <entity> | <timevalue>`.
+        teks = """It looks like you tried to set time value for tmute but you didn't specified time; Try, `/tmute <entity> | <timevalue>`.
 Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."""
-       await bon.reply(teks, parse_mode="markdown")
-       return
-    bantime = await extract_time(bon, time)  
+        await bon.reply(teks, parse_mode="markdown")
+        return
+    bantime = await extract_time(bon, time)
     if bantime == None:
-       await bon.reply(
-            "Invalid time type specified. Expected m,h, or d, got: {}".format(
-                time
-            )
-       )
-       return          
-    NEW_RIGHTS = ChatBannedRights(
-                 until_date=bantime,
-                 send_messages=True)                 
+        await bon.reply(
+            "Invalid time type specified. Expected m,h, or d, got: {}".format(time)
+        )
+        return
+    NEW_RIGHTS = ChatBannedRights(until_date=bantime, send_messages=True)
     try:
-     await tbot(EditBannedRequest(bon.chat_id, r_sender_id, NEW_RIGHTS))
-     await bon.reply(f"Muted for {time}.")
+        await tbot(EditBannedRequest(bon.chat_id, r_sender_id, NEW_RIGHTS))
+        await bon.reply(f"Muted for {time}.")
     except:
-     await bon.reply("Failed to mute.")
+        await bon.reply("Failed to mute.")
 
 
 __help__ = """

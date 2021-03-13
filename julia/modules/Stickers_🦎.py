@@ -291,13 +291,14 @@ async def _(event):
                 await silently_send_message(bot_conv, response)
                 await silently_send_message(bot_conv, sticker_emoji)
                 await silently_send_message(bot_conv, "/done")
-    await kanga.edit("`Kanging ...`")    
+    await kanga.edit("`Kanging ...`")
     await kanga.edit(
         f"Sticker added! Your pack can be found [here](t.me/addstickers/{packshortname})"
     )
     os.system("rm -rf  @MissJuliaRobot.png")
     os.system("rm -rf  AnimatedSticker.tgs")
     os.system("rm -rf *.webp")
+
 
 @register(pattern="^/getsticker$")
 async def _(event):
@@ -340,6 +341,7 @@ async def _(event):
         )
     os.remove("sticker.png")
 
+
 def is_it_animated_sticker(message):
     try:
         if message.media and message.media.document:
@@ -364,7 +366,7 @@ def is_message_image(message):
 
 
 async def silently_send_message(conv, text):
-    await conv.send_message(text)    
+    await conv.send_message(text)
     response = await conv.get_response()
     await conv.mark_read(message=response)
     return response
@@ -381,6 +383,7 @@ async def stickerset_exists(conv, setname):
         return True
     except StickersetInvalidError:
         return False
+
 
 def resize_image(image, save_locaton):
     """Copyright Rhyse Simpson:
@@ -443,63 +446,74 @@ async def _(event):
         reply += f"\nâ€¢ [{title.get_text()}]({link})"
     await event.reply(reply)
 
+
 @tbot.on(events.NewMessage(pattern="^/rmkang$"))
 async def _(event):
- try:
-    approved_userss = approved_users.find({})
-    for ch in approved_userss:
-        iid = ch["id"]
-        userss = ch["user"]
-    if event.is_group:
-        if await is_register_admin(event.input_chat, event.message.sender_id):
-            pass
-        elif event.chat_id == iid and event.sender_id == userss:
-            pass
-        else:
+    try:
+        approved_userss = approved_users.find({})
+        for ch in approved_userss:
+            iid = ch["id"]
+            userss = ch["user"]
+        if event.is_group:
+            if await is_register_admin(event.input_chat, event.message.sender_id):
+                pass
+            elif event.chat_id == iid and event.sender_id == userss:
+                pass
+            else:
+                return
+
+        if not event.is_reply:
+            await event.reply(
+                "Reply to a sticker to remove it from your personal sticker pack."
+            )
+            return
+        reply_message = await event.get_reply_message()
+        kanga = await event.reply("`Deleting .`")
+
+        if not is_message_image(reply_message):
+            await kanga.edit("Please reply to a sticker.")
             return
 
-    if not event.is_reply:
-        await event.reply("Reply to a sticker to remove it from your personal sticker pack.")
-        return
-    reply_message = await event.get_reply_message()   
-    kanga = await event.reply("`Deleting .`")
-      
-    if not is_message_image(reply_message):
-        await kanga.edit("Please reply to a sticker.")
-        return
+        rmsticker = await ubot.get_messages(event.chat_id, ids=reply_message.id)
 
-    rmsticker = await ubot.get_messages(event.chat_id, ids=reply_message.id)
-          
-    stickerset_attr_s = reply_message.document.attributes
-    stickerset_attr = find_instance(stickerset_attr_s, DocumentAttributeSticker)
-    if not stickerset_attr.stickerset:
-        await event.reply("Sticker does not belong to a pack.")
-        return
-        
-    get_stickerset = await tbot(
-        GetStickerSetRequest(
-            InputStickerSetID(
-                id=stickerset_attr.stickerset.id,
-                access_hash=stickerset_attr.stickerset.access_hash,
+        stickerset_attr_s = reply_message.document.attributes
+        stickerset_attr = find_instance(stickerset_attr_s, DocumentAttributeSticker)
+        if not stickerset_attr.stickerset:
+            await event.reply("Sticker does not belong to a pack.")
+            return
+
+        get_stickerset = await tbot(
+            GetStickerSetRequest(
+                InputStickerSetID(
+                    id=stickerset_attr.stickerset.id,
+                    access_hash=stickerset_attr.stickerset.access_hash,
+                )
             )
         )
-    )
-    
-    packname = get_stickerset.set.short_name
-    
-    sresult = (await ubot(functions.messages.GetStickerSetRequest(InputStickerSetShortName(packname)))).documents
-    for c in sresult:
-      if int(c.id) == int(stickerset_attr.stickerset.id):
-         pass
-      else:
-         await kanga.edit("This sticker is already removed from your personal sticker pack.")
-         return
 
-    await kanga.edit("`Deleting ..`")
+        packname = get_stickerset.set.short_name
 
-    async with ubot.conversation("@Stickers") as bot_conv:
-       
-            await silently_send_message(bot_conv, "/cancel")            
+        sresult = (
+            await ubot(
+                functions.messages.GetStickerSetRequest(
+                    InputStickerSetShortName(packname)
+                )
+            )
+        ).documents
+        for c in sresult:
+            if int(c.id) == int(stickerset_attr.stickerset.id):
+                pass
+            else:
+                await kanga.edit(
+                    "This sticker is already removed from your personal sticker pack."
+                )
+                return
+
+        await kanga.edit("`Deleting ..`")
+
+        async with ubot.conversation("@Stickers") as bot_conv:
+
+            await silently_send_message(bot_conv, "/cancel")
             response = await silently_send_message(bot_conv, "/delsticker")
             if "Choose" not in response.text:
                 await tbot.edit_message(
@@ -513,12 +527,12 @@ async def _(event):
                 )
                 return
             try:
-             await rmsticker.forward_to("@Stickers")
+                await rmsticker.forward_to("@Stickers")
             except Exception as e:
-             print(e)
+                print(e)
             if response.text.startswith("This pack has only"):
-               await silently_send_message(bot_conv, "Delete anyway")
-               
+                await silently_send_message(bot_conv, "Delete anyway")
+
             await kanga.edit("`Deleting ...`")
             response = await bot_conv.get_response()
             if not "I have deleted" in response.text:
@@ -526,11 +540,14 @@ async def _(event):
                     kanga, f"**FAILED**! @Stickers replied: {response.text}"
                 )
                 return
-                
-            await kanga.edit("Successfully deleted that sticker from your personal pack.")                    
- except Exception as e:
-   os.remove("sticker.webp")
-   print (e)
+
+            await kanga.edit(
+                "Successfully deleted that sticker from your personal pack."
+            )
+    except Exception as e:
+        os.remove("sticker.webp")
+        print(e)
+
 
 file_help = os.path.basename(__file__)
 file_help = file_help.replace(".py", "")
