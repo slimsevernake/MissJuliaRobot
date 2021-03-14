@@ -1,4 +1,4 @@
-from julia import SUDO_USERS, tbot, OWNER_ID
+from julia import SUDO_USERS, tbot, OWNER_ID, ANTI_GBAN
 from telethon.tl.types import ChatBannedRights
 from telethon import events
 from telethon.tl.functions.channels import EditBannedRequest
@@ -156,10 +156,8 @@ async def _(event):
 async def join_ban(event):
     if event.is_private:
         return
-    if event.chat_id == int(-1001158277850):
-        return
-    if event.chat_id == int(-1001342790946):
-        return
+    if event.chat_id in ANTI_GBAN:
+        return    
     pass
     user = event.user_id
     chats = gbanned.find({})
@@ -185,10 +183,8 @@ async def join_ban(event):
 async def type_ban(event):
     if event.is_private:
         return
-    if event.chat_id == int(-1001158277850):
-        return
-    if event.chat_id == int(-1001342790946):
-        return
+    if event.chat_id in ANTI_GBAN:
+        return    
     pass
     chats = gbanned.find({})
     for c in chats:
