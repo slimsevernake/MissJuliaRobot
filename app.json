@@ -115,7 +115,7 @@
       "description": "Get one from https://cloudmersive.com/virus-api",
       "value": "",
       "required": false
-    },
+    },   
     "GOOGLE_CHROME_BIN": {
       "description": "Required for chromedriver",
       "value": "/app/.apt/usr/bin/google-chrome",
@@ -124,6 +124,21 @@
     "CHROME_DRIVER": {
       "description": "Required for chromedriver",
       "value": "/app/.chromedriver/bin/chromedriver",
+      "required": false
+    },
+    "ANTI_GBAN": {
+      "description": "List of chat ids that shouldn't enforce gban",
+      "value": "",
+      "required": false
+    },
+    "JULIASONG": {
+      "description": "Channel link with @ where all songs should be dumped",
+      "value": "",
+      "required": false
+    },
+    "JULIAVSONG": {
+      "description": "Channel link with @ where all video songs should be dumped",
+      "value": "",
       "required": false
     },
     "GOOGLE_SRCH_KEY": {
