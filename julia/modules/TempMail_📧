@@ -73,21 +73,23 @@ async def _(event):
            await event.reply('There are no emails yet')
            return
     for i in mails:
-        from = i['mail_from']
-        subject =i['mail_subject']
-        time = i[]
-    
+        from_mail = str(i['mail_from']).replace("<","").replace(">","")
+        subject = str(i['mail_subject']).replace("<","").replace(">","")
+        msg = str(i['mail_html']).replace("<","").replace(">","")
+        ttime = i['mail_timestamp']
+           
     telegraph = Telegraph()
     telegraph.create_account(short_name='MissJuliaRobot')
     if subject == "":
        subject = "No Subject"
 
-    headers = "**FROM**: {from}\n**TO**: {email}\n**DATE"**: {time}\n\n"
+    headers = f"**FROM**: {from_mail}<br />**TO**: {email}<br />**DATE**: {ttime}<br />**MAIL BODY**:<br /><br />{msg}"
+    
     
     response = telegraph.create_page(
                subject, 
                html_content=final)
-    print('https://telegra.ph/{}'.format(response['path']))
+    tlink = 'https://telegra.ph/{}'.format(response['path'])
 
 @tbot.on(events.NewMessage(pattern=None))
 async def _(event):   
