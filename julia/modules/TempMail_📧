@@ -13,8 +13,8 @@ db = client["missjuliarobot"]
 tmail = db.tempmail
 
 tm = TempMail()
-api_host = TEMP_MAIL_HOST
-api_key=TEMP_MAIL_KEY
+api_host = "privatix-temp-mail-v1.p.rapidapi.com"
+api_key = TEMP_MAIL_KEY
 tm.set_header(api_host,api_key)
 
 def get_email(id):
@@ -103,4 +103,6 @@ __help__ = """
  - /newemail: Registers your account for a new email address
  - /myaddress: Gives your current email address
  - /checkinbox: Checks the inbox associated with the account for new emails
+
+**NOTE**: Emails received are temporary and they will be deleted after 60 minutes
 """
