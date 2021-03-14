@@ -58,6 +58,8 @@ if ENV:
     GOOGLE_SRCH_VALUE = os.environ.get("GOOGLE_SRCH_VALUE", None)
     JULIASONG = os.environ.get("JULIASONG", None)
     JULIASONG = os.environ.get("JULIAVSONG", None)   
+    ANTI_GBAN = {int(x) for x in os.environ.get("ANTI_GBAN", "").split()}
+    ANTI_GBAN = list(ANTI_BAN)
 
     if CONSOLE_LOGGER_VERBOSE:
         basicConfig(
