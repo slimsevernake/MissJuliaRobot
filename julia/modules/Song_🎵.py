@@ -43,10 +43,6 @@ async def is_register_admin(chat, user):
         return True
 
 
-JULIASONG = "@MissJuliaRobotMP3"
-JULIAVSONG = "@MissJuliaRobotMP4"
-
-
 @register(pattern="^/song (.*)")
 async def download_song(v_url):
     approved_userss = approved_users.find({})
