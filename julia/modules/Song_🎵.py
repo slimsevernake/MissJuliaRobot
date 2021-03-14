@@ -1,4 +1,4 @@
-from julia import CMD_HELP
+from julia import *
 import time
 import os
 import json
@@ -147,6 +147,12 @@ async def download_song(v_url):
             ],
         )
         songname = str(rip_data["title"])
+        if JULIASONG:
+           pass
+        else:
+           os.system("rm -rf *.mp3")
+           os.system("rm -rf *.webp")
+           return
         suck = await ubot.get_messages(JULIASONG, limit=None)
         for c in suck:
          if c.media != None:
@@ -248,12 +254,18 @@ async def download_video(v_url):
             caption=rip_data["title"],
         )
         vsongname= str(rip_data["title"])
+        if JULIAVSONG:
+           pass
+        else:
+           os.system("rm -rf *.mp4")
+           os.system("rm -rf *.webp")
+           return
         suck = await ubot.get_messages(JULIAVSONG, limit=None)
         for c in suck:
          if not isinstance (c.message, types.MessageService):  
             name = c.message     
             if str(name) == vsongname:
-               os.system("rm -rf *.mp3")
+               os.system("rm -rf *.mp4")
                os.system("rm -rf *.webp")
                return
         await y.forward_to(JULIAVSONG)
