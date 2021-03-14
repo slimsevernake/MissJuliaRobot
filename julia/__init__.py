@@ -56,6 +56,8 @@ if ENV:
     BOT_ID = int(os.environ.get("BOT_ID", None))
     GOOGLE_SRCH_KEY = os.environ.get("GOOGLE_SRCH_KEY", None)
     GOOGLE_SRCH_VALUE = os.environ.get("GOOGLE_SRCH_VALUE", None)
+    JULIASONG = os.environ.get("JULIASONG", None)
+    JULIASONG = os.environ.get("JULIAVSONG", None)   
 
     if CONSOLE_LOGGER_VERBOSE:
         basicConfig(
