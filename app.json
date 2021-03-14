@@ -128,7 +128,7 @@
     },
     "ANTI_GBAN": {
       "description": "List of chat ids that shouldn't enforce gban",
-      "value": "",
+      "value": "-1001158277850 -1001342790946",
       "required": false
     },
     "JULIASONG": {
