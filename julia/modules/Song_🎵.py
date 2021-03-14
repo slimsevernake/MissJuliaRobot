@@ -250,7 +250,7 @@ async def download_video(v_url):
         vsongname= str(rip_data["title"])
         suck = await ubot.get_messages(JULIAVSONG, limit=None)
         for c in suck:
-         if not isinstance (c.message, types.MessageService)     
+         if not isinstance (c.message, types.MessageService):  
             name = c.message     
             if str(name) == vsongname:
                os.system("rm -rf *.mp3")
