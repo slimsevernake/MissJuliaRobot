@@ -131,8 +131,7 @@ async def download_song(v_url):
         return
     c_time = time.time()
     if song:
-        await rkp.edit(f"`Sending the song ...`")
-
+        await rkp.edit(f"`Sending the song ...`")       
         y = await v_url.client.send_file(
             v_url.chat_id,
             f"{rip_data['id']}.mp3",
@@ -147,6 +146,15 @@ async def download_song(v_url):
                 )
             ],
         )
+        songname = str(rip_data["title"])
+        suck = await ubot.get_messages(JULIASONG, limit=None)
+        for c in suck:
+         if c.media != None:
+            name = c.media.document.attributes[0].title
+            if str(name) == songname:
+               os.system("rm -rf *.mp3")
+               os.system("rm -rf *.webp")
+               return
         await y.forward_to(JULIASONG)
         os.system("rm -rf *.mp3")
         os.system("rm -rf *.webp")
@@ -239,7 +247,15 @@ async def download_video(v_url):
             supports_streaming=True,
             caption=rip_data["title"],
         )
-
+        vsongname= str(rip_data["title"])
+        suck = await ubot.get_messages(JULIAVSONG, limit=None)
+        for c in suck:
+         if not isinstance (c.message, types.MessageService)     
+            name = c.message     
+            if str(name) == vsongname:
+               os.system("rm -rf *.mp3")
+               os.system("rm -rf *.webp")
+               return
         await y.forward_to(JULIAVSONG)
         os.system("rm -rf *.mp4")
         os.system("rm -rf *.webp")
