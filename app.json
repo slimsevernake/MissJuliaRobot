@@ -17,7 +17,7 @@
       "required": true
     },   
     "STRING_SESSION": {
-      "description": "Get this value by running python3 session.py locally",
+      "description": "Get this value by running python3 session.py locally(or heroku console)",
       "value": "",
       "required": true
     },
@@ -82,7 +82,7 @@
       "required": true
     },
     "BOT_ID": {
-      "description": "userid of the bot itself, use any other bot to get it",
+      "description": "Userid of the bot itself, use any other bot to get it",
       "value": "",
       "required": true
     },
