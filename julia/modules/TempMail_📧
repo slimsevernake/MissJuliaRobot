@@ -104,5 +104,5 @@ __help__ = """
  - /myaddress: Gives your current email address
  - /checkinbox: Checks the inbox associated with the account for new emails
 
-**NOTE**: Emails received are temporary and they will be deleted after 60 minutes
+**NOTE**: Emails received are temporary and they will be deleted after 60 minutes of arrival
 """
