@@ -107,7 +107,7 @@ async def _(event):
             [
                 Button.inline(
                     "▶️",
-                    data=f"startcheckinbox-{sender}|{email}|{hash}|{index}|{chatid}|{msgid}",
+                    data=f"startcheckinbox-{sender}|{index}|{chatid}|{msgid}",
                 )
             ],
             [Button.inline("❌", data=f"stopcheckinbox-{sender}|{chatid}|{msgid}")],
@@ -130,7 +130,7 @@ async def newsstop(event):
         sender, chatid, msgid = meta.split("|")
     sender = int(sender.strip())
     chatid = int(chatid.strip())
-    msgid = int(msgid.strip())
+    msgid = int(msgid.strip())    
     if not event.sender_id == sender:
         await event.answer("You haven't send that command !")
         return
@@ -145,17 +145,18 @@ async def paginate_news(event):
     meta = data.split("-", 1)[1]
     # print(meta)
     if "|" in meta:
-        sender, email, hash, index, chatid, msgid = meta.split("|")
+        sender, index, chatid, msgid = meta.split("|")
     sender = int(sender.strip())
     if not event.sender_id == sender:
         await event.answer("You haven't send that command !")
-        return
-    email = email.strip()
-    hash = hash.strip()
+        return    
     index = int(index.strip())
     num = index
     chatid = int(chatid.strip())
     msgid = int(msgid.strip())
+    to_check = get_email(event.sender_id)
+    email = to_check["email"]
+    hash = to_check["hash"]
     mails = tm.get_mailbox(email=email, email_hash=hash)
     for key, value in mails.items():
         if value == "There are no emails yet":
@@ -239,17 +240,19 @@ async def paginate_prevnews(event):
     meta = data.split("-", 1)[1]
     # print(meta)
     if "|" in meta:
-        sender, email, hash, index, chatid, msgid = meta.split("|")
+        sender, index, chatid, msgid = meta.split("|")
     sender = int(sender.strip())
     if not event.sender_id == sender:
         await event.answer("You haven't send that command !")
         return
-    email = email.strip()
-    hash = hash.strip()
+    
     index = int(index.strip())
     num = index - 1
     chatid = int(chatid.strip())
     msgid = int(msgid.strip())
+    to_check = get_email(event.sender_id)
+    email = to_check["email"]
+    hash = to_check["hash"]
     mails = tm.get_mailbox(email=email, email_hash=hash)
     for key, value in mails.items():
         if value == "There are no emails yet":
@@ -339,17 +342,19 @@ async def paginate_prevnews(event):
     meta = data.split("-", 1)[1]
     # print(meta)
     if "|" in meta:
-        sender, email, hash, index, chatid, msgid = meta.split("|")
+        sender, index, chatid, msgid = meta.split("|")
     sender = int(sender.strip())
     if not event.sender_id == sender:
         await event.answer("You haven't send that command !")
         return
-    email = email.strip()
-    hash = hash.strip()
+    
     index = int(index.strip())
     num = index + 1
     chatid = int(chatid.strip())
     msgid = int(msgid.strip())
+    to_check = get_email(event.sender_id)
+    email = to_check["email"]
+    hash = to_check["hash"]
     mails = tm.get_mailbox(email=email, email_hash=hash)
     for key, value in mails.items():
         if value == "There are no emails yet":
@@ -439,17 +444,19 @@ async def paginate_prevnews(event):
     meta = data.split("-", 1)[1]
     # print(meta)
     if "|" in meta:
-        sender, email, hash, index, chatid, msgid = meta.split("|")
+        sender, index, chatid, msgid = meta.split("|")
     sender = int(sender.strip())
     if not event.sender_id == sender:
         await event.answer("You haven't send that command !")
         return
-    email = email.strip()
-    hash = hash.strip()
+    
     index = int(index.strip())
     num = 0
     chatid = int(chatid.strip())
     msgid = int(msgid.strip())
+    to_check = get_email(event.sender_id)
+    email = to_check["email"]
+    hash = to_check["hash"]
     mails = tm.get_mailbox(email=email, email_hash=hash)
     for key, value in mails.items():
         if value == "There are no emails yet":
@@ -560,7 +567,7 @@ async def newsstop(event):
         sender, chatid, msgid = meta.split("|")
     sender = int(sender.strip())
     chatid = int(chatid.strip())
-    msgid = int(msgid.strip())
+    msgid = int(msgid.strip())   
     if not event.sender_id == sender:
         await event.answer("You haven't send that command !")
         return
