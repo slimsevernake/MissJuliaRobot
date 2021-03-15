@@ -32,8 +32,9 @@ def get_attachments(mail_id):
     # print(response)
     return eval(response.text)
 
-@register(pattern="^/newmail$")
+@tbot.on(events.NewMessage(pattern="^/newmail$"))
 async def _(event):
+ try:
     if not event.is_private:
        await event.reply("You can only use this service in PM!")
        return
@@ -64,6 +65,8 @@ async def _(event):
     hash = tm.get_hash(email)
     tmail.insert_one({"user": event.sender_id, "time": ttime, "email": email, "hash": hash})
     await event.reply(f"Your new temporary email is: {email}")
+ except Exception as e:
+        print (e)
 
 @register(pattern="^/mymail$")
 async def _(event):
