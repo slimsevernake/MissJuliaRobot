@@ -57,7 +57,7 @@ if ENV:
     GOOGLE_SRCH_KEY = os.environ.get("GOOGLE_SRCH_KEY", None)
     GOOGLE_SRCH_VALUE = os.environ.get("GOOGLE_SRCH_VALUE", None)
     JULIASONG = os.environ.get("JULIASONG", None)
-    JULIASONG = os.environ.get("JULIAVSONG", None)   
+    JULIAVSONG = os.environ.get("JULIAVSONG", None)   
     ANTI_GBAN = {int(x) for x in os.environ.get("ANTI_GBAN", "").split()}
     ANTI_GBAN = list(ANTI_GBAN)
     TEMP_MAIL_KEY = os.environ.get("TEMP_MAIL_KEY", None)
