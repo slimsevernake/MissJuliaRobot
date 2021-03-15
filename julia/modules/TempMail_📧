@@ -24,7 +24,7 @@ def get_email(id):
     return tmail.find_one({"user": id})
 
 def get_attachments(mail_id):
-    url = f"https://privatix-temp-mail-v1.p.rapidapi.com/request/attachments/id/{mail_id}"
+    url = "https://privatix-temp-mail-v1.p.rapidapi.com/request/atchmnts/id/{mail_id}/"
     headers = {
       'x-rapidapi-key': TEMP_MAIL_KEY,
       'x-rapidapi-host': api_host
