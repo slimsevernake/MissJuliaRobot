@@ -17,7 +17,7 @@ from youtube_dl.utils import (
 )
 
 from julia import tbot
-from telethon import types
+from telethon import types, events
 from telethon.tl import functions
 from julia.events import register
 from youtubesearchpython import SearchVideos
@@ -43,8 +43,9 @@ async def is_register_admin(chat, user):
         return True
 
 
-@register(pattern="^/song (.*)")
+@tbot.on(events.NewMessage(pattern="^/song (.*)"))
 async def download_song(v_url):
+ try:
     approved_userss = approved_users.find({})
     for ch in approved_userss:
         iid = ch["id"]
@@ -160,7 +161,8 @@ async def download_song(v_url):
         await y.forward_to(JULIASONG)
         os.system("rm -rf *.mp3")
         os.system("rm -rf *.webp")
-
+ except Exception as e:
+   print (e)
 
 @register(pattern="^/videosong (.*)")
 async def download_video(v_url):
