@@ -157,7 +157,7 @@ async def join_ban(event):
     if event.is_private:
         return
     if event.chat_id in ANTI_GBAN:
-        return    
+        return
     pass
     user = event.user_id
     chats = gbanned.find({})
@@ -184,7 +184,7 @@ async def type_ban(event):
     if event.is_private:
         return
     if event.chat_id in ANTI_GBAN:
-        return    
+        return
     pass
     chats = gbanned.find({})
     for c in chats:
