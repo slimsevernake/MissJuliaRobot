@@ -139,7 +139,7 @@ async def paginate_news(event):
     meta = data.split("-", 1)[1]
     # print(meta)
     if "|" in meta:
-        sender, email, hash index, chatid, msgid = meta.split("|")
+        sender, email, hash, index, chatid, msgid = meta.split("|")
     sender = int(sender.strip())
     if not event.sender_id == sender:
         await event.answer("You haven't send that command !")
