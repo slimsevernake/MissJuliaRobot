@@ -82,8 +82,9 @@ async def _(event):
            return
     await event.reply("You don't have any email address associated with your account, get one with /newmail")
 
-@register(pattern="^/checkinbox$")
+@tbot.on(events.NewMessage(pattern="^/checkinbox$"))
 async def _(event):
+ try:
     if not event.is_private:
        await event.reply("You can only use this service in PM!")
        return   
@@ -114,6 +115,8 @@ async def _(event):
       )
       return
     await event.reply("You don't have any email address associated with your account, get one with /newmail")
+ except Exception as e:
+        print (e)
 
 @tbot.on(events.CallbackQuery(pattern=r"stopcheckinbox(\-(.*))"))
 async def newsstop(event):
