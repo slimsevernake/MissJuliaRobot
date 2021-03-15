@@ -579,8 +579,19 @@ async def newsstop(event):
     ttime = time.time()
     email = tm.get_email_address()
     hash = tm.get_hash(email)
-    tmail.insert_one({"user": event.sender_id, "time": ttime, "email": email, "hash": hash})
-    await event.reply(f"Your new temporary email is: {email}")
+    to_check = get_email(id=sender)
+    tmail.update_one(
+                {
+                    "_id": to_check["_id"],
+                    "user": to_check["user"],
+                    "time": to_check["time"],
+                    "email": to_check["email"],
+                    "hash": to_check["hash"],
+                },
+                {"$set": {"time": ttime, "email": email, "hash": hash}},
+            )    
+    await tbot.edit_message(chatid, msgid, f"Your new temporary email is: {email}")
+
 
           
 __help__ = """
