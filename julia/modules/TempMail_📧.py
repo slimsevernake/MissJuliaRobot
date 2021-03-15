@@ -32,7 +32,7 @@ def get_attachments(mail_id):
     # print(response)
     return eval(response.text)
 
-@tbot.on(events.NewMessage(pattern="^/newmail$"))
+@tbot.on(events.NewMessage(pattern="^/newemail$"))
 async def _(event):
  try:
     if not event.is_private:
@@ -89,19 +89,16 @@ async def _(event):
        return   
     gmail = tmail.find({})
     for c in gmail:
-        gid = c["user"]
-    if not event.sender_id == gid:
-       await event.reply("You don't have any email address associated with your account, get one with /newmail")
-       return
-    addr = get_email(event.sender_id)
-    email = addr["email"]
-    hash = addr["hash"]
-    sender = event.sender_id    
-    index = 0
-    chatid = event.chat_id
-    msg = await tbot.send_message(chatid, "Loading ...")
-    msgid = msg.id
-    await tbot.edit_message(
+     if event.sender_id == c["user"]:
+      addr = get_email(event.sender_id)
+      email = addr["email"]
+      hash = addr["hash"]
+      sender = event.sender_id    
+      index = 0
+      chatid = event.chat_id
+      msg = await tbot.send_message(chatid, "Loading ...")
+      msgid = msg.id
+      await tbot.edit_message(
         chatid,
         msgid,
         "Click on the below button to check your email inbox 👇",
@@ -114,7 +111,9 @@ async def _(event):
             ],
             [Button.inline("❌", data=f"stopcheckinbox-{sender}|{chatid}|{msgid}")],
         ],
-    )
+      )
+      return
+    await event.reply("You don't have any email address associated with your account, get one with /newmail")
 
 @tbot.on(events.CallbackQuery(pattern=r"stopcheckinbox(\-(.*))"))
 async def newsstop(event):
@@ -132,7 +131,7 @@ async def newsstop(event):
     if not event.sender_id == sender:
         await event.answer("You haven't send that command !")
         return
-    await tbot.edit_message(chatid, msgid, "Thanks for using.\n❤️ from Julia !")
+    await tbot.edit_message(chatid, msgid, "Thanks for using Julia ♥️")
 
 @tbot.on(events.CallbackQuery(pattern=r"startcheckinbox(\-(.*))"))
 async def paginate_news(event):
