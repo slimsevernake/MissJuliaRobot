@@ -13,7 +13,6 @@ import requests
 client = MongoClient(MONGO_DB_URI)
 db = client["missjuliarobot"]
 tmail = db.tempmail
-approved_users = db.approved_users
 
 tm = TempMail()
 api_host = "privatix-temp-mail-v1.p.rapidapi.com"
@@ -30,7 +29,7 @@ def get_attachments(mail_id):
       'x-rapidapi-host': api_host
       }
     response = requests.request("GET", url, headers=headers)
-    print(response)
+    # print(response)
     return eval(response.text)
 
 @register(pattern="^/newmail$")
@@ -46,12 +45,25 @@ async def _(event):
            if not ttime - time.time() > 86400: # 24 hrs
               await event.reply("You have recently created a new email address, wait for 24hrs to change it")
               return
+           await tbot.send_message(
+            event.chat_id,
+            "Are you sure you want to create a new email address ?\nYou will permanently lose your previous email address !",
+            buttons=[
+             [
+                Button.inline(
+                    "Yes",
+                    data=f"removeoldemail-{sender}|{chatid}|{msgid}",
+                )
+             ],
+             [Button.inline("No", data=f"dontremoveoldemail-{sender}|{chatid}|{msgid}")],         
+             ],
+           )       
+           return
     ttime = time.time()
     email = tm.get_email_address()
     hash = tm.get_hash(email)
     tmail.insert_one({"user": event.sender_id, "time": ttime, "email": email, "hash": hash})
-    await event.reply(f"You have successfully registered your account !\nYour temporary email is: {email}")
-
+    await event.reply(f"Your new temporary email is: {email}")
 
 @register(pattern="^/mymail$")
 async def _(event):
@@ -102,17 +114,8 @@ async def _(event):
 
 @tbot.on(events.CallbackQuery(pattern=r"stopcheckinbox(\-(.*))"))
 async def newsstop(event):
-    approved_userss = approved_users.find({})
-    for ch in approved_userss:
-        iid = ch["id"]
-        userss = ch["user"]
-    if event.is_group:
-        if await is_register_admin(event.input_chat, event.sender_id):
-            pass
-        elif event.chat_id == iid and user_id == userss:
-            pass
-        else:
-            return
+    if not event.is_private:
+       return
     tata = event.pattern_match.group(1)
     data = tata.decode()
     meta = data.split("-", 1)[1]
@@ -129,17 +132,8 @@ async def newsstop(event):
 
 @tbot.on(events.CallbackQuery(pattern=r"startcheckinbox(\-(.*))"))
 async def paginate_news(event):
-    approved_userss = approved_users.find({})
-    for ch in approved_userss:
-        iid = ch["id"]
-        userss = ch["user"]
-    if event.is_group:
-        if await is_register_admin(event.input_chat, event.sender_id):
-            pass
-        elif event.chat_id == iid and event.sender_id == userss:
-            pass
-        else:
-            return
+    if not event.is_private:       
+       return
     tata = event.pattern_match.group(1)
     data = tata.decode()
     meta = data.split("-", 1)[1]
@@ -232,17 +226,8 @@ async def paginate_news(event):
 
 @tbot.on(events.CallbackQuery(pattern=r"checkinboxprev(\-(.*))"))
 async def paginate_prevnews(event):
-    approved_userss = approved_users.find({})
-    for ch in approved_userss:
-        iid = ch["id"]
-        userss = ch["user"]
-    if event.is_group:
-        if await is_register_admin(event.input_chat, event.sender_id):
-            pass
-        elif event.chat_id == iid and event.sender_id == userss:
-            pass
-        else:
-            return
+    if not event.is_private:       
+       return
     tata = event.pattern_match.group(1)
     data = tata.decode()
     meta = data.split("-", 1)[1]
@@ -341,17 +326,8 @@ async def paginate_prevnews(event):
         
 @tbot.on(events.CallbackQuery(pattern=r"checkinboxnext(\-(.*))"))
 async def paginate_prevnews(event):
-    approved_userss = approved_users.find({})
-    for ch in approved_userss:
-        iid = ch["id"]
-        userss = ch["user"]
-    if event.is_group:
-        if await is_register_admin(event.input_chat, event.sender_id):
-            pass
-        elif event.chat_id == iid and event.sender_id == userss:
-            pass
-        else:
-            return
+    if not event.is_private:       
+       return
     tata = event.pattern_match.group(1)
     data = tata.decode()
     meta = data.split("-", 1)[1]
@@ -450,17 +426,8 @@ async def paginate_prevnews(event):
         
 @tbot.on(events.CallbackQuery(pattern=r"refreshinbox(\-(.*))"))
 async def paginate_prevnews(event):
-    approved_userss = approved_users.find({})
-    for ch in approved_userss:
-        iid = ch["id"]
-        userss = ch["user"]
-    if event.is_group:
-        if await is_register_admin(event.input_chat, event.sender_id):
-            pass
-        elif event.chat_id == iid and event.sender_id == userss:
-            pass
-        else:
-            return
+    if not event.is_private:       
+       return
     tata = event.pattern_match.group(1)
     data = tata.decode()
     meta = data.split("-", 1)[1]
@@ -557,16 +524,65 @@ async def paginate_prevnews(event):
         await tbot.send_file(chatid, file=fname)
         os.remove(fname)
         
-@tbot.on(events.NewMessage(pattern=None))
-async def _(event):   
-    gmail = tmail.find({})
-    for c in gmail:
-        if event.sender_id == c["user"]:
-           addr = get_email(event.sender_id)
-           email = addr["email"]
-           hash = addr["hash"]
-           
+@tbot.on(events.CallbackQuery(pattern=r"stopcheckinbox(\-(.*))"))
+async def newsstop(event):
+    if not event.is_private:
+       return
+    tata = event.pattern_match.group(1)
+    data = tata.decode()
+    meta = data.split("-", 1)[1]
+    # print(meta)
+    if "|" in meta:
+        sender, chatid, msgid = meta.split("|")
+    sender = int(sender.strip())
+    chatid = int(chatid.strip())
+    msgid = int(msgid.strip())
+    if not event.sender_id == sender:
+        await event.answer("You haven't send that command !")
+        return
+    await tbot.edit_message(chatid, msgid, "Thanks for using Julia ♥️"))
 
+@tbot.on(events.CallbackQuery(pattern=r"dontremoveoldemail(\-(.*))"))
+async def newsstop(event):
+    if not event.is_private:
+       return
+    tata = event.pattern_match.group(1)
+    data = tata.decode()
+    meta = data.split("-", 1)[1]
+    # print(meta)
+    if "|" in meta:
+        sender, chatid, msgid = meta.split("|")
+    sender = int(sender.strip())
+    chatid = int(chatid.strip())
+    msgid = int(msgid.strip())
+    if not event.sender_id == sender:
+        await event.answer("You haven't send that command !")
+        return
+    await tbot.edit_message(chatid, msgid, "Okay !\nNot a problem 😉")
+
+@tbot.on(events.CallbackQuery(pattern=r"removeoldemail(\-(.*))"))
+async def newsstop(event):
+    if not event.is_private:
+       return
+    tata = event.pattern_match.group(1)
+    data = tata.decode()
+    meta = data.split("-", 1)[1]
+    # print(meta)
+    if "|" in meta:
+        sender, chatid, msgid = meta.split("|")
+    sender = int(sender.strip())
+    chatid = int(chatid.strip())
+    msgid = int(msgid.strip())
+    if not event.sender_id == sender:
+        await event.answer("You haven't send that command !")
+        return
+    ttime = time.time()
+    email = tm.get_email_address()
+    hash = tm.get_hash(email)
+    tmail.insert_one({"user": event.sender_id, "time": ttime, "email": email, "hash": hash})
+    await event.reply(f"Your new temporary email is: {email}")
+
+          
 __help__ = """
  - /newemail: Registers your account for a new email address
  - /myaddress: Gives your current email address
