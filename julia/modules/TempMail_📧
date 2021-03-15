@@ -167,7 +167,7 @@ async def paginate_news(event):
     msg = mails[int(num)]['mail_html'])
     ttime = mails[int(num)]['mail_timestamp']
     mail_id = mails[int(num)]['mail_id']
-
+    attch = int(mails[int(num)]['mail_attachments_count'])
     timestamp = ttime
     dt_object = datetime.fromtimestamp(timestamp)
     ttime = str(dt_object)
@@ -183,18 +183,13 @@ async def paginate_news(event):
     response = telegraph.create_page(
                subject, 
                html_content=final)
+
     tlink = 'https://telegra.ph/{}'.format(response['path'])
-    gg = get_attachments(mail_id=mail_id)
-
-    for i in gg:             
-        fname = i['name']   
-        with open(fname, 'w+b') as f:
-             f.write(base64.b64decode((gg['content']).encode()))
-        await tbot.send_file(chatid, file=fname)
-        os.remove(fname)
-
-    f.write((gg[1]['content']).encode())
-    lastisthis = f"{header}MAIL FROM: {from_mail}" + "\n" + "TO: {email}" + "\n" + f"DATE: `{date}`" 
+    
+    if not attch > 0:
+       lastisthis = f"{header}MAIL FROM: {from_mail}" + "\n" + "TO: {email}" + "\n" + f"DATE: `{date}`" 
+    else:
+       lastisthis = f"{header}MAIL FROM: {from_mail}" + "\n" + "TO: {email}" + "\n" + f"DATE: `{date}`" + "**The attachments will be send to you shortly !**"
     await tbot.edit_message(
         chatid,
         msgid,
@@ -226,6 +221,14 @@ async def paginate_news(event):
             ],
         ],
     )
+    if attch > 0:
+       gg = get_attachments(mail_id=mail_id)
+       for i in gg:             
+        fname = i['name']   
+        with open(fname, 'w+b') as f:
+             f.write(base64.b64decode((gg['content']).encode()))
+        await tbot.send_file(chatid, file=fname)
+        os.remove(fname)
 
 @tbot.on(events.CallbackQuery(pattern=r"checkinboxprev(\-(.*))"))
 async def paginate_prevnews(event):
