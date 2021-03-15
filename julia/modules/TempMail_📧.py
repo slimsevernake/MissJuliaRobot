@@ -540,7 +540,7 @@ async def newsstop(event):
     if not event.sender_id == sender:
         await event.answer("You haven't send that command !")
         return
-    await tbot.edit_message(chatid, msgid, "Thanks for using Julia ♥️"))
+    await tbot.edit_message(chatid, msgid, "Thanks for using Julia ♥️")
 
 @tbot.on(events.CallbackQuery(pattern=r"dontremoveoldemail(\-(.*))"))
 async def newsstop(event):
