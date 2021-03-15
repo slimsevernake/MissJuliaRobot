@@ -1,5 +1,5 @@
 from tempmail import TempMail
-import time, markdown
+import time, markdown, base64
 from datetime import datetime
 from julia import *
 from julia.events import register
@@ -166,6 +166,8 @@ async def paginate_news(event):
     subject = mails[int(num)]['mail_subject'])
     msg = mails[int(num)]['mail_html'])
     ttime = mails[int(num)]['mail_timestamp']
+    mail_id = mails[int(num)]['mail_id']
+
     timestamp = ttime
     dt_object = datetime.fromtimestamp(timestamp)
     ttime = str(dt_object)
@@ -182,11 +184,15 @@ async def paginate_news(event):
                subject, 
                html_content=final)
     tlink = 'https://telegra.ph/{}'.format(response['path'])
+    gg = get_attachments(mail_id=mail_id)
+
     for i in gg:             
         fname = i['name']   
         with open(fname, 'w+b') as f:
              f.write(base64.b64decode((gg['content']).encode()))
-        
+        await tbot.send_file(chatid, file=fname)
+        os.remove(fname)
+
     f.write((gg[1]['content']).encode())
     lastisthis = f"{header}MAIL FROM: {from_mail}" + "\n" + "TO: {email}" + "\n" + f"DATE: `{date}`" 
     await tbot.edit_message(
