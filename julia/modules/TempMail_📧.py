@@ -189,9 +189,9 @@ async def paginate_news(event):
     tlink = 'https://telegra.ph/{}'.format(response['path'])
     
     if not attch > 0:
-       lastisthis = f"{header}MAIL FROM: {from_mail}" + "\n" + "TO: {email}" + "\n" + f"DATE: `{date}`" 
+       lastisthis = f"{header}MAIL FROM: {from_mail}" + "\n" + "TO: {email}" + "\n" + f"DATE: `{ttime}`" 
     else:
-       lastisthis = f"{header}MAIL FROM: {from_mail}" + "\n" + "TO: {email}" + "\n" + f"DATE: `{date}`" + "**The attachments will be send to you shortly !**"
+       lastisthis = f"{header}MAIL FROM: {from_mail}" + "\n" + "TO: {email}" + "\n" + f"DATE: `{ttime}`" + "**The attachments will be send to you shortly !**"
     await tbot.edit_message(
         chatid,
         msgid,
@@ -292,9 +292,9 @@ async def paginate_prevnews(event):
                
     tlink = 'https://telegra.ph/{}'.format(response['path'])
     if not attch > 0:
-       lastisthis = f"{header}MAIL FROM: {from_mail}" + "\n" + "TO: {email}" + "\n" + f"DATE: `{date}`" 
+       lastisthis = f"{header}MAIL FROM: {from_mail}" + "\n" + "TO: {email}" + "\n" + f"DATE: `{ttime}`" 
     else:
-       lastisthis = f"{header}MAIL FROM: {from_mail}" + "\n" + "TO: {email}" + "\n" + f"DATE: `{date}`" + "**The attachments will be send to you shortly !**"
+       lastisthis = f"{header}MAIL FROM: {from_mail}" + "\n" + "TO: {email}" + "\n" + f"DATE: `{ttime}`" + "**The attachments will be send to you shortly !**"
     await tbot.edit_message(
         chatid,
         msgid,
@@ -395,9 +395,9 @@ async def paginate_prevnews(event):
                
     tlink = 'https://telegra.ph/{}'.format(response['path'])
     if not attch > 0:
-       lastisthis = f"{header}MAIL FROM: {from_mail}" + "\n" + "TO: {email}" + "\n" + f"DATE: `{date}`" 
+       lastisthis = f"{header}MAIL FROM: {from_mail}" + "\n" + "TO: {email}" + "\n" + f"DATE: `{ttime}`" 
     else:
-       lastisthis = f"{header}MAIL FROM: {from_mail}" + "\n" + "TO: {email}" + "\n" + f"DATE: `{date}`" + "**The attachments will be send to you shortly !**"
+       lastisthis = f"{header}MAIL FROM: {from_mail}" + "\n" + "TO: {email}" + "\n" + f"DATE: `{ttime}`" + "**The attachments will be send to you shortly !**"
     await tbot.edit_message(
         chatid,
         msgid,
@@ -498,9 +498,9 @@ async def paginate_prevnews(event):
                
     tlink = 'https://telegra.ph/{}'.format(response['path'])
     if not attch > 0:
-       lastisthis = f"{header}MAIL FROM: {from_mail}" + "\n" + "TO: {email}" + "\n" + f"DATE: `{date}`" 
+       lastisthis = f"{header}MAIL FROM: {from_mail}" + "\n" + "TO: {email}" + "\n" + f"DATE: `{ttime}`" 
     else:
-       lastisthis = f"{header}MAIL FROM: {from_mail}" + "\n" + "TO: {email}" + "\n" + f"DATE: `{date}`" + "**The attachments will be send to you shortly !**"
+       lastisthis = f"{header}MAIL FROM: {from_mail}" + "\n" + "TO: {email}" + "\n" + f"DATE: `{ttime}`" + "**The attachments will be send to you shortly !**"
     await tbot.edit_message(
         chatid,
         msgid,
