@@ -229,7 +229,7 @@ async def _(event):
        for i in gg:             
         fname = i['name']   
         with open(fname, 'w+b') as f:
-             f.write(base64.b64decode((gg['content']).encode()))
+             f.write(base64.b64decode((i['content']).encode()))
         await tbot.send_file(chatid, file=fname)
         os.remove(fname)
 
@@ -332,7 +332,7 @@ async def _(event):
        for i in gg:             
         fname = i['name']   
         with open(fname, 'w+b') as f:
-             f.write(base64.b64decode((gg['content']).encode()))
+             f.write(base64.b64decode((i['content']).encode()))
         await tbot.send_file(chatid, file=fname)
         os.remove(fname)
         
@@ -435,7 +435,7 @@ async def _(event):
        for i in gg:             
         fname = i['name']   
         with open(fname, 'w+b') as f:
-             f.write(base64.b64decode((gg['content']).encode()))
+             f.write(base64.b64decode((i['content']).encode()))
         await tbot.send_file(chatid, file=fname)
         os.remove(fname)
         
@@ -537,7 +537,7 @@ async def _(event):
        for i in gg:             
         fname = i['name']   
         with open(fname, 'w+b') as f:
-             f.write(base64.b64decode((gg['content']).encode()))
+             f.write(base64.b64decode((i['content']).encode()))
         await tbot.send_file(chatid, file=fname)
         os.remove(fname)
         
