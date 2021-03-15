@@ -188,12 +188,12 @@ async def paginate_news(event):
             [
                 Button.inline(
                     "◀️",
-                    data=f"checkinboxnext-{sender}|{email}|{hash}|{num}|{chatid}|{msgid}",
+                    data=f"checkinboxprev-{sender}|{email}|{hash}|{num}|{chatid}|{msgid}",
                 ),
-                Button.inline("❌", data=f"newsstop-{sender}|{chatid}|{msgid}"),
+                Button.inline("❌", data=f"stopcheckinbox-{sender}|{chatid}|{msgid}"),
                 Button.inline(
                     "▶️",
-                    data=f"checkinboxprev-{sender}|{email}|{hash}|{num}|{chatid}|{msgid}",
+                    data=f"checkinboxnext-{sender}|{email}|{hash}|{num}|{chatid}|{msgid}",
                 ),
             ],
             [
