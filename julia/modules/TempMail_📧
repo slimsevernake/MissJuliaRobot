@@ -1,5 +1,5 @@
 from tempmail import TempMail
-import time
+import time, markdown
 from julia import *
 from julia.events import register
 from pymongo import MongoClient
@@ -73,9 +73,9 @@ async def _(event):
            await event.reply('There are no emails yet')
            return
     for i in mails:
-        from_mail = str(i['mail_from']).replace("<","").replace(">","")
-        subject = str(i['mail_subject']).replace("<","").replace(">","")
-        msg = str(i['mail_html']).replace("<","").replace(">","")
+        from_mail = str(i['mail_from'])
+        subject = str(i['mail_subject'])
+        msg = str(i['mail_html'])
         ttime = i['mail_timestamp']
            
     telegraph = Telegraph()
@@ -83,9 +83,9 @@ async def _(event):
     if subject == "":
        subject = "No Subject"
 
-    headers = f"**FROM**: {from_mail}<br />**TO**: {email}<br />**DATE**: {ttime}<br />**MAIL BODY**:<br /><br />{msg}"
-    
-    
+    headers = f"**FROM**: {from_mail}\n**TO**: {email}\n**DATE**: {ttime}\n**MAIL BODY**:\n\n{msg}"   
+    nheaders = headers.replace("\n", "<br />")
+    final = markdown.markdown(nheaders)
     response = telegraph.create_page(
                subject, 
                html_content=final)
