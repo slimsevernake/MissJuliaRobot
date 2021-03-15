@@ -8,6 +8,7 @@ from telethon import *
 from telethon.tl import *
 from telethon.tl.types import *
 from telegraph import Telegraph
+import requests
 
 client = MongoClient(MONGO_DB_URI)
 db = client["missjuliarobot"]
@@ -21,6 +22,15 @@ tm.set_header(api_host,api_key)
 
 def get_email(id):
     return tmail.find_one({"user": id})
+
+def get_attachments(mail_id):
+    url = "https://privatix-temp-mail-v1.p.rapidapi.com/request/attachments/id/{mail_id}"
+    headers = {
+      'x-rapidapi-key': TEMP_MAIL_KEY,
+      'x-rapidapi-host': api_host
+      }
+    response = requests.request("GET", url, headers=headers)
+    print(response)
 
 @register(pattern="^/newmail$")
 async def _(event):
