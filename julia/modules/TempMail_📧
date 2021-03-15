@@ -1,9 +1,10 @@
 from tempmail import TempMail
 import time, markdown
+from datetime import datetime
 from julia import *
 from julia.events import register
 from pymongo import MongoClient
-from telethon import types, events
+from telethon import *
 from telethon.tl import *
 from telethon.tl.types import *
 from telegraph import Telegraph
@@ -11,6 +12,7 @@ from telegraph import Telegraph
 client = MongoClient(MONGO_DB_URI)
 db = client["missjuliarobot"]
 tmail = db.tempmail
+approved_users = db.approved_users
 
 tm = TempMail()
 api_host = "privatix-temp-mail-v1.p.rapidapi.com"
@@ -67,17 +69,96 @@ async def _(event):
     addr = get_email(event.sender_id)
     email = addr["email"]
     hash = addr["hash"]
+    sender = event.sender_id    
+    index = 0
+    chatid = event.chat_id
+    msg = await tbot.send_message(chatid, "Loading ...")
+    msgid = msg.id
+    await tbot.edit_message(
+        chatid,
+        msgid,
+        "Click on the below button to check your email inbox 👇",
+        buttons=[
+            [
+                Button.inline(
+                    "▶️",
+                    data=f"startcheckinbox-{sender}|{email}|{hash}|{index}|{chatid}|{msgid}",
+                )
+            ],
+            [Button.inline("❌", data=f"stopcheckinbox-{sender}|{chatid}|{msgid}")],
+        ],
+    )
+
+@tbot.on(events.CallbackQuery(pattern=r"stopcheckinbox(\-(.*))"))
+async def newsstop(event):
+    approved_userss = approved_users.find({})
+    for ch in approved_userss:
+        iid = ch["id"]
+        userss = ch["user"]
+    if event.is_group:
+        if await is_register_admin(event.input_chat, event.sender_id):
+            pass
+        elif event.chat_id == iid and user_id == userss:
+            pass
+        else:
+            return
+    tata = event.pattern_match.group(1)
+    data = tata.decode()
+    meta = data.split("-", 1)[1]
+    # print(meta)
+    if "|" in meta:
+        sender, chatid, msgid = meta.split("|")
+    sender = int(sender.strip())
+    chatid = int(chatid.strip())
+    msgid = int(msgid.strip())
+    if not event.sender_id == sender:
+        await event.answer("You haven't send that command !")
+        return
+    await tbot.edit_message(chatid, msgid, "Thanks for using.\n❤️ from Julia !")
+
+@tbot.on(events.CallbackQuery(pattern=r"startcheckinbox(\-(.*))"))
+async def paginate_news(event):
+    approved_userss = approved_users.find({})
+    for ch in approved_userss:
+        iid = ch["id"]
+        userss = ch["user"]
+    if event.is_group:
+        if await is_register_admin(event.input_chat, event.sender_id):
+            pass
+        elif event.chat_id == iid and event.sender_id == userss:
+            pass
+        else:
+            return
+    tata = event.pattern_match.group(1)
+    data = tata.decode()
+    meta = data.split("-", 1)[1]
+    # print(meta)
+    if "|" in meta:
+        sender, email, hash index, chatid, msgid = meta.split("|")
+    sender = int(sender.strip())
+    if not event.sender_id == sender:
+        await event.answer("You haven't send that command !")
+        return
+    email = email.strip()
+    hash = hash.strip()
+    index = int(index.strip())
+    num = index
+    chatid = int(chatid.strip())
+    msgid = int(msgid.strip())
     mails = tm.get_mailbox(email=email, email_hash=hash)
     for key, value in mails.items():
         if value == "There are no emails yet":
-           await event.reply('There are no emails yet')
+           await tbot.edit_message(chatid, msgid, 'There are no emails yet.')
            return
-    for i in mails:
-        from_mail = str(i['mail_from'])
-        subject = str(i['mail_subject'])
-        msg = str(i['mail_html'])
-        ttime = i['mail_timestamp']
-           
+    header = f"**#{num} **"
+    from_mail = mails[int(num)]['mail_from'])
+    subject = mails[int(num)]['mail_subject'])
+    msg = mails[int(num)]['mail_html'])
+    ttime = mails[int(num)]['mail_timestamp']
+    timestamp = ttime
+    dt_object = datetime.fromtimestamp(timestamp)
+    ttime = str(dt_object)
+
     telegraph = Telegraph()
     telegraph.create_account(short_name='MissJuliaRobot')
     if subject == "":
@@ -90,6 +171,67 @@ async def _(event):
                subject, 
                html_content=final)
     tlink = 'https://telegra.ph/{}'.format(response['path'])
+  
+    lastisthis = f"{header}MAIL FROM: {from_mail}" + "\n" + "TO: {email}" + "\n" + f"DATE: `{date}`" 
+    await tbot.edit_message(
+        chatid,
+        msgid,
+        lastisthis,
+        link_preview=False,
+        buttons=[
+            [
+                Button.url(
+                    "Click here to read this mail",
+                    url=f"{tlink}",
+                ),
+            ],
+            [
+                Button.inline(
+                    "◀️",
+                    data=f"checkinboxnext-{sender}|{email}|{hash}|{num}|{chatid}|{msgid}",
+                ),
+                Button.inline("❌", data=f"newsstop-{sender}|{chatid}|{msgid}"),
+                Button.inline(
+                    "▶️",
+                    data=f"checkinboxprev-{sender}|{email}|{hash}|{num}|{chatid}|{msgid}",
+                ),
+            ],
+            [
+                Button.inline(
+                    "Refresh 🔁",
+                    data=f"refreshinbox-{sender}|{email}|{hash}|{chatid}|{msgid}",
+                )
+            ],
+        ],
+    )
+
+
+########
+
+    await tbot.send_message(event.chat_id, tlink, buttons=[[Button.inline('<', data="checkinboxprev-{event.sender_id}-{email}-{hash}")], [Button.inline('<', data="stopcheckinbox-{event.sender_id}-{email}-{hash}")], [Button.inline('<', data="checkinboxnext-{event.sender_id}-{email}-{hash}")]])
+    
+    index = 0
+    
+    timestamp = ttime
+    dt_object = datetime.fromtimestamp(timestamp)
+    ttime = str(dt_object)
+
+    telegraph = Telegraph()
+    telegraph.create_account(short_name='MissJuliaRobot')
+    if subject == "":
+       subject = "No Subject"
+
+    headers = f"**FROM**: {from_mail}\n**TO**: {email}\n**DATE**: {ttime}\n**MAIL BODY**:\n\n{msg}"   
+    nheaders = headers.replace("\n", "<br />")
+    final = markdown.markdown(nheaders)
+    response = telegraph.create_page(
+               subject, 
+               html_content=final)
+    tlink = 'https://telegra.ph/{}'.format(response['path'])
+    await tbot.send_message(event.chat_id, tlink, buttons=[[Button.inline('<', data="checkinboxprev-{event.sender_id}-{email}-{hash}")], [Button.inline('<', data="stopcheckinbox-{event.sender_id}-{email}-{hash}")], [Button.inline('<', data="checkinboxnext-{event.sender_id}-{email}-{hash}")]])
+
+#####
+
 
 @tbot.on(events.NewMessage(pattern=None))
 async def _(event):   
