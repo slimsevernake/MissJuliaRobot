@@ -32,6 +32,7 @@ def get_attachments(mail_id):
     # print(response)
     return eval(response.text)
 
+
 @tbot.on(events.NewMessage(pattern="^/newemail$"))
 async def _(event):
  try:
@@ -189,9 +190,9 @@ async def paginate_news(event):
     tlink = 'https://telegra.ph/{}'.format(response['path'])
     
     if not attch > 0:
-       lastisthis = f"{header}MAIL FROM: {from_mail}" + "\n" + "TO: {email}" + "\n" + f"DATE: `{ttime}`" 
+       lastisthis = f"{header}MAIL FROM: {from_mail}" + "\n" + f"TO: {email}" + "\n" + f"DATE: `{ttime}`" 
     else:
-       lastisthis = f"{header}MAIL FROM: {from_mail}" + "\n" + "TO: {email}" + "\n" + f"DATE: `{ttime}`" + "**The attachments will be send to you shortly !**"
+       lastisthis = f"{header}MAIL FROM: {from_mail}" + "\n" + f"TO: {email}" + "\n" + f"DATE: `{ttime}`" + "**The attachments will be send to you shortly !**"
     await tbot.edit_message(
         chatid,
         msgid,
@@ -224,7 +225,7 @@ async def paginate_news(event):
         ],
     )
     if attch > 0:
-       gg = get_attachments(mail_id=mail_id)
+       gg = get_attachments(mail_id)
        for i in gg:             
         fname = i['name']   
         with open(fname, 'w+b') as f:
@@ -292,9 +293,9 @@ async def paginate_prevnews(event):
                
     tlink = 'https://telegra.ph/{}'.format(response['path'])
     if not attch > 0:
-       lastisthis = f"{header}MAIL FROM: {from_mail}" + "\n" + "TO: {email}" + "\n" + f"DATE: `{ttime}`" 
+       lastisthis = f"{header}MAIL FROM: {from_mail}" + "\n" + f"TO: {email}" + "\n" + f"DATE: `{ttime}`" 
     else:
-       lastisthis = f"{header}MAIL FROM: {from_mail}" + "\n" + "TO: {email}" + "\n" + f"DATE: `{ttime}`" + "**The attachments will be send to you shortly !**"
+       lastisthis = f"{header}MAIL FROM: {from_mail}" + "\n" + f"TO: {email}" + "\n" + f"DATE: `{ttime}`" + "**The attachments will be send to you shortly !**"
     await tbot.edit_message(
         chatid,
         msgid,
@@ -327,7 +328,7 @@ async def paginate_prevnews(event):
         ],
     )
     if attch > 0:
-       gg = get_attachments(mail_id=mail_id)
+       gg = get_attachments(mail_id)
        for i in gg:             
         fname = i['name']   
         with open(fname, 'w+b') as f:
@@ -395,9 +396,9 @@ async def paginate_prevnews(event):
                
     tlink = 'https://telegra.ph/{}'.format(response['path'])
     if not attch > 0:
-       lastisthis = f"{header}MAIL FROM: {from_mail}" + "\n" + "TO: {email}" + "\n" + f"DATE: `{ttime}`" 
+       lastisthis = f"{header}MAIL FROM: {from_mail}" + "\n" + f"TO: {email}" + "\n" + f"DATE: `{ttime}`" 
     else:
-       lastisthis = f"{header}MAIL FROM: {from_mail}" + "\n" + "TO: {email}" + "\n" + f"DATE: `{ttime}`" + "**The attachments will be send to you shortly !**"
+       lastisthis = f"{header}MAIL FROM: {from_mail}" + "\n" + f"TO: {email}" + "\n" + f"DATE: `{ttime}`" + "**The attachments will be send to you shortly !**"
     await tbot.edit_message(
         chatid,
         msgid,
@@ -430,7 +431,7 @@ async def paginate_prevnews(event):
         ],
     )
     if attch > 0:
-       gg = get_attachments(mail_id=mail_id)
+       gg = get_attachments(mail_id)
        for i in gg:             
         fname = i['name']   
         with open(fname, 'w+b') as f:
@@ -497,9 +498,9 @@ async def paginate_prevnews(event):
                
     tlink = 'https://telegra.ph/{}'.format(response['path'])
     if not attch > 0:
-       lastisthis = f"{header}MAIL FROM: {from_mail}" + "\n" + "TO: {email}" + "\n" + f"DATE: `{ttime}`" 
+       lastisthis = f"{header}MAIL FROM: {from_mail}" + "\n" + f"TO: {email}" + "\n" + f"DATE: `{ttime}`" 
     else:
-       lastisthis = f"{header}MAIL FROM: {from_mail}" + "\n" + "TO: {email}" + "\n" + f"DATE: `{ttime}`" + "**The attachments will be send to you shortly !**"
+       lastisthis = f"{header}MAIL FROM: {from_mail}" + "\n" + f"TO: {email}" + "\n" + f"DATE: `{ttime}`" + "**The attachments will be send to you shortly !**"
     await tbot.edit_message(
         chatid,
         msgid,
@@ -532,7 +533,7 @@ async def paginate_prevnews(event):
         ],
     )
     if attch > 0:
-       gg = get_attachments(mail_id=mail_id)
+       gg = get_attachments(mail_id)
        for i in gg:             
         fname = i['name']   
         with open(fname, 'w+b') as f:
