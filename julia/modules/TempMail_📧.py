@@ -120,7 +120,7 @@ async def _(event):
         print (e)
 
 @tbot.on(events.CallbackQuery(pattern=r"stopcheckinbox(\-(.*))"))
-async def newsstop(event):
+async def _(event):
     if not event.is_private:
        return
     tata = event.pattern_match.group(1)
@@ -138,7 +138,7 @@ async def newsstop(event):
     await tbot.edit_message(chatid, msgid, "Thanks for using Julia ♥️")
 
 @tbot.on(events.CallbackQuery(pattern=r"startcheckinbox(\-(.*))"))
-async def paginate_news(event):
+async def _(event):
     if not event.is_private:       
        return
     tata = event.pattern_match.group(1)
@@ -234,7 +234,7 @@ async def paginate_news(event):
         os.remove(fname)
 
 @tbot.on(events.CallbackQuery(pattern=r"checkinboxprev(\-(.*))"))
-async def paginate_prevnews(event):
+async def _(event):
     if not event.is_private:       
        return
     tata = event.pattern_match.group(1)
@@ -337,7 +337,7 @@ async def paginate_prevnews(event):
         os.remove(fname)
         
 @tbot.on(events.CallbackQuery(pattern=r"checkinboxnext(\-(.*))"))
-async def paginate_prevnews(event):
+async def _(event):
     if not event.is_private:       
        return
     tata = event.pattern_match.group(1)
@@ -440,7 +440,7 @@ async def paginate_prevnews(event):
         os.remove(fname)
         
 @tbot.on(events.CallbackQuery(pattern=r"refreshinbox(\-(.*))"))
-async def paginate_prevnews(event):
+async def _(event):
     if not event.is_private:       
        return
     tata = event.pattern_match.group(1)
@@ -542,7 +542,7 @@ async def paginate_prevnews(event):
         os.remove(fname)
         
 @tbot.on(events.CallbackQuery(pattern=r"stopcheckinbox(\-(.*))"))
-async def newsstop(event):
+async def _(event):
     if not event.is_private:
        return
     tata = event.pattern_match.group(1)
@@ -560,7 +560,7 @@ async def newsstop(event):
     await tbot.edit_message(chatid, msgid, "Thanks for using Julia ♥️")
 
 @tbot.on(events.CallbackQuery(pattern=r"dontremoveoldemail(\-(.*))"))
-async def newsstop(event):
+async def _(event):
     if not event.is_private:
        return
     tata = event.pattern_match.group(1)
@@ -578,7 +578,7 @@ async def newsstop(event):
     await tbot.edit_message(chatid, msgid, "Okay !\nNot a problem 😉")
 
 @tbot.on(events.CallbackQuery(pattern=r"removeoldemail(\-(.*))"))
-async def newsstop(event):
+async def _(event):
     if not event.is_private:
        return
     tata = event.pattern_match.group(1)
