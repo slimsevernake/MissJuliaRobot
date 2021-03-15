@@ -207,18 +207,18 @@ async def paginate_news(event):
             [
                 Button.inline(
                     "◀️",
-                    data=f"checkinboxprev-{sender}|{email}|{hash}|{num}|{chatid}|{msgid}",
+                    data=f"checkinboxprev-{sender}|{num}|{chatid}|{msgid}",
                 ),
                 Button.inline("❌", data=f"stopcheckinbox-{sender}|{chatid}|{msgid}"),
                 Button.inline(
                     "▶️",
-                    data=f"checkinboxnext-{sender}|{email}|{hash}|{num}|{chatid}|{msgid}",
+                    data=f"checkinboxnext-{sender}|{num}|{chatid}|{msgid}",
                 ),
             ],
             [
                 Button.inline(
                     "Refresh 🔁",
-                    data=f"refreshinbox-{sender}|{email}|{hash}|{chatid}|{msgid}",
+                    data=f"refreshinbox-{sender}|{chatid}|{msgid}",
                 )
             ],
         ],
@@ -310,18 +310,18 @@ async def paginate_prevnews(event):
             [
                 Button.inline(
                     "◀️",
-                    data=f"checkinboxprev-{sender}|{email}|{hash}|{num}|{chatid}|{msgid}",
+                    data=f"checkinboxprev-{sender}|{num}|{chatid}|{msgid}",
                 ),
                 Button.inline("❌", data=f"stopcheckinbox-{sender}|{chatid}|{msgid}"),
                 Button.inline(
                     "▶️",
-                    data=f"checkinboxnext-{sender}|{email}|{hash}|{num}|{chatid}|{msgid}",
+                    data=f"checkinboxnext-{sender}|{num}|{chatid}|{msgid}",
                 ),
             ],
             [
                 Button.inline(
                     "Refresh 🔁",
-                    data=f"refreshinbox-{sender}|{email}|{hash}|{chatid}|{msgid}",
+                    data=f"refreshinbox-{sender}|{chatid}|{msgid}",
                 )
             ],
         ],
@@ -413,18 +413,18 @@ async def paginate_prevnews(event):
             [
                 Button.inline(
                     "◀️",
-                    data=f"checkinboxprev-{sender}|{email}|{hash}|{num}|{chatid}|{msgid}",
+                    data=f"checkinboxprev-{sender}|{num}|{chatid}|{msgid}",
                 ),
                 Button.inline("❌", data=f"stopcheckinbox-{sender}|{chatid}|{msgid}"),
                 Button.inline(
                     "▶️",
-                    data=f"checkinboxnext-{sender}|{email}|{hash}|{num}|{chatid}|{msgid}",
+                    data=f"checkinboxnext-{sender}|{num}|{chatid}|{msgid}",
                 ),
             ],
             [
                 Button.inline(
                     "Refresh 🔁",
-                    data=f"refreshinbox-{sender}|{email}|{hash}|{chatid}|{msgid}",
+                    data=f"refreshinbox-{sender}|{chatid}|{msgid}",
                 )
             ],
         ],
@@ -447,13 +447,12 @@ async def paginate_prevnews(event):
     meta = data.split("-", 1)[1]
     # print(meta)
     if "|" in meta:
-        sender, index, chatid, msgid = meta.split("|")
+        sender, chatid, msgid = meta.split("|")
     sender = int(sender.strip())
     if not event.sender_id == sender:
         await event.answer("You haven't send that command !")
         return
     
-    index = int(index.strip())
     num = 0
     chatid = int(chatid.strip())
     msgid = int(msgid.strip())
@@ -516,18 +515,18 @@ async def paginate_prevnews(event):
             [
                 Button.inline(
                     "◀️",
-                    data=f"checkinboxprev-{sender}|{email}|{hash}|{num}|{chatid}|{msgid}",
+                    data=f"checkinboxprev-{sender}|{num}|{chatid}|{msgid}",
                 ),
                 Button.inline("❌", data=f"stopcheckinbox-{sender}|{chatid}|{msgid}"),
                 Button.inline(
                     "▶️",
-                    data=f"checkinboxnext-{sender}|{email}|{hash}|{num}|{chatid}|{msgid}",
+                    data=f"checkinboxnext-{sender}|{num}|{chatid}|{msgid}",
                 ),
             ],
             [
                 Button.inline(
                     "Refresh 🔁",
-                    data=f"refreshinbox-{sender}|{email}|{hash}|{chatid}|{msgid}",
+                    data=f"refreshinbox-{sender}|{chatid}|{msgid}",
                 )
             ],
         ],
