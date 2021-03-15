@@ -1,5 +1,5 @@
 from tempmail import TempMail
-import time, markdown, base64
+import time, markdown, base64, os
 from datetime import datetime
 from julia import *
 from julia.events import register
@@ -592,7 +592,9 @@ async def newsstop(event):
             )    
     await tbot.edit_message(chatid, msgid, f"Your new temporary email is: {email}")
 
-
+file_help = os.path.basename(__file__)
+file_help = file_help.replace(".py", "")
+file_helpo = file_help.replace("_", " ")
           
 __help__ = """
  - /newemail: Registers your account for a new email address
@@ -601,3 +603,5 @@ __help__ = """
 
 **NOTE**: Emails received are temporary and they will be deleted after 60 minutes of arrival
 """
+
+CMD_HELP.update({file_helpo: [file_helpo, __help__]})
