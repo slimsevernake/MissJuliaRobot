@@ -158,7 +158,8 @@ async def paginate_news(event):
     email = to_check["email"]
     hash = to_check["hash"]
     mails = tm.get_mailbox(email=email, email_hash=hash)
-    for key, value in mails.items():
+    if type(mails) is dict:
+     for key, value in mails.items():
         if value == "There are no emails yet":
            await tbot.edit_message(chatid, msgid, 'There are no emails yet.')
            return
@@ -254,7 +255,8 @@ async def paginate_prevnews(event):
     email = to_check["email"]
     hash = to_check["hash"]
     mails = tm.get_mailbox(email=email, email_hash=hash)
-    for key, value in mails.items():
+    if type(mails) is dict:
+     for key, value in mails.items():
         if value == "There are no emails yet":
            await tbot.edit_message(chatid, msgid, 'There are no emails yet.')
            return
@@ -356,7 +358,8 @@ async def paginate_prevnews(event):
     email = to_check["email"]
     hash = to_check["hash"]
     mails = tm.get_mailbox(email=email, email_hash=hash)
-    for key, value in mails.items():
+    if type(mails) is dict:
+     for key, value in mails.items():
         if value == "There are no emails yet":
            await tbot.edit_message(chatid, msgid, 'There are no emails yet.')
            return
@@ -458,7 +461,8 @@ async def paginate_prevnews(event):
     email = to_check["email"]
     hash = to_check["hash"]
     mails = tm.get_mailbox(email=email, email_hash=hash)
-    for key, value in mails.items():
+    if type(mails) is dict:
+     for key, value in mails.items():
         if value == "There are no emails yet":
            await tbot.edit_message(chatid, msgid, 'There are no emails yet.')
            return
