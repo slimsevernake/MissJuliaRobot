@@ -68,7 +68,7 @@ async def _(event):
  except Exception as e:
         print (e)
 
-@register(pattern="^/mymail$")
+@register(pattern="^/myemail$")
 async def _(event):
     if not event.is_private:
        await event.reply("You can only use this service in PM!")
@@ -80,7 +80,7 @@ async def _(event):
            addrs = addr["email"]
            await event.reply(f"Your current email address is:\n{addrs}")
            return
-        await event.reply("You don't have any email address associated with your account, get one with /newmail")
+    await event.reply("You don't have any email address associated with your account, get one with /newmail")
 
 @register(pattern="^/checkinbox$")
 async def _(event):
@@ -89,9 +89,10 @@ async def _(event):
        return   
     gmail = tmail.find({})
     for c in gmail:
-        if not event.sender_id == c["user"]:
-           await event.reply("You don't have any email address associated with your account, get one with /newmail")
-           return
+        if event.sender_id == c["user"]:
+           pass      
+        await event.reply("You don't have any email address associated with your account, get one with /newmail")
+        return
     addr = get_email(event.sender_id)
     email = addr["email"]
     hash = addr["hash"]
@@ -601,7 +602,7 @@ file_helpo = file_help.replace("_", " ")
           
 __help__ = """
  - /newemail: Registers your account for a new email address
- - /myaddress: Gives your current email address
+ - /myemail: Gives your current email address
  - /checkinbox: Checks the inbox associated with the account for new emails
 
 **NOTE**: Emails received are temporary and they will be deleted after 60 minutes of arrival
