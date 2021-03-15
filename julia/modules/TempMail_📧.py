@@ -91,8 +91,9 @@ async def _(event):
     for c in gmail:
         if event.sender_id == c["user"]:
            pass      
-        await event.reply("You don't have any email address associated with your account, get one with /newmail")
-        return
+        else:
+           await event.reply("You don't have any email address associated with your account, get one with /newmail")
+           return
     addr = get_email(event.sender_id)
     email = addr["email"]
     hash = addr["hash"]
