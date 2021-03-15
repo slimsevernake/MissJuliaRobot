@@ -166,7 +166,7 @@ async def paginate_news(event):
     header = f"**#{num} **"
     from_mail = mails[int(num)]['mail_from']
     subject = mails[int(num)]['mail_subject']
-    msg = mails[int(num)]['mail_html']
+    msg = mails[int(num)]['mail_text']
     ttime = mails[int(num)]['mail_timestamp']
     mail_id = mails[int(num)]['mail_id']
     attch = int(mails[int(num)]['mail_attachments_count'])
@@ -268,7 +268,7 @@ async def paginate_prevnews(event):
     header = f"**#{num} **"
     from_mail = mails[int(num)]['mail_from']
     subject = mails[int(num)]['mail_subject']
-    msg = mails[int(num)]['mail_html']
+    msg = mails[int(num)]['mail_text']
     ttime = mails[int(num)]['mail_timestamp']
     mail_id = mails[int(num)]['mail_id']
     attch = int(mails[int(num)]['mail_attachments_count'])
@@ -371,7 +371,7 @@ async def paginate_prevnews(event):
     header = f"**#{num} **"
     from_mail = mails[int(num)]['mail_from']
     subject = mails[int(num)]['mail_subject']
-    msg = mails[int(num)]['mail_html']
+    msg = mails[int(num)]['mail_text']
     ttime = mails[int(num)]['mail_timestamp']
     mail_id = mails[int(num)]['mail_id']
     attch = int(mails[int(num)]['mail_attachments_count'])
@@ -474,7 +474,7 @@ async def paginate_prevnews(event):
     header = f"**#{num} **"
     from_mail = mails[int(num)]['mail_from']
     subject = mails[int(num)]['mail_subject']
-    msg = mails[int(num)]['mail_html']
+    msg = mails[int(num)]['mail_text']
     ttime = mails[int(num)]['mail_timestamp']
     mail_id = mails[int(num)]['mail_id']
     attch = int(mails[int(num)]['mail_attachments_count'])
