@@ -230,6 +230,103 @@ async def paginate_news(event):
     tlink = 'https://telegra.ph/{}'.format(response['path'])
     await tbot.send_message(event.chat_id, tlink, buttons=[[Button.inline('<', data="checkinboxprev-{event.sender_id}-{email}-{hash}")], [Button.inline('<', data="stopcheckinbox-{event.sender_id}-{email}-{hash}")], [Button.inline('<', data="checkinboxnext-{event.sender_id}-{email}-{hash}")]])
 
+@tbot.on(events.CallbackQuery(pattern=r"checkinboxprev(\-(.*))"))
+async def paginate_prevnews(event):
+    approved_userss = approved_users.find({})
+    for ch in approved_userss:
+        iid = ch["id"]
+        userss = ch["user"]
+    if event.is_group:
+        if await is_register_admin(event.input_chat, event.sender_id):
+            pass
+        elif event.chat_id == iid and event.sender_id == userss:
+            pass
+        else:
+            return
+    tata = event.pattern_match.group(1)
+    data = tata.decode()
+    meta = data.split("-", 1)[1]
+    # print(meta)
+    if "|" in meta:
+        sender, email, hash, index, chatid, msgid = meta.split("|")
+    sender = int(sender.strip())
+    if not event.sender_id == sender:
+        await event.answer("You haven't send that command !")
+        return
+    email = email.strip()
+    hash = hash.strip()
+    index = int(index.strip())
+    num = index - 1
+    chatid = int(chatid.strip())
+    msgid = int(msgid.strip())
+    mails = tm.get_mailbox(email=email, email_hash=hash)
+    for key, value in mails.items():
+        if value == "There are no emails yet":
+           await tbot.edit_message(chatid, msgid, 'There are no emails yet.')
+           return
+    header = f"**#{num} **"
+    from_mail = mails[int(num)]['mail_from'])
+    subject = mails[int(num)]['mail_subject'])
+    msg = mails[int(num)]['mail_html'])
+    ttime = mails[int(num)]['mail_timestamp']
+    timestamp = ttime
+    dt_object = datetime.fromtimestamp(timestamp)
+    ttime = str(dt_object)
+    
+    vector = len(mails)
+    if num < 0:
+        num = vector - 1
+    # print(vector)
+    # print(num)
+    header = f"**#{num} **"
+    
+    telegraph = Telegraph()
+    telegraph.create_account(short_name='MissJuliaRobot')
+    if subject == "":
+       subject = "No Subject"
+
+    headers = f"**FROM**: {from_mail}\n**TO**: {email}\n**DATE**: {ttime}\n**MAIL BODY**:\n\n{msg}"   
+    nheaders = headers.replace("\n", "<br />")
+    final = markdown.markdown(nheaders)
+    response = telegraph.create_page(
+               subject, 
+               html_content=final)
+               
+    tlink = 'https://telegra.ph/{}'.format(response['path'])
+    lastisthis = f"{header}MAIL FROM: {from_mail}" + "\n" + "TO: {email}" + "\n" + f"DATE: `{date}`" 
+ 
+    await tbot.edit_message(
+        chatid,
+        msgid,
+        lastisthis,
+        link_preview=False,
+        buttons=[
+            [
+                Button.url(
+                    "Click here to read this mail",
+                    url=f"{tlink}",
+                ),
+            ],        
+            [
+                Button.inline(
+                    "◀️",
+                    data=f"checkinboxprev-{sender}|{email}|{hash}|{num}|{chatid}|{msgid}",
+                ),
+                Button.inline("❌", data=f"stopcheckinbox-{sender}|{chatid}|{msgid}"),
+                Button.inline(
+                    "▶️",
+                    data=f"checkinboxnext-{sender}|{email}|{hash}|{num}|{chatid}|{msgid}",
+                ),
+            ],
+            [
+                Button.inline(
+                    "Refresh 🔁",
+                    data=f"refreshinbox-{sender}|{email}|{hash}|{chatid}|{msgid}",
+                )
+            ],
+        ],
+    )
+
 #####
 
 
