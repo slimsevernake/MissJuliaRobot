@@ -89,11 +89,10 @@ async def _(event):
        return   
     gmail = tmail.find({})
     for c in gmail:
-        if event.sender_id == c["user"]:
-           pass      
-        else:
-           await event.reply("You don't have any email address associated with your account, get one with /newmail")
-           return
+        gid = c["user"]
+    if not event.sender_id == gid:
+       await event.reply("You don't have any email address associated with your account, get one with /newmail")
+       return
     addr = get_email(event.sender_id)
     email = addr["email"]
     hash = addr["hash"]
