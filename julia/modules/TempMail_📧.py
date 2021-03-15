@@ -75,7 +75,7 @@ async def _(event):
         if event.sender_id == c["user"]:
            addr = get_email(event.sender_id)
            addrs = addr["email"]
-           await event.reply(f"Your current email address is:\n{addrs})
+           await event.reply(f"Your current email address is:\n{addrs}")
            return
         await event.reply("You don't have any email address associated with your account, get one with /newmail")
 
