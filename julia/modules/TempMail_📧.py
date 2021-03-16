@@ -43,7 +43,7 @@ async def _(event):
             if event.sender_id == c["user"]:
                 addr = get_email(event.sender_id)
                 ttime = addr["time"]
-                if not ttime - time.time() > 86400:  # 24 hrs
+                if not int(abs(ttime - time.time())) > 86400:  # 24 hrs
                     await event.reply(
                         "You have recently created a new email address, wait for 24hrs to change it"
                     )
