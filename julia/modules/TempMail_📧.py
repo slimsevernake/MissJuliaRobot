@@ -38,6 +38,8 @@ async def _(event):
         if not event.is_private:
             await event.reply("You can only use this service in PM!")
             return
+        sender = event.sender_id
+        chatid = event.chat_id
         gmail = tmail.find({})
         for c in gmail:
             if event.sender_id == c["user"]:
@@ -48,8 +50,13 @@ async def _(event):
                         "You have recently created a new email address, wait for 24hrs to change it"
                     )
                     return
-                await tbot.send_message(
+                msg = await tbot.send_message(
                     event.chat_id,
+                    "Working ...")
+                msgid = msg.id
+                await tbot.edit_message(
+                    event.chat_id,
+                    msgid, 
                     "Are you sure you want to create a new email address ?\nYou will permanently lose your previous email address !",
                     buttons=[
                         [
